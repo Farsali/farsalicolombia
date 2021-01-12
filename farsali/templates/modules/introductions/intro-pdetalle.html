@@ -1,0 +1,19 @@
+<div class="bread container">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ producto.nombre|safe }}</li>
+        </ol>
+    </nav>
+</div>
+
+<div class="introductions">
+    <div class="introductions__container">
+        <h1 class="introductions__title">
+            {{ producto.nombre|safe }}
+        </h1>
+        <h2 class="introductions__text">
+            {{ marca.nombre|safe }}
+        </h2>
+    </div>
+</div>

@@ -1,0 +1,66 @@
+/* Nosotros */
+
+.info-about {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.info-about__container {
+    width: 100%;
+    padding: 5%;
+}
+
+.generic-cont__cont--item {
+    margin-bottom: 40px;
+    display: flex;
+    align-items: center;
+
+    @media (max-width: 1024px) {
+        flex-direction: column;
+    }
+
+    @media (min-width: 1030px) {
+        &:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+    }
+
+    .generic-cont__cont--description {
+        margin: 20px;
+        width: 50%;
+        padding: 3rem;
+
+        @media (max-width: 1024px) {
+            width: 100%;
+        }
+
+    }
+
+    .generic-cont__cont--title {
+        margin-bottom: 2rem;
+
+        h3 {
+            font-weight: 600;
+            margin-bottom: 0;
+            font-size: 2.5rem;
+        }
+
+        h4 {
+            font-weight: 500;
+            font-size: 1.6rem;
+        }
+    }
+
+    .generic-cont__cont--image {
+        width: 50%;
+
+        @media (max-width: 1024px) {
+            width: 100%;
+        }
+
+        img {
+            width: 100%;
+        }
+    }
+}

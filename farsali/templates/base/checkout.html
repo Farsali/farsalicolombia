@@ -1,0 +1,73 @@
+{% extends "base/base.html" %}
+{% load farsali_tags humanize %}
+
+{% block extracss %}
+{{ block.super }}
+
+{% endblock %}
+
+{% block content %}
+<div class="container" style="margin-top: 140px;">
+    <div class="card">
+        <div class="card-header">
+          <div class="row justify-content-between">
+            <div class="col-md-auto">
+              <h5 class="mb-3 mb-md-0">Carrito ( {{ products|length }} Items )</h5>
+            </div>
+            <div class="col-md-auto">
+                <a class="btn btn-checkout border-300 mr-2" href="{% url 'home' %}"> <span class="fas fa-chevron-left mr-1" data-fa-transform="shrink-4"></span>Continuar Comprando</a>
+                <button class="btn btn-sm btn-checkout" onclick="sendCheckout('{% url 'datos_cliente' %}', '{% json_serialize products %}')">Finalizar Compra</button>
+          </div>
+        </div>
+        <div class="table-responsive fs--1">
+            <table class="table table-striped border-bottom">
+              <thead class="bg-200 text-900">
+                <tr>
+                  <th class="border-0">Productos</th>
+                  <th class="border-0 text-center">Cantidad</th>
+                  <th class="border-0 text-right">Precio Unitario</th>
+                  <th class="border-0 text-right">Precio Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for item in products %}
+                  <tr>
+                    <td class="align-middle">
+                      <h6 class="mb-0 text-nowrap">{{ item.title }}</h6>
+                    </td>
+                    <td class="align-middle text-center">{{ item.quantity }}</td>
+                    <td class="align-middle text-right">${{ item.unit_price|intcomma }} COP</td>
+                    <td class="align-middle text-right">${% multiply item.quantity item.unit_price %} COP</td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+
+          <div class="row no-gutters justify-content-end">
+            <div class="col-auto">
+              <table class="table table-sm table-borderless fs--1 text-right">
+                <tr>
+                  <th class="text-900">Subtotal:</th>
+                  <td class="font-weight-semi-bold">${{ total|intcomma }} COP </td>
+                </tr>
+                <tr class="border-top">
+                  <th class="text-900">Total:</th>
+                  <td class="font-weight-semi-bold">${{ total|intcomma }} COP</td>
+                </tr>
+              </table>
+            </div>
+          </div>
+
+        <div class="card-footer bg-light d-flex justify-content-end">
+            <button class="btn btn-sm btn-checkout"
+            onclick="sendCheckout('{% url 'datos_cliente' %}', '{% json_serialize products %}')">Finalizar Compra</button>
+        </div>
+      </div>
+</div>
+{% if not logged_usser %}
+  {% include "modules/call-to-action/call-to-action.html" %}
+{% endif %}
+{% endblock %}
+
+

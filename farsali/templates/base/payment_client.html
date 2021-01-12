@@ -1,0 +1,80 @@
+{% extends "base/base.html" %}
+{% load farsali_tags %}
+
+{% block extracss %}
+{{ block.super }}
+
+{% endblock %}
+
+{% block content %}
+<div class="container" style="margin-top: 140px;">
+        <div class="container">
+            <p>Rellena los datos a continuación para confirmar tu compra y serás
+                redigirigido a
+                la plataforma de pago</p>
+            <p>Los campos marcados <em>*</em> son obligatorios</p>
+
+            <div class="modal-form mt-2 mb-4">
+
+                <form action="{% url 'resumen_pago' %}" method="post" id="paymentForm">
+                    {% csrf_token %}
+                    <div class="fila-formulario">
+                        <div class="col-md-6">
+                            <label>Nombre Completo*</label>
+                            <input type="text" name="full_name" id="full_name" class="form-control" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label>Documento*</label>
+                            <input type="text" name="document" id="document" class="form-control" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="email">Email*</label>
+                            <input type="email" name="email" id="email"
+                                class="form-control" required>
+                        </div>
+                    </div>
+
+                    <div class="fila-formulario">
+                        <div class="col-md-6">
+                            <label>Teléfono*</label>
+                            <input type="tel" name="phone" id="phone" class="form-control" required>
+                        </div>
+                    </div>
+
+                    <div class="fila-formulario">
+                        <div class="col-md-6">
+                            <label>Dirección de entrega*</label>
+                            <input type="text" name="address" id="address" class="form-control" required>
+                        </div>
+                    </div>
+
+                    <div class="fila-formulario">
+                        <div class="col-md-6">
+                            <label>Locacion*</label>
+                            <input type="text" name="locacion" id="locacion" class="form-control" required>
+                        </div>
+                    </div>
+
+                    <input type="hidden" name="productos" value="{% json_serialize products %}">
+
+                    {% if logged_usser %}
+                        <input type="hidden" name="boxes" value="boxes">
+                    {% endif %}
+
+                    <div class="fila-formulario">
+                        <div class="col-md-6 mt-4">
+                            <button class="btn btn-sm btn-checkout" type="submit">Finalizar Compra</button>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+
+        </div>
+</div>
+{% if not logged_usser %}
+    {% include "modules/call-to-action/call-to-action.html" %}
+{% endif %}
+{% endblock %}
+
+

@@ -1,0 +1,38 @@
+{% extends "base/base.html" %}
+
+{% block extracaptcha %}
+    <script src="https://www.google.com/recaptcha/api.js?render={{ GOOGLE_KEY_CAPTCHA_V3 }}&hl=es"></script>
+    <script>
+        grecaptcha.ready(function() {
+            grecaptcha.execute('{{ GOOGLE_KEY_CAPTCHA_V3 }}', {action: 'producto_detalle'}).then(function(token) {
+                document.getElementById('g-recaptcha-response').value = token;
+                document.getElementById('g-recaptcha-action').value = 'producto_detalle';
+            });
+        });
+    </script>
+{% endblock extracaptcha %}
+
+{% block extracss %}
+{{ block.super }}
+
+{% endblock %}
+
+{% block content %}
+{% include "modules/inner/inner.html" %}
+{% include "modules/marcas/marcas.html" %}
+<div class="container" style="margin-top: 40px;">
+    {% include "modules/introductions/intro-pdetalle.html" %}
+</div>
+{% include "modules/products/product_detail.html" %}
+{% include "modules/products/products.html" %}
+{% include "modules/highlights/highlights.html" %}
+{% if not logged_usser %}
+    {% include "modules/call-to-action/call-to-action.html" %}
+{% endif %}
+{% endblock %}
+
+{% block extrajs %}
+    <script type="text/javascript">
+        document.documentElement.scrollTop = 500;
+    </script>
+{% endblock %}

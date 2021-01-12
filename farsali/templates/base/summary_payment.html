@@ -1,0 +1,110 @@
+{% extends "base/base.html" %}
+{% load farsali_tags humanize %}
+
+{% block extracss %}
+{{ block.super }}
+
+{% endblock %}
+
+{% block content %}
+<div class="container" style="margin-top: 140px;">
+      <div class="card mb-3">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-lg-12">
+              <h5 class="mb-3 fs-0"><strong>Resumen de la Compra</strong><h5>
+              <h6 class="mb-2">{{ client.nombre }}</h6>
+              <p class="mb-1 fs--1">{{ client.direccion }}</p>
+              <p class="mb-0 fs--1"> <strong>Email: </strong>{{ client.email }}</p>
+              <p class="mb-0 fs--1"> <strong>Phone: </strong>{{ client.telefono }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card mb-3">
+        <div class="card-body">
+          <div class="table-responsive fs--1">
+            <table class="table table-striped border-bottom">
+              <thead class="bg-200 text-900">
+                <tr>
+                  <th class="border-0">Productos</th>
+                  <th class="border-0 text-center">Cantidad</th>
+                  <th class="border-0 text-right">Precio Unitario</th>
+                  <th class="border-0 text-right">Precio Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for item in products %}
+                  <tr>
+                    <td class="align-middle">
+                      <h6 class="mb-0 text-nowrap">{{ item.title }}</h6>
+                    </td>
+                    <td class="align-middle text-center">{{ item.quantity }}</td>
+                    <td class="align-middle text-right">${{ item.unit_price|floatformat:"0"|intcomma }} COP</td>
+                    <td class="align-middle text-right">${% multiply item.quantity item.unit_price %} COP</td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+          <div class="row no-gutters justify-content-end">
+            <div class="col-auto">
+              <table class="table table-sm table-borderless fs--1 text-right">
+                <tr>
+                  <th class="text-900">Subtotal:</th>
+                  <td class="font-weight-semi-bold">${{ total|floatformat:"0"|intcomma }} COP </td>
+                </tr>
+                <tr class="border-top">
+                  <th class="text-900">Total:</th>
+                  <td class="font-weight-semi-bold">${{ total|floatformat:"0"|intcomma }} COP</td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-end">
+        {% if pasarela == 0 %}
+          <script
+            src="https://www.mercadopago.com.co/integrations/v1/web-payment-checkout.js"
+            data-preference-id="{{preference}}">
+          </script>
+        {% elif pasarela == 1 %}
+          <form>
+            <script
+              src="https://checkout.wompi.co/widget.js"
+              data-render="button"
+              data-public-key="{{ wompi }}"
+              data-currency="COP"
+              data-amount-in-cents="{% multiply total 100 False %}"
+              data-reference="{{ preference }}"
+              >
+            </script>
+          </form>
+        {% elif pasarela == 2 %}
+          <form>
+              <script
+                  src="https://checkout.epayco.co/checkout.js"
+                  class="epayco-button"
+                  data-epayco-key="{{ epayco }}"
+                  data-epayco-amount="{{ total }}"
+                  data-epayco-name="Compra en Farsali"
+                  data-epayco-description="Compra en Farsali"
+                  data-epayco-currency="cop"
+                  data-epayco-country="co"
+                  data-epayco-invoice="{{ preference }}"
+                  data-epayco-test="true"
+                  data-epayco-external="false">
+              </script>
+          </form>
+        {% endif %}
+    </div>
+</div>
+{% if not logged_usser %}
+  {% include "modules/call-to-action/call-to-action.html" %}
+{% endif %}
+{% endblock %}
+
+

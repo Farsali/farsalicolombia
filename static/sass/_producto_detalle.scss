@@ -1,0 +1,413 @@
+.product__detail {
+
+    .container {
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+
+        .product__detail--body {
+            display: block;
+            width: 40%;
+            padding-right: 3rem;
+
+            .product__detail--description {
+                text-align: center;
+                .products__detail--rating {
+                    margin-top: 10px;
+                    .products__detail--stars {
+                        align-items: center;
+                        display: flex;
+                        justify-content: flex-start;
+                        svg {
+                            fill: #f8bd3e;
+                            height: auto;
+                            margin: 5px;
+                            max-height: 20px;
+                            max-width: 20px;
+                            transition: all 0.5s;
+                            width: 100%;
+                        }
+                    }
+                }
+                .products__detail--paragraph {
+                    text-align: left;
+                }
+            }
+
+            .product__detail-price {
+                font-size: 1.4rem;
+                font-weight: 700;
+                display: flex;
+
+                &--discount {
+                    background: $Dor;
+                    font-size: .7rem;
+                    width: 2rem;
+                    height: 2rem;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: $Blanco;
+                    border-radius: 50%;
+                }
+            }
+
+            .product__detail--info {
+                .container {
+                    margin-top: 20px;
+                    display: flex;
+                    justify-content: flex-start;
+                    padding: 0;
+
+                    .info__prices {
+                        display: block;
+                        width: 100%;
+
+                        &-prefer {
+                            display: flex;
+                            align-items: center;
+                            margin-top: 1rem;
+                            border-top: .1rem solid $Gristr;
+                            padding-top: 1rem;
+
+                            img {
+                                max-width: 5rem;
+                                margin-left: 2rem;
+                            }
+                        }
+
+                        &-prefer-login {
+                            display: flex;
+                            align-items: center;
+
+                            img {
+                                max-width: 5rem;
+                                margin-left: 2rem;
+                            }
+                        }
+                    }
+                }
+            }
+
+            .product__detail--options {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: flex-start;
+                align-items: center;
+                margin-top: 20px;
+
+                .detail__options--chart {
+                    display: flex;
+                    .products__info--btn {
+                        width: auto;
+                        align-items: center;
+                        display: flex;
+                        border-radius: .7rem;
+                        justify-content: center;
+                        text-decoration: none;
+                        padding: 1rem;
+                        margin: 0 1rem 0 0;
+                        font-size: 1.1rem;
+
+                        &:hover {
+                            text-decoration: none;
+                        }
+
+                        a {
+                            text-decoration: none;
+
+                            &:hover {
+                                text-decoration: none;
+                            }
+                        }
+
+                        .icon-basket {
+                            font-size: 1rem;
+                        }
+                    }
+
+                    .modal {
+                        .col-md-6 {
+                            margin-top: 10px;
+                        }
+                        .modal-dialog {
+                            .modal-content {
+                                .modal-body {
+                                    text-align: center;
+                                    .container {
+                                        display: block;
+                                        .modal-form {
+                                            width: 100%;
+                                            display: flex;
+                                            justify-content: center;
+                                            text-align: left;
+                                            margin-bottom: 10px;
+    
+                                            form {
+                                                .columna__formulario {
+                                                    .col-md-6 {
+                                                        textarea {
+                                                            height: 120px;
+                                                        }
+                                                    }
+                                                }
+    
+                                                .fila-formulario {
+                                                    display: flex;
+                                                    width: 900px;
+                                                    justify-content: center;
+                                                    margin-bottom: 10px;
+    
+                                                    .col-md-6 {
+                                                        .media__payments {
+                                                            display: flex;
+                                                            justify-content: space-between;
+                                                            .input__efecty,
+                                                            .input__card {
+                                                                display: flex;
+                                                                align-items: center;
+                                                                justify-content: space-evenly;
+                                                                input {
+                                                                    margin: 2px;
+                                                                    cursor: pointer;
+                                                                }
+    
+                                                                img {
+                                                                    height: 20px;
+                                                                    margin: 2px;
+                                                                }
+                                                            }
+                                                        }
+    
+                                                        .total__pagar {
+                                                            .total__pagar--valor {
+                                                                text-align: right;
+                                                            }
+    
+                                                            .total__pagar--descuento {
+                                                                display: flex;
+                                                                justify-content: flex-end;
+    
+                                                                .pagar__descuento--porcentaje {
+                                                                    color: green;
+                                                                    margin-right: 10px;
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                .detail__options--face {
+                    @media (max-width: 1024px) {
+                        margin-top: 1rem;
+                    }
+
+                    img {
+                        width: 2rem;
+                    }
+                }
+            }
+        }
+
+        .product__detail--carousel {
+            width: 60%;
+
+            iframe {
+                width: 100%;
+                min-height: 27rem;
+            }
+        }
+    }
+
+    .product__detail--carousel-list {
+        padding: 0 1.5rem;
+    }
+
+    .divisor {
+        margin-top: 40px;
+        text-align: center;
+    }
+
+    .pdetail__comment {
+        margin-top: 3rem;
+        display: block;
+        justify-content: center;
+
+        .pdetail__comment--header {
+            text-align: center;
+        }
+
+        .pdetail__comment--body {
+            width: 100%;
+            margin: 0;
+            border-radius: 12px;
+            background: $NegroClaro;
+            display: flex;
+            justify-content: space-evenly;
+            align-items: center;
+            padding: 1rem;
+            color: white;
+
+            .comment__hall {
+                text-align: left;
+                width: 40%;
+
+                @media (max-width: 1024px) {
+                    width: 100%;
+                }
+
+                .user__comment {
+                    margin-top: 30px;
+                }
+            }
+
+            .pdetail__comment--form {
+                width: 50%;
+                text-align: left;
+                border-left: .1rem solid $Blanco;
+                padding-left: 3rem;
+
+                @media (max-width: 1024px) {
+                    width: 100%;
+                    padding-left: 0;
+                    padding-top: 3rem;
+                    border-left: 0;
+                    border-top: .1rem solid $Blanco;
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 1024px) {
+    .product__detail {
+        .container {
+            display: flex;
+            flex-direction: column;
+
+            .product__detail--body,
+            .product__detail--carousel {
+                width: 100%;
+                padding-right: 0;
+
+                .product__detail--info {
+                    position: relative;
+                }
+
+                .product__detail--options {
+                    position: relative;
+                }
+
+                .container {
+                    width: 100%;
+                    padding: 10px;
+                }
+            }
+            
+            .product__detail--carousel {
+                order: -1;
+                margin-bottom: 1rem;
+            }
+        }
+
+        .pdetail__comment {
+            .pdetail__comment--body {
+                width: 94%;
+                margin: 10px;
+                display: block;
+
+                .separador {
+                    display: none;
+                }
+
+                .pdetail__comment--form {
+                    width: 100%;
+                    margin-top: 40px;
+                }
+            }
+        }
+    }
+}
+
+.book-form__button {
+    background-color: #f8bd3e;
+    border: 0;
+    border-radius: 50px;
+    color: #ffffff;
+    font-weight: 600;
+    padding: 10px 20px;
+    transition: all 0.5s;
+    
+    &:hover {
+        cursor: pointer;
+        background-color: #f8bd3e;
+    }
+}
+
+.modal .pdetail__comment {
+    margin-top: 0;
+}
+
+.comment-product {
+    display: flex;
+    padding: 2rem 2rem;
+    justify-content: space-between;
+    align-items: center;
+    width: 90%;
+    margin-left: 5%;
+    border-bottom: 1px solid rgb(163, 163, 163);
+
+    @media (max-width: 1024px) {
+        flex-direction: column;
+    }
+
+    &__btn {
+        align-items: center;
+        display: flex !important;
+        border-radius: .7rem !important;
+        justify-content: center;
+        text-decoration: none;
+        padding: 1rem !important;
+        margin: 0 1rem 0 0;
+        font-size: 1.1rem  !important;
+        background: #fab7ef !important;
+        font-weight: 700 !important;
+
+        &:hover {
+            background-color: #dd95d1 !important;
+        }
+    }
+}
+
+.div-description-product{
+    width: 50%;
+    text-align: justify;
+    @media (max-width: 1024px) {
+        margin-top: 2em;
+        width: 100%;
+    }
+}
+
+#exampleModalComment {
+    .modal-content {
+        background-color: #202020;
+    }
+
+    .modal-header {
+        flex-direction: column;
+        align-items: center;
+
+        h3,
+        p {
+            color: $Blanco;
+        }
+    }
+}

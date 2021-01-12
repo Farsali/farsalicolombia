@@ -1,0 +1,132 @@
+{% load static farsali_tags %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Reporte de Venta</title>
+</head>
+<style type="text/css">
+
+	body{
+	    background-position: center;
+	    background-repeat: no-repeat;
+	    background-size: cover;
+	    height: 600px;
+	    width: 100%;
+	}
+
+	.div-margin{
+        margin: 1em;
+    }
+
+    .div-start{
+	    display: flex;
+	    flex-direction: row;
+	    align-items: flex-start;
+    }
+
+    .div-footer{
+	    display: flex;
+	    flex-direction: column;
+	    align-items: center;
+	    text-align: center;
+	    width: 100%;
+    }
+
+    .div-between{
+    	display: flex;
+	    flex-direction: row;
+	    justify-content: space-around;
+    }
+
+    .p-title{
+        font-family: Montserrat;
+        font-style: normal;
+        font-weight: 300;
+        font-size: 24px;
+        line-height: 44px;
+        text-align: right;
+    }
+
+    .p-subtitle{
+    	font-family: Montserrat;
+		font-style: normal;
+		font-weight: normal;
+		font-size: 14px;
+		line-height: 24px;
+        text-align: right;
+    }
+
+    .hr-separated-horizontal{
+    	border: none;
+    	border-color: black;
+	    border-top:7px solid;
+	    width: 27em;
+    }
+
+    .hr-separated-vertical{
+    	border: none;
+    	border-color: black;
+	    border-left:7px solid;
+	    height: 47em;
+    }
+</style>
+<body style="background-image: url({% static 'images/fondo.jpg' %})">
+
+     <div class="div-start">
+            <div class="div-margin">
+                <img src="{% static 'images/logo.png' %}" alt="Logo" />
+
+            </div>
+
+            <div class="div-margin" style="margin-top:2em">
+                <hr class="hr-separated-horizontal">
+            </div>
+    </div>
+
+    <div class="div-between">
+    	<div class="div-margin">
+	    	<hr class="hr-separated-vertical">
+		</div>
+
+		<div>
+			<div class="div-margin">
+		    	<p class="p-title">Resumen de Compra No {{ reference }}</p>
+		    </div>
+
+		    <div class="div-margin">
+		        <p class="p-subtitle">{{ date_now }}</p>
+		    </div>
+
+		    <div class="div-margin">
+		        <p class="p-title">{{ name_client }}</p>
+		    </div>
+
+		    <div class="div-margin">
+		        <p class="p-subtitle"><strong>Dirección:<strong> {{ address }} {{ location }}</p>
+		    </div>
+
+		    <div class="div-margin">
+		        <p class="p-subtitle"><strong>Teléfono:</strong> {{ phone }}</p>
+		    </div>
+
+		    <div class="div-margin">
+		    	{% for product in products %}
+		    		{% if product.by_venta_caja %}
+				        <p class="p-subtitle">
+				        	{{ product.producto.nombre }} {{ product.cantidad }} Cajas x {{ product.productos.cantidad_cajas }} Unidad(es) c/u: $ {% multiply product.cantidad product.precio %}
+				        </p>
+			        {% else %}
+			        	<p class="p-subtitle">
+				        	{{ product.producto.nombre }} x {{ product.cantidad }} Unidad(es): $ {% multiply product.cantidad product.precio %}
+				        </p>
+			        {% endif %}
+		       	{% endfor %}
+		    </div>
+
+		    <div class="div-margin">
+		        <p class="p-title">Subtotal: {{ price }} COP</p>
+		    </div>
+		</div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,21 @@
+{% load i18n %}
+<html>
+    <head>
+        <title></title>
+    </head>
+    <body>
+        {% blocktrans %}Mensaje del formulario de confirmación de cliente Farsali{% endblocktrans %}<br/>
+        <ul>
+            <li><b>{% trans "Nombre:" %}</b> {{nombre}}</li>
+            <li><b>{% trans "Teléfono:" %}</b> {{telefono}}</li>
+            <li><b>{% trans "Nombre de usuario:" %}</b> {{nick_name}}</li>
+            <li><b>{% trans "Email:" %}</b> {{email}}</li>
+            <li><b>{% trans "Contraseña:" %}</b> {{contrasena}}</li>
+            <li><b>{% trans "Locación:" %}</b> {{locacion}}</li>
+
+            Clickee el siguiente enlace para activar cliente Farsali:
+            <li><b>http://{{ domain }}{% url 'activate_farsali' unicknameb64=unickname %}</b></li>
+
+        </ul>
+    </body>
+</html>

@@ -1,0 +1,30 @@
+{% extends "base/base.html" %}
+
+{% block extracss %}
+{{ block.super }}
+
+{% endblock %}
+
+{% block content %}
+{% include "modules/inner/inner.html" %}
+
+<div class="canvas-home" style="padding-top: 40px;">
+	<div class="flex-center min-vh-100 py-6 text-center">
+        <div class="d-flex justify-content-center" style="width: 100%;flex-direction: column;height:580px;">
+            <div class="display-1 text-300 fs-error">404</div>
+            <p class="lead mt-4 text-800 text-sans-serif font-weight-semi-bold">La página que usted esta buscando no se encuentra.</p>
+            <hr />
+            <p>Por favor regresa a la página de Inicio o a nuestra tienda Farsáli</p>
+        </div>
+    </div>
+</div>
+
+{% if not logged_usser %}
+    {% include "modules/call-to-action/call-to-action.html" %}
+{% endif %}
+
+{% endblock %}
+
+{% block extrajs %}
+{{ block.super }}
+{% endblock %}

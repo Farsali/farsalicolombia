@@ -1,0 +1,70 @@
+<div class="info-about">
+    <div class="info-about__container">
+        <div class="generic-content">
+            {% if generics %}
+                {% for generic in generics %}
+                    <div class="generic-cont__cont--item">
+                        <div class="generic-cont__cont--image">
+                            <img 
+                                src="{{ generic.imagen.url }}" 
+                                alt="{{ generic.titulo|safe }}"
+                                height="462"
+                                width="692">
+                        </div>
+                        <div class="generic-cont__cont--description">
+                            <div class="generic-cont__cont--title">
+                                <h3>{{ generic.titulo|safe }}</h3>
+                                <h4>{{ generic.subtitulo|safe }}</h4>
+                            </div>
+                            <p>{{ generic.descripcion|safe }}</p>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="generic-cont__cont--item">
+                    <div class="generic-cont__cont--image">
+                        <img src="/static/images/nosotros/img-generic-fars-02.jpg" alt="">
+                    </div>
+                    <div class="generic-cont__cont--description">
+                        <div class="generic-cont__cont--title">
+                            <h3>Nosotros</h3>
+                            <h4>Pruebaaaa</h4>
+                        </div>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
+                            labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
+                            laboris nisi ut aliquip ex ea commodo consequat.</p>
+                    </div>
+                </div>
+
+                <div class="generic-cont__cont--item">
+                    <div class="generic-cont__cont--image">
+                        <img src="/static/images/nosotros/img-generic-fars-01.jpg" alt="">
+                    </div>
+                    <div class="generic-cont__cont--description">
+                        <div class="generic-cont__cont--title">
+                            <h3>Misión</h3>
+                        </div>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
+                            labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
+                            laboris nisi ut aliquip ex ea commodo consequat.</p>
+                    </div>
+                </div>
+
+                <div class="generic-cont__cont--item">
+                    <div class="generic-cont__cont--image">
+                        <img src="/static/images/nosotros/img-generic-fars-00.jpg" alt="">
+                    </div>
+                    <div class="generic-cont__cont--description">
+                        <div class="generic-cont__cont--title">
+                            <h3>Visión</h3>
+                        </div>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
+                            labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
+                            laboris nisi ut aliquip ex ea commodo consequat.</p>
+                    </div>
+                </div>
+            {% endif %}
+
+        </div>
+    </div>
+</div>

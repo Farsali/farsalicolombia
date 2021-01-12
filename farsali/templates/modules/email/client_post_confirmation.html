@@ -1,0 +1,20 @@
+{% load i18n %}
+<html>
+    <head>
+        <title></title>
+    </head>
+    <body>
+        {% blocktrans %}Hola {{ nombre }}{% endblocktrans %}<br/>
+        <ul>
+            <li>
+                <p>
+                    {% blocktrans %}
+                        Tu solicitud de registro como Cliente My Farsáli ha sido aprobada con éxito.
+                        Ahora podrás adquirir los productos de la tienda online al por mayor y a un mejor precio.
+                        Gracias por preferirnos.
+                    {% endblocktrans %}
+                </p>
+            </li>
+        </ul>
+    </body>
+</html>

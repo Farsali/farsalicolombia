@@ -1,0 +1,129 @@
+{% load thumbnail farsali_tags humanize %}
+<div class="highlights">
+    <div class="highlights__titles">
+        <p class="highlights__title">Destacados Farsail</p>
+        <p class="highlights__text"> Encuentra los productos Farsali mas vendidos y solicitados</p>
+    </div>
+    {% if productos_destacados %}
+    <div class="highlights__container owl-carousel" id="highlights-carousel">
+        {% for producto in productos_destacados %}
+        <div 
+            class="highlights__items" 
+            onclick="if(!(event.target.classList.contains('highlights__info--btn') || ($(event.target).parents('div.modal').length))){window.location=$(this).data('url')}"
+            data-url="{% url 'producto_detalle' producto.id %}"
+            data-category="{{ producto.categoria_url }}"
+            data-name="{{ producto.nombre|safe }}"
+            data-id="{{ producto.id|safe }}"
+            data-precio="{{ producto.costo }}"
+            >
+            {% thumbnail producto.imagen "400x264" as thumb %}
+            <img class="highlights__items--img" src="{{ thumb.url }}" alt="{{ producto.nombre|safe }}"
+                title="{{ producto.nombre|safe }}" height="{{ thumb.y }}" width="{{ thumb.x }}">
+            {% endthumbnail %}
+            <div class="highlights__info">
+                <p class="highlights__info--ref">{{ producto.codigo }}</p>
+                <p class="highlights__info--title">{{ producto.nombre|safe }}</p>
+                <p class="highlights__info--price">${{ producto.costo|floatformat:"0"|intcomma }} COP</p>
+                <div class="highlights__info--rating">
+                    <div class="highlights__info--stars">
+                        {% for estrellas in producto.calificacion_cantidad %}
+                        <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
+                            xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 511 511"
+                            style="enable-background:new 0 0 511 511;" xml:space="preserve">
+                            <path class="st0" d="M509.67,196.02c-3.35-10.35-12.52-17.7-23.38-18.67L338.8,163.95L280.48,27.44c-4.3-10-14.09-16.48-24.98-16.48
+                                            c-10.88,0-20.67,6.48-24.98,16.5l-58.32,136.48L24.69,177.34c-10.84,1-19.99,8.33-23.36,18.67c-3.36,10.35-0.26,21.7,7.94,28.85
+                                            l111.48,97.77L87.89,467.45c-2.41,10.65,1.73,21.65,10.56,28.04c4.75,3.43,10.3,5.18,15.91,5.18c4.83,0,9.62-1.3,13.92-3.88
+                                            l127.22-76.04l127.18,76.04c9.31,5.6,21.04,5.09,29.85-1.3c8.84-6.41,12.97-17.42,10.56-28.04l-32.87-144.81l111.48-97.75
+                                            C509.9,217.71,513.03,206.38,509.67,196.02z" />
+                        </svg>
+                        {% endfor %}
+                    </div>
+                    <a 
+                        class="highlights__info--btn" 
+                        href="#"
+                        data-toggle="modal"
+                        data-target="#exampleModal-{{ producto.id }}"> Añadir al carrito</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="highlights__container highlights__info">
+        {% for producto in productos_destacados %}
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModal-{{ producto.id }}" tabindex="-1" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-sm">
+                    <div class="modal-content bg-dark">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">{{ producto.nombre }}</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="modal__body--content">
+                                <p>Selecciona la cantidad de productos que quieres guardar en el carrito</p>
+                                <div class="form__cantidad">
+                                    <form action="">
+                                        <div class="form-group">
+                                            <label for="">{{ producto.nombre|safe }}</label>
+                                            {% if logged_usser %}
+                                                <label for="">Caja x {{ producto.cantidad_cajas }} unidades</label>
+                                            {% endif %}
+                                            <input type="number" name="" id="cantidad-{{ producto.id }}" class="form-control">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="">Especificaciones para la compra</label>
+                                            <input type="text" name="" id="especificaciones-{{ producto.id }}" class="form-control">
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary"
+                                data-dismiss="modal">Cancelar</button>
+                            <button 
+                                type="button" 
+                                class="btn btn-danger add-carrito"
+                                data-dismiss="modal"
+                                data-product-serialize="{% json_serialize producto %}">
+                            Añadir al carrito</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="highlights__container owl-carousel" id="highlights-carousel-2">
+        {% for i in '12345678' %}
+        <div class="highlights__items">
+            <img class="highlights__items--img" src="/static/images/liquid-pro.jpg" alt="">
+            <div class="highlights__info">
+                <p class="highlights__info--ref">REF-NY0554</p>
+                <p class="highlights__info--title">Desmaquillante</p>
+                <p class="highlights__info--price">$20.000 COP</p>
+                <div class="highlights__info--rating">
+                    <div class="highlights__info--stars">
+                        {% for i in '1234' %}
+                        <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
+                            xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 511 511"
+                            style="enable-background:new 0 0 511 511;" xml:space="preserve">
+                            <path class="st0" d="M509.67,196.02c-3.35-10.35-12.52-17.7-23.38-18.67L338.8,163.95L280.48,27.44c-4.3-10-14.09-16.48-24.98-16.48
+                                    c-10.88,0-20.67,6.48-24.98,16.5l-58.32,136.48L24.69,177.34c-10.84,1-19.99,8.33-23.36,18.67c-3.36,10.35-0.26,21.7,7.94,28.85
+                                    l111.48,97.77L87.89,467.45c-2.41,10.65,1.73,21.65,10.56,28.04c4.75,3.43,10.3,5.18,15.91,5.18c4.83,0,9.62-1.3,13.92-3.88
+                                    l127.22-76.04l127.18,76.04c9.31,5.6,21.04,5.09,29.85-1.3c8.84-6.41,12.97-17.42,10.56-28.04l-32.87-144.81l111.48-97.75
+                                    C509.9,217.71,513.03,206.38,509.67,196.02z" />
+                        </svg>
+                        {% endfor %}
+                    </div>
+                    <button class="highlights__info--btn"> Añadir al carrito</button>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>

@@ -1,0 +1,21 @@
+{% load i18n %}
+<html>
+    <head>
+        <title></title>
+    </head>
+    <body>
+        {% blocktrans %}Hola {{ nombre }}{% endblocktrans %}<br/>
+        <ul>
+            <li>
+                <p>
+                    {% blocktrans %}
+                        Tu solicitud de registro como Cliente My Farsáli ha sido enviada con éxito.
+                        Estaremos revisando tu solicitud y te enviaremos una notificación en cuanto haya sido activada tu cuenta.
+    
+                        Gracias por tu comprensión.
+                    {% endblocktrans %}
+                </p>
+            </li>
+        </ul>
+    </body>
+</html>

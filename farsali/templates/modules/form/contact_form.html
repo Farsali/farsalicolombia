@@ -1,0 +1,35 @@
+<form action="" method="post">
+    {% csrf_token %}
+    {% for hidden in form.hidden_fields %}
+        {{hidden}}
+    {% endfor %}
+    {% for field in form.visible_fields %}
+        <div class="contact-form__form--{% if field.label == 'Contenido' %}text{% else %}item{% endif %}">
+            <label for="">{{ field.label }}</label>
+            {{ field }}
+        </div>
+    {% endfor %}
+    <input type="hidden" name="g-recaptcha-response" id="g-recaptcha-response">
+    <input type="hidden" name="g-recaptcha-action" id="g-recaptcha-action">
+    {% for error in form.non_field_errors %}
+        <p class="text-danger">
+            <small>{{ error }}</small>
+        </p>
+    {% endfor %}
+    {% if form.errors %}
+        {% for field in form %}
+            {% for error in field.errors %}
+                <div class="alert alert-danger">
+                    <strong>{{ error|escape }}</strong>
+                </div>
+            {% endfor %}
+        {% endfor %}
+        {% for error in form.non_field_errors %}
+            <div class="alert alert-danger">
+                <strong>{{ error|escape }}</strong>
+            </div>
+        {% endfor %}
+    {% endif %}
+    <button class="book-form__button" type="submit" class=""
+            itemprop="potentialAction">Enviar</button>
+</form>

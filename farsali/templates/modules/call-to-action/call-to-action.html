@@ -1,0 +1,80 @@
+<div class="call-to-action">
+    <div class="call-to-action__container">
+        <div class="call-to-action__titles">
+            <p class="call-to-action__title"> Regístrate como cliente</p>
+            <a href="" data-toggle="modal" data-target="#modal-prefer">
+                <img src="/static/images/logo-my-farsali.png" alt="" class="call-to-action__img">
+            </a>
+
+            <!-- Modal -->
+
+            <div class="modal fade" id="modal-prefer" tabindex="-1" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-lg bg-dark">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Cliente My Farsali</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+
+                        <div class="modal-body">
+                            <div class="modal__prefer container">
+
+                                <div class="prefer__signin">
+                                    <h5>Por favor, inicia sesión para continuar</h5>
+
+                                    <div class="card__signin">
+                                        <div class="card bg-dark">
+                                            <form action="{% url 'login_farsali' %}" method="POST" class="prefer__signin--form">
+                                                {% csrf_token %}
+                                                <div class="form-group">
+                                                    <label>Usuario:</label>
+                                                    <input type="text" name="username" id="username" class="form-control">
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label>Password: </label>
+                                                    <input type="password" name="password" id="password" class="form-control">
+                                                </div>
+                                                <div class="card-footer">
+                                                    <div class="form-group">
+                                                        <button class="btn btn-dark btn-block">Ingresar</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="prefer__signup">
+                                    <h5>O regístrate como cliente <em>My Farsali</em></h5>
+                                    <div class="card__register">
+                                        <a href="{% url 'registro_farsali' %}">
+                                            <img src="/static/images/logo-my-farsali.png" alt="">
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <p class="call-to-action__text">
+            Adquiere productos al por mayor con Ofertas y promociones inigualables
+            <span class="call-to-action__termino">
+                *Aplican términos y condiciones
+            </span>
+        </p>
+
+
+
+    </div>
+</div>

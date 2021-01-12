@@ -1,0 +1,24 @@
+{% extends "base/base.html" %}
+
+{% block extracss %}
+{{ block.super }}
+
+{% endblock %}
+
+{% block content %}
+{% include "modules/inner/inner.html" %}
+{% include "modules/marcas/marcas.html" %}
+
+<div class="canvas-home" style="padding-top: 40px;">
+    {% include "modules/introductions/intro-nosotros.html" %}
+    {% include "modules/generics/nosotros.html" %}
+    {% if not logged_usser %}
+        {% include "modules/call-to-action/call-to-action.html" %}
+    {% endif %}
+</div>
+
+{% endblock %}
+
+{% block extrajs %}
+{{ block.super }}
+{% endblock %}

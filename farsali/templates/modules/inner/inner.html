@@ -1,0 +1,21 @@
+{% if background %}
+    <div class="inner" {% if background and not background.video %} style="background-image: url({{ background.imagen.url }})" {% endif %}>
+        {% with bg_titulo=background.titulo|default:'30%' bg_subtitulo=background.subtitulo|default:'Descuento en cuidado de la piel' %}
+            {% if background.video %}
+                <div class="backgrounds__video backgrounds">
+                    <div class="backgrounds__video-container">
+                        <iframe 
+                            width="560" 
+                            height="315" 
+                            src="https://www.youtube.com/embed/{{ background.video }}?controls=0&autoplay=1&mute=0&loop=1" 
+                            frameborder="0"
+                            volume="0"
+                            allow="autoplay; encrypted-media" 
+                            allowfullscreen></iframe>
+                    </div>
+                </div>
+            {% endif %}
+        {% endwith %}
+    </div>
+    <div class="inner__bottom"></div>
+{% endif %}

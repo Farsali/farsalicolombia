@@ -1,0 +1,60 @@
+<!-- <div id="buscar"></div> -->
+
+<div class="filter" id="search">
+    <div class="filter__container">
+        <h1 class="filter__text">
+            Farsáli Colombia
+        </h1>
+        <h2>Encuentra productos cosméticos al Mayor y al detal</h2>
+        <div class="filter__content">
+            {% if categorias %}
+                <select class="filter__dropdown" name="filter_product" id="id_filter_product">
+                    <option class="filter__dropdown--item" value="all">Todos</option>
+                    {% for categoria in categorias %}
+                        <option class="filter__dropdown--item" value="{{ categoria.url|safe }}">{{ categoria.nombre|safe }}</option>
+                    {% endfor %}
+                </select>
+            {% else %}
+                <select class="filter__dropdown" name="" id="">
+                    <option class="filter__dropdown--item" value="">Tratamientos y cuidado de la piel</option>
+                    <option class="filter__dropdown--item" value="">Tratamientos y cuidado de la piel2</option>
+                    <option class="filter__dropdown--item" value="">Tratamientos y cuidado de la piel3</option>
+                </select>
+            {% endif %}
+            <div class="filter__search--icon">
+                <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
+                    xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 136 136"
+                    style="enable-background:new 0 0 136 136;" xml:space="preserve">
+                    <g>
+                        <path d="M132.1,117.9c-0.1-0.1-0.3-0.3-0.4-0.4L94.6,80.7c16.3-23.1,10.9-55-12.2-71.3s-55-10.9-71.3,12.2
+                    c-16.3,23.1-10.9,55,12.2,71.3c16.5,11.6,38.2,12.5,55.6,2.3l37.7,37.5c4.1,4.3,10.8,4.5,15.1,0.4C136,129,136.1,122.2,132.1,117.9
+                    z M52.8,84.2C52.8,84.2,52.8,84.2,52.8,84.2c-18.2,0-33-14.8-33-33c0-18.2,14.8-33,33-33c18.2,0,33,14.7,33,32.9
+                    C85.8,69.4,71,84.2,52.8,84.2z" />
+                    </g>
+                </svg>
+                <input id="id_search_product" onkeyup="filterContent()" class="filter__search--input" type="text">
+            </div>
+            <script>
+                function filterContent() {
+                    // Declare variables
+                    var input, filter, productsContainer, a, i, txtValue;
+                    input = document.getElementById('id_search_product');
+                    filter = input.value.toUpperCase();
+                    productsContainer = document.getElementsByClassName("products__container");
+                    products = productsContainer[0].getElementsByClassName("products__items");
+
+                    // Loop through all list items, and hide those who don't match the search query
+                    for (i = 0; i < products.length; i++) {
+                        a = products[i].getElementsByTagName("a")[0];
+                        txtValue = a.textContent || a.innerText;
+                        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                            products[i].style.display = "";
+                        } else {
+                            products[i].style.display = "none";
+                        }
+                    }
+                }
+            </script>
+        </div>
+    </div>
+</div>
