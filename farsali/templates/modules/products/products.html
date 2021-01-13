@@ -1,6 +1,9 @@
 {% load thumbnail farsali_tags humanize %}
-<div v-if="productos.length > 0" id="products"  class="products">
-    <div class="products__container">
+<div id="products"  class="products">
+    {% if productos_id %}
+        <input type="hidden" value="{{ productos_id }}" ref="value_product">
+    {% endif %}
+    <div v-if="productos.length > 0" class="products__container">
         <div class="scroll__animate" ref="ref_scroll_infinite">
             <div v-for="producto in productos"
                     class="products__items animado"
@@ -93,7 +96,7 @@
 </div>
 {% block scripts %}
     <script type="text/javascript">
-       const API_URL = 'https://www.farsalicolombia.com'
+       const API_URL = 'http://localhost:8000'
        const URL_BUCKET = 'https://farsali-col-bucket.s3.amazonaws.com/'
        var app2 = new Vue({
             el: '#products',
@@ -110,8 +113,12 @@
             },
             methods:{
                 async getProducts(){
+                    let producto_id = 0
+                     if(this.$refs.value_product){
+                        producto_id = this.$refs.value_product.value
+                    }
                     self = this
-                    let response = await fetch(this.url_service+this.page,{
+                    let response = await fetch(this.url_service+this.page+"&producto_id="+producto_id,{
                         method:"GET", 
                         headers: {
                             "Content-Type":"application/json", 
@@ -138,8 +145,8 @@
                 }
             },
             mounted: async function(){
-               await this.getProducts()
-               this.scroll_infinite()
+                await this.getProducts()
+                this.scroll_infinite()
             }, 
         })
     </script>

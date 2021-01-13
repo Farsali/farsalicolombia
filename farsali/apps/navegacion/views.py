@@ -138,8 +138,12 @@ def get_marcas(**kwargs):
 
 def productsView(request):
     page_number = request.GET.get('page')
+    producto_id = request.GET.get('producto_id')
     quantity = 12
     pagination=int(page_number)*quantity
+    product = None
+    if producto_id and int(producto_id) > 0:
+        product = Producto.objects.get(pk=producto_id)
 
     fields = [
         'id',
@@ -159,13 +163,28 @@ def productsView(request):
         'activo': True,
         'destacado': False
     }
-    
-    productos_qs = Producto.objects.filter(**filter_kwargs)[int(pagination):int(pagination)+quantity]
-    productos = productos_qs.values(*fields, **map_fields)
+
+    productos_qs = None
+    if product:
+        exclude = {'pk': product.id}
+        filter_kwargs = {'orden__gte':product.orden}
+        productos_qs_gt = Producto.objects.filter(**filter_kwargs).exclude(**exclude)[int(pagination):int(pagination)+quantity]
+        productos_qs_gt = productos_qs_gt.values(*fields, **map_fields)
+        productos_qs_lt = []
+        if len(productos_qs_gt) < quantity:
+            filter_kwargs = {'orden__lt':product.orden}
+            productos_qs_lt = Producto.objects.filter(**filter_kwargs).exclude(**exclude)[int(pagination):int(pagination)+quantity]
+            productos_qs_lt = productos_qs_lt.values(*fields, **map_fields)
+        productos =  list(productos_qs_gt) + list(productos_qs_lt)
+    else:
+        productos_qs = Producto.objects.filter(**filter_kwargs)[int(pagination):int(pagination)+quantity]
+        productos = productos_qs.values(*fields, **map_fields)
+
     for p in productos:
         p["imagen"]
         p['calificacion_cantidad'] = list(range(
             0, p['calificacion']+1)) if p.get('calificacion') else []
+    
     return JsonResponse({'error':False,'data':list(productos)}, status=200 ,safe=False)
 
 
@@ -366,9 +385,6 @@ class productsDetailView(TemplateView):
             producto = dict_producto(self.producto)
         except Producto.DoesNotExist:
             producto = None
-        productos_qs_gt = get_productos(exclude={'pk': producto['id']}, filter={'orden__gte':producto["orden"]})
-        productos_qs_lt = get_productos(exclude={'pk': producto['id']}, filter={'orden__lt':producto["orden"]})
-        productos_qs =  list(productos_qs_gt) + list(productos_qs_lt)
 
         productos_hg = get_productos(**{
             'filter': {
@@ -383,7 +399,7 @@ class productsDetailView(TemplateView):
             'page_name': self.page_name,
             'producto': producto,
             'marcas': get_marcas(),
-            'productos': productos_qs,
+            'productos_id': producto['id'],
             'productos_destacados': productos_hg,
             'background': get_backgrounds(
                 filter={'codigo': self.request.resolver_match.url_name}),
