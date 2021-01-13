@@ -20,7 +20,7 @@ SECRET_KEY = 'lr+ke#n6om%_evagj1-=-piroo%b^x4_ktr+*b8!(57#49%8oe'
 MEDIA_URL = '/'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [
     'farsalicol.herokuapp.com',

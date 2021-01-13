@@ -11,7 +11,7 @@
                     :data-id="[[ producto.id ]]"
                     :data-precio="[[ producto.costo ]]"
                     >
-                    <img class="products__items--img" :src="[[ producto.imagen[0] ]]" :alt="[[ producto.nombre ]]"
+                    <img class="products__items--img" :src="[[ url_images ]] + [[ producto.imagen ]]" :alt="[[ producto.nombre ]]"
                         :title="[[ producto.nombre ]]" height="400" width="264">
 
 
@@ -93,7 +93,8 @@
 </div>
 {% block scripts %}
     <script type="text/javascript">
-       const API_URL = 'https://www.farsalicolombia.com'
+       const API_URL = 'http://localhost:8000'
+       const URL_BUCKET = 'https://farsali-col-bucket.s3.amazonaws.com/'
        var app2 = new Vue({
             el: '#products',
             delimiters: ['[[', ']]'],
@@ -103,7 +104,8 @@
                     url: API_URL + "/productos/",
                     page: 0,
                     url_service: API_URL + "/lista_productos/?page=",
-                    last_page: -1
+                    last_page: -1,
+                    url_images: URL_BUCKET
                 }
             },
             methods:{
