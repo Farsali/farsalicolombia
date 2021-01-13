@@ -14,7 +14,8 @@ from .views import (
     checkoutView,
     paymentClienteView,
     paymentView,
-    registerFarsali
+    registerFarsali,
+    productsView
     # ajax_highligths
 )
 
@@ -45,6 +46,7 @@ urlpatterns = [
     path('compra/', checkoutView.as_view(), name='checkout'),
     path('datos_cliente/', paymentClienteView.as_view(), name='datos_cliente'),
     path('resumen_pago/', paymentView.as_view(), name='resumen_pago'),
+    path('lista_productos/', productsView, name='lista_productos'),
     path(
         'registro_farsali/',
         ClienteViewMixin.as_view(),

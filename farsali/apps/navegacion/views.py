@@ -138,7 +138,7 @@ def get_marcas(**kwargs):
 
 def productsView(request):
     page_number = request.GET.get('page')
-    quantity = 3
+    quantity = 10
     pagination=int(page_number)*quantity
 
     fields = [
@@ -159,7 +159,7 @@ def productsView(request):
         'activo': True,
         'destacado': False
     }
-    #TODO quitarlo en la noche
+    
     productos_qs = Producto.objects.filter(**filter_kwargs)[int(pagination):int(pagination)+quantity]
     productos = productos_qs.values(*fields, **map_fields)
     for p in productos:

@@ -1,33 +1,29 @@
 {% load thumbnail farsali_tags humanize %}
-<div class="products">
-    {% if productos %}
+<div v-if="productos.length > 0" id="products"  class="products">
     <div class="products__container">
-        <div class="scroll__animate">
-            {% for producto in productos %}
-            <!-- window.location=$(this).data('url')  -->
-                <div 
+        <div class="scroll__animate" ref="ref_scroll_infinite">
+            <div v-for="producto in productos"
                     class="products__items animado"
                     onclick="if(!(event.target.classList.contains('products__info--btn') || ($(event.target).parents('div.modal').length))){window.location=$(this).data('url')}"
-                    data-url="{% url 'producto_detalle' producto.id %}"
-                    data-category="{{ producto.categoria_url }}"
-                    data-name="{{ producto.nombre|safe }}" 
-                    data-id="{{ producto.id|safe }}"
-                    data-precio="{{ producto.costo }}"
+                    :data-url="[[ url ]] + [[ producto.id ]]"
+                    :data-category="[[ producto.categoria_url ]]"
+                    :data-name="[[ producto.nombre ]]" 
+                    :data-id="[[ producto.id ]]"
+                    :data-precio="[[ producto.costo ]]"
                     >
-                    {% thumbnail producto.imagen "400x264" as thumb %}
-                    <img class="products__items--img" src="{{ thumb.url }}" alt="{{ producto.nombre|safe }}"
-                        title="{{ producto.nombre|safe }}" height="{{ thumb.y }}" width="{{ thumb.x }}">
-                    {% endthumbnail %}
+                    <img class="products__items--img" :src="[[ producto.imagen ]]" :alt="[[ producto.nombre ]]"
+                        :title="[[ producto.nombre ]]" height="400" width="264">
+
+
                     <div class="products__info">
-                        <p class="products__info--ref">{{ producto.codigo }}</p>
-                        <a class="products__info--link" href="{% url 'producto_detalle' producto.id %}" target="_blank">
-                            <p class="products__info--title">{{ producto.nombre|safe }}</p>
+                        <p class="products__info--ref">[[ producto.codigo ]]</p>
+                        <a class="products__info--link" :href="[[ url ]] + [[ producto.id ]]" target="_blank">
+                            <p class="products__info--title">[[ producto.nombre ]]</p>
                         </a>
-                        <p class="products__info--price">${{ producto.costo|floatformat:"0"|intcomma }} COP</p>
+                        <p class="products__info--price">$ [[ producto.costo ]] COP</p>
                         <div class="products__info--rating">
                             <div class="products__info--stars">
-                                {% for estrellas in producto.calificacion_cantidad %}
-                                    <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
+                                    <svg  v-for="estrellas in producto.calificacion_cantidad" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
                                         xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 511 511"
                                         style="enable-background:new 0 0 511 511;" xml:space="preserve">
                                         <path class="st0" d="M509.67,196.02c-3.35-10.35-12.52-17.7-23.38-18.67L338.8,163.95L280.48,27.44c-4.3-10-14.09-16.48-24.98-16.48
@@ -36,22 +32,21 @@
                                                     l127.22-76.04l127.18,76.04c9.31,5.6,21.04,5.09,29.85-1.3c8.84-6.41,12.97-17.42,10.56-28.04l-32.87-144.81l111.48-97.75
                                                     C509.9,217.71,513.03,206.38,509.67,196.02z" />
                                     </svg>
-                                {% endfor %}
                             </div>
                         </div>
                         <a 
                             class="products__info--btn" 
                             href="#"
                             data-toggle="modal"
-                            data-target="#exampleModal-{{ producto.id }}">Añadir al carrito</a>
+                            :data-target="'#exampleModal-' +[[ producto.id ]]">Añadir al carrito</a>
                             
                         <!-- Modal -->
-                        <div class="modal fade" id="exampleModal-{{ producto.id }}" tabindex="-1" aria-labelledby="exampleModalLabel"
+                        <div class="modal fade" :id="'exampleModal-' + [[ producto.id ]]" tabindex="-1" aria-labelledby="exampleModalLabel"
                             aria-hidden="true">
                             <div class="modal-dialog modal-sm">
                                 <div class="modal-content bg-dark">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLabel">{{ producto.nombre }}</h5>
+                                        <h5 class="modal-title" id="exampleModalLabel">[[ producto.nombre ]]</h5>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
@@ -62,15 +57,15 @@
                                             <div class="form__cantidad">
                                                 <form action="">
                                                     <div class="form-group">
-                                                        <label for="">{{ producto.nombre|safe }}</label>
+                                                        <label for="">[[ producto.nombre ]]</label>
                                                         {% if logged_usser %}
-                                                            <label for="">Caja x {{ producto.cantidad_cajas }} unidades</label>
+                                                            <label for="">Caja x + [[ producto.cantidad_cajas ]] + unidades</label>
                                                         {% endif %}
-                                                        <input type="number" name="" id="cantidad-{{ producto.id }}" class="form-control">
+                                                        <input type="number" name="" :id="'cantidad-' + [[ producto.id ]]" class="form-control">
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="">Especificaciones para la compra</label>
-                                                        <input type="text" name="" id="especificaciones-{{ producto.id }}" class="form-control">
+                                                        <input type="text" name="" :id="'especificaciones-' + [[ producto.id ]]" class="form-control">
                                                     </div>
                                                 </form>
                                             </div>
@@ -82,8 +77,9 @@
                                         <button 
                                             type="button" 
                                             class="btn btn-danger add-carrito"
-                                            data-dismiss="modal"
-                                            data-product-serialize="{% json_serialize producto %}">
+                                            onclick="comprarproducto(event)" 
+                                            :data-product-serialize="[[ JSON.stringify(producto) ]]"
+                                            data-dismiss="modal">
                                         Añadir al carrito</button>
                                     </div>
                                 </div>
@@ -91,76 +87,58 @@
                         </div>
 
                     </div>
-                </div>
-            {% endfor %}
-        </div>
-    </div>
-    {% else %}
-    <div class="products__container">
-        <div class="scroll__animate">
-            {% for i in '12345678' %}
-
-            <div class="products__items animado">
-                <img class="products__items--img" src="/static/images/liquid-pro.jpg" alt="">
-                <div class="products__info">
-                    <p class="products__info--ref">REF-NY0554</p>
-                    <a href="#" rel="_blank">
-                        <p class="products__info--title">Desmaquillante</p>
-                    </a>
-                    <p class="products__info--price">$20.000 COP</p>
-                    <div class="products__info--rating">
-                        <div class="products__info--stars">
-                            {% for i in '1234' %}
-                            <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
-                                xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 511 511"
-                                style="enable-background:new 0 0 511 511;" xml:space="preserve">
-                                <path class="st0" d="M509.67,196.02c-3.35-10.35-12.52-17.7-23.38-18.67L338.8,163.95L280.48,27.44c-4.3-10-14.09-16.48-24.98-16.48
-                                                c-10.88,0-20.67,6.48-24.98,16.5l-58.32,136.48L24.69,177.34c-10.84,1-19.99,8.33-23.36,18.67c-3.36,10.35-0.26,21.7,7.94,28.85
-                                                l111.48,97.77L87.89,467.45c-2.41,10.65,1.73,21.65,10.56,28.04c4.75,3.43,10.3,5.18,15.91,5.18c4.83,0,9.62-1.3,13.92-3.88
-                                                l127.22-76.04l127.18,76.04c9.31,5.6,21.04,5.09,29.85-1.3c8.84-6.41,12.97-17.42,10.56-28.04l-32.87-144.81l111.48-97.75
-                                                C509.9,217.71,513.03,206.38,509.67,196.02z" />
-                            </svg>
-                            {% endfor %}
-                        </div>
-                    </div>
-                    <a class="products__info--btn add-carrito" href="#" data-toggle="modal"
-                        data-target="#exampleModal">Añadir al carrito</a>
-                    <!-- Modal -->
-                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-                        aria-hidden="true">
-                        <div class="modal-dialog modal-sm">
-                            <div class="modal-content bg-dark">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    <div class="modal__body--content">
-                                        <p>Selecciona la cantidad de productos que quieres guardar en el carrito</p>
-                                        <div class="form__cantidad">
-                                            <form action="">
-                                                <div class="form-group">
-                                                    <label for="">Producto nombre</label>
-                                                    <input type="number" name="" id="" class="form-control">
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary"
-                                        data-dismiss="modal">Cancelar</button>
-                                    <button type="button" class="btn btn-danger">Añadir al carrito</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
-            {% endfor %}
         </div>
     </div>
-    {% endif %}
 </div>
+{% block scripts %}
+    <script type="text/javascript">
+       const API_URL = 'http://localhost:8000'
+       var app2 = new Vue({
+            el: '#products',
+            delimiters: ['[[', ']]'],
+            data: function(){
+                return{
+                    productos: [],
+                    url: API_URL + "/productos/",
+                    page: 0,
+                    url_service: API_URL + "/lista_productos/?page=",
+                    last_page: -1
+                }
+            },
+            methods:{
+                async getProducts(){
+                    self = this
+                    let response = await fetch(this.url_service+this.page,{
+                        method:"GET", 
+                        headers: {
+                            "Content-Type":"application/json", 
+                        }, 
+                    });
+
+                    if(response.status = 200){
+                        data_response = await response.json()
+                        self.last_page = self.page
+                        if(data_response.data && data_response.data.length > 0){
+                            self.productos = [...self.productos, ...data_response.data]
+                            self.page += 1
+                        }
+                    }  
+                },
+                scroll_infinite(){
+                    window.addEventListener('scroll',_.debounce(()=>{
+                      const {offsetHeight} = this.$refs.ref_scroll_infinite
+                      const {scrollHeight,scrollTop,clientHeight} = document.documentElement;
+                      if(scrollTop + clientHeight >= offsetHeight && this.page!=this.last_page){
+                            this.getProducts();
+                        }
+                      }, 500));
+                }
+            },
+            mounted: async function(){
+               await this.getProducts()
+               this.scroll_infinite()
+            }, 
+        })
+    </script>
+{% endblock %}

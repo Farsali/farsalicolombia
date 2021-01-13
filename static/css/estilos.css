@@ -1553,17 +1553,19 @@ p {
   max-width: 100%;
 }
 .products .products__container .scroll__animate .animado {
-  opacity: 0%;
-  transition: all 0.6s;
+  transition: all 0.5s;
+  animation: mostrarArriba 1s;
 }
 .products .products__container .scroll__animate .mostrarArriba {
   animation: mostrarArriba 1s;
 }
 @keyframes mostrarArriba {
   0% {
+    opacity: 0;
     transform: translateY(60px);
   }
   100% {
+    opacity: 1;
     transform: translateX(0);
   }
 }
@@ -2276,7 +2278,7 @@ p {
 .comment-product {
   display: flex;
   padding: 2rem 2rem;
-  justify-content: space-between;
+  justify-content: space-evenly;
   align-items: center;
   width: 90%;
   margin-left: 5%;
