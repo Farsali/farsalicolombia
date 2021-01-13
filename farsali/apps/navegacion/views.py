@@ -161,11 +161,12 @@ def productsView(request):
     }
     
     productos_qs = Producto.objects.filter(**filter_kwargs)[int(pagination):int(pagination)+quantity]
+    print(productos_qs)
     productos = productos_qs.values(*fields, **map_fields)
     for p in productos:
         p['calificacion_cantidad'] = range(
             0, p['calificacion']+1) if p.get('calificacion') else []
-    return JsonResponse({'error':False,'data':list(productos)}, status=200 ,safe=False)
+    return JsonResponse({'error':False,'data':productos}, status=200 ,safe=False)
 
 
 class homeView(TemplateView):
