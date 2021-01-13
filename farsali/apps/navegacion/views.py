@@ -138,7 +138,7 @@ def get_marcas(**kwargs):
 
 def productsView(request):
     page_number = request.GET.get('page')
-    quantity = 10
+    quantity = 12
     pagination=int(page_number)*quantity
 
     fields = [
