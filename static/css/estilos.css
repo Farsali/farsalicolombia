@@ -1981,6 +1981,25 @@ p {
   text-align: center;
 }
 
+.loading {
+  text-align: center;
+  position: absolute;
+  color: #fff;
+  z-index: 9;
+  background: #000000;
+  padding: 8px 18px;
+  border-radius: 5px;
+  left: calc(50% - 45px);
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.5s;
+}
+
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+}
+
 .product__detail .container {
   display: flex;
   justify-content: space-evenly;

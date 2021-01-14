@@ -93,10 +93,16 @@
             </div>
         </div>
     </div>
+
+    <transition name="fade">
+      <div class="loading" ref="loading" style="display: none;">
+        <span class="fa fa-spinner fa-spin"></span> Cargando
+      </div>
+    </transition>
 </div>
 {% block scripts %}
     <script type="text/javascript">
-       const API_URL = 'https://www.farsalicolombia.com'
+       const API_URL = 'http://localhost:8000'
        const URL_BUCKET = 'https://farsali-col-bucket.s3.amazonaws.com/'
        var app2 = new Vue({
             el: '#products',
@@ -113,6 +119,8 @@
             },
             methods:{
                 async getProducts(){
+                    let loading = this.$refs.loading;
+                    loading.style.display = "block"
                     let producto_id = 0
                      if(this.$refs.value_product){
                         producto_id = this.$refs.value_product.value
@@ -132,7 +140,8 @@
                             self.productos = [...self.productos, ...data_response.data]
                             self.page += 1
                         }
-                    }  
+                    }
+                    loading.style.display = "none"
                 },
                 scroll_infinite(){
                     window.addEventListener('scroll',_.debounce(()=>{
