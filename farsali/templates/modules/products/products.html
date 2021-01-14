@@ -147,7 +147,7 @@
                     window.addEventListener('scroll',_.debounce(()=>{
                       const {offsetHeight} = this.$refs.ref_scroll_infinite
                       const {scrollHeight,scrollTop,clientHeight} = document.documentElement;
-                      if(scrollTop + clientHeight >= offsetHeight - 1000 && this.page!=this.last_page){
+                      if(scrollTop + clientHeight >= offsetHeight + 500 && this.page!=this.last_page){
                             this.getProducts();
                         }
                       }, 500));
