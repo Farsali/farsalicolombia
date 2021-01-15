@@ -177,7 +177,7 @@ def productsView(request):
             productos_qs_lt = Producto.objects.filter(**filter_kwargs).exclude(**exclude)[int(pagination):int(pagination)+quantity]
             productos_qs_lt = productos_qs_lt.values(*fields, **map_fields)
         productos =  list(productos_qs_gt) + list(productos_qs_lt)
-    elif marca_id:
+    elif marca_id and int(marca_id) > 0:
         marca = Marca.objects.get(pk=marca_id)
         filter_kwargs = {
             'activo': True,
