@@ -3,6 +3,10 @@
     {% if productos_id %}
         <input type="hidden" value="{{ productos_id }}" ref="value_product">
     {% endif %}
+
+    {% if marca_id %}
+        <input type="hidden" value="{{ marca_id }}" ref="value_marca">
+    {% endif %}
     <div v-if="productos.length > 0" class="products__container">
         <div class="scroll__animate" ref="ref_scroll_infinite">
             <div v-for="producto in productos"
@@ -121,12 +125,21 @@
                 async getProducts(){
                     let loading = this.$refs.loading;
                     loading.style.display = "block"
+
+                    // asignar id producto cuando entra al detalle del producto
                     let producto_id = 0
-                     if(this.$refs.value_product){
+                    if(this.$refs.value_product){
                         producto_id = this.$refs.value_product.value
                     }
+
+                    // asignar id marca cuando entra al detalle de la marca
+                    let marca_id = 0
+                    if(this.$refs.value_marca){
+                        marca_id = this.$refs.value_marca.value
+                    }
+
                     self = this
-                    let response = await fetch(this.url_service+this.page+"&producto_id="+producto_id,{
+                    let response = await fetch(this.url_service+this.page+"&producto_id="+producto_id+"&marca_id="+marca_id,{
                         method:"GET", 
                         headers: {
                             "Content-Type":"application/json", 

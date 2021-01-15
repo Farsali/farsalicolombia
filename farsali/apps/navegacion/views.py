@@ -139,6 +139,7 @@ def get_marcas(**kwargs):
 def productsView(request):
     page_number = request.GET.get('page')
     producto_id = request.GET.get('producto_id')
+    marca_id = request.GET.get('marca_id')
     quantity = 12
     pagination=int(page_number)*quantity
     product = None
@@ -176,6 +177,15 @@ def productsView(request):
             productos_qs_lt = Producto.objects.filter(**filter_kwargs).exclude(**exclude)[int(pagination):int(pagination)+quantity]
             productos_qs_lt = productos_qs_lt.values(*fields, **map_fields)
         productos =  list(productos_qs_gt) + list(productos_qs_lt)
+    elif marca_id:
+        marca = Marca.objects.get(pk=marca_id)
+        filter_kwargs = {
+            'activo': True,
+            'destacado': False,
+            'marca_producto': marca
+        }
+        productos_qs = Producto.objects.filter(**filter_kwargs)[int(pagination):int(pagination)+quantity]
+        productos = productos_qs.values(*fields, **map_fields)
     else:
         productos_qs = Producto.objects.filter(**filter_kwargs)[int(pagination):int(pagination)+quantity]
         productos = productos_qs.values(*fields, **map_fields)
@@ -270,7 +280,7 @@ class marcasView(TemplateView):
             'page_name': self.page_name,
             'marcas': get_marcas(),
             'marca': marca,
-            'productos': productos_marca,
+            'marca_id': marca.id,
             'background': get_backgrounds(
                 filter={'codigo': self.request.resolver_match.url_name}),
         })
