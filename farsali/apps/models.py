@@ -308,6 +308,14 @@ class Constante(models.Model):
     u"""
     Modelo para almacenar constantes específicas
     """
+    TIPOS_NAME = (
+        ('None', _(u'Ninguno')),
+        ('contacto_email', _(u'Email')),
+        ('contacto_telefono1', _(u'Teléfono')),
+        ('contacto_telefono2', _(u'Télefono 2')),
+        ('contacto_direccion', _(u'Dirección')),
+    )
+
     TIPOS = (
         ('str', _(u'Cadena')),
         ('int', _(u'Entero')),
@@ -319,9 +327,11 @@ class Constante(models.Model):
     VERDADEROS = frozenset(('si', 'activado', 'activada', 'yes', 'on', 'true',
                             'verdadero', 'verdadera'))
 
-    nombre = models.CharField(
-        _(u'Nombre'), max_length=30,
-        help_text=_(u'En minúsculas. Como si fuera un atributo'))
+    nombre = models.CharField(_(u'Codigo'), max_length=45, choices=TIPOS_NAME, default='None',  unique=True)
+        
+    # nombre = models.CharField(
+    #     _(u'Nombre'), max_length=30,
+    #     help_text=_(u'En minúsculas. Como si fuera un atributo'))
     enlace_texto = models.CharField(
         _(u"Enlace"),
         max_length=200,
