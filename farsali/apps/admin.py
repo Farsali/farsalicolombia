@@ -137,11 +137,11 @@ class GenericAdmin(admin.ModelAdmin):
 admin.site.register(Generic, GenericAdmin)
 
 
-class ImagenAdmin(admin.ModelAdmin):
-    pass
+# class ImagenAdmin(admin.ModelAdmin):
+#     pass
 
 
-admin.site.register(Imagen, ImagenAdmin)
+# admin.site.register(Imagen, ImagenAdmin)
 
 
 class VideoAdmin(admin.ModelAdmin):

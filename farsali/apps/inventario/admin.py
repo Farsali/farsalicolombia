@@ -150,4 +150,25 @@ class ComentarioAdmin(admin.ModelAdmin):
     pass
 
 
+class ImagenesProductoAdmin(admin.ModelAdmin):
+    list_display = (
+        'id',
+        'nombre',
+        'producto',
+        'imagen',
+        'orden',
+        'activo',
+    )
+    list_display_links = (
+        'id',
+        'nombre',
+    )
+
+    search_fields = (
+        'nombre',
+        'producto__nombre',
+    )
+
+
 admin.site.register(Comentario, ComentarioAdmin)
+admin.site.register(GaleriaProducto, ImagenesProductoAdmin)

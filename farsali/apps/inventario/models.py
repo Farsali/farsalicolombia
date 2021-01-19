@@ -238,6 +238,9 @@ class GaleriaProducto(ImagenBase, models.Model):
         on_delete=models.CASCADE
     )
 
+    def __str__(self):
+        return self.nombre
+
     class Meta:
         verbose_name = _(u'Imagen Producto')
         verbose_name_plural = _(u'Galería de Productos')
