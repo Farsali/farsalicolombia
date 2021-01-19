@@ -113,11 +113,11 @@
 		    	{% for product in products %}
 		    		{% if product.by_venta_caja %}
 				        <p class="p-subtitle">
-				        	{{ product.producto.nombre }} {{ product.cantidad }} Cajas x {{ product.productos.cantidad_cajas }} Unidad(es) c/u: $ {% multiply product.cantidad product.precio %}
+				        	{{ product.producto.codigo }} {{ product.producto.nombre }} {{ product.cantidad }} Cajas x {{ product.productos.cantidad_cajas }} Unidad(es) c/u: $ {% multiply product.cantidad product.precio %}
 				        </p>
 			        {% else %}
 			        	<p class="p-subtitle">
-				        	{{ product.producto.nombre }} x {{ product.cantidad }} Unidad(es): $ {% multiply product.cantidad product.precio %}
+				        	{{ product.producto.codigo }} {{ product.producto.nombre }} x {{ product.cantidad }} Unidad(es): $ {% multiply product.cantidad product.precio %}
 				        </p>
 			        {% endif %}
 		       	{% endfor %}

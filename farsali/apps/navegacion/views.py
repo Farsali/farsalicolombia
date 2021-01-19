@@ -198,6 +198,22 @@ def productsView(request):
     return JsonResponse({'error':False,'data':list(productos)}, status=200 ,safe=False)
 
 
+def callbackGatewayWompiView(request):
+    if request.method=="POST":
+        json_data = json.loads(request.body.decode("utf-8"))
+        print("WompiCallback")
+        if json_data["event"] == 'transaction.updated':
+            print("data")
+            print(json_data["data"])
+            data=json_data["data"]["transaction"]
+            data_reference=data["reference"].split("-")
+            cobrus = Cobru.objects.filter(url=data_reference[0])
+            return HttpResponse("Todo ok")
+        else:
+            return HttpResponse("event not found")
+    return HttpResponse("method not allowed")
+
+
 class homeView(TemplateView):
     template_name = "base/home.html"
     page_name = 'home'

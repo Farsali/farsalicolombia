@@ -15,7 +15,8 @@ from .views import (
     paymentClienteView,
     paymentView,
     registerFarsali,
-    productsView
+    productsView,
+    callbackGatewayWompiView
     # ajax_highligths
 )
 
@@ -47,6 +48,10 @@ urlpatterns = [
     path('datos_cliente/', paymentClienteView.as_view(), name='datos_cliente'),
     path('resumen_pago/', paymentView.as_view(), name='resumen_pago'),
     path('lista_productos/', productsView, name='lista_productos'),
+
+    # callback de las pasarelas de pagos
+    path('callback_pago_wompi/', callbackGatewayWompiView, name='callback_pago_wompi'),
+
     path(
         'registro_farsali/',
         ClienteViewMixin.as_view(),
