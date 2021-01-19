@@ -98,9 +98,21 @@ class RedSocial(models.Model):
 class Background(models.Model):
     """Model definition for Background."""
 
-    codigo = models.CharField(
-        _(u'Código'),
-        max_length=100)
+    TIPOS_NAME = (
+        ('None', _(u'Ninguno')),
+        ('tienda', _(u'Tienda')),
+        ('nosotros', _(u'Nosotros')),
+        ('home', _(u'Home')),
+        ('contacto', _(u'Contacto')),
+        ('videos', _(u'Videos')),
+        ('politicas', _(u'Politicas')),
+        ('videos', _(u'Videos')),
+    )
+
+    codigo = models.CharField(_(u'Codigo'), max_length=45, choices=TIPOS_NAME, default='None',  unique=True)
+    # codigo = models.CharField(
+    #     _(u'Código'),
+    #     max_length=100)
     video = models.CharField(
         _(u'Video'),
         blank=True,
