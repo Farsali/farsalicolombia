@@ -162,7 +162,6 @@ def productsView(request):
     }
     filter_kwargs = {
         'activo': True,
-        'destacado': False
     }
 
     productos_qs = None
@@ -181,7 +180,6 @@ def productsView(request):
         marca = Marca.objects.get(pk=marca_id)
         filter_kwargs = {
             'activo': True,
-            'destacado': False,
             'marca_producto': marca
         }
         productos_qs = Producto.objects.filter(**filter_kwargs)[int(pagination):int(pagination)+quantity]

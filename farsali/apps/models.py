@@ -145,7 +145,10 @@ class Background(models.Model):
         ordering = ('orden', )
 
     def __str__(self):
-        return self.titulo
+        titulo = ""
+        if self.titulo:
+            titulo = self.titulo
+        return titulo
 
 
 class Imagen(models.Model):
