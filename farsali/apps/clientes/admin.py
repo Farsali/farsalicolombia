@@ -28,18 +28,6 @@ class ClienteAdmin(admin.ModelAdmin):
         'email',
     ]
 
-    readonly_fields = [
-        'nombre',
-        'cedula',
-        'nick_name',
-        'contrasena',
-        'email',
-        'is_farsali',
-        'locacion',
-        'telefono',
-        'direccion'
-    ]
-
     fieldsets = [
         [_(u'General'), {
             'fields': (
