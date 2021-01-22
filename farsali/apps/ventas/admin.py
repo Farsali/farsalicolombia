@@ -40,6 +40,7 @@ class VentaAdmin(admin.ModelAdmin):
         'id',
         'cliente',
         'referencia',
+        'estado',
         'fecha',
         'tipo_pasarela'
     )
@@ -48,13 +49,14 @@ class VentaAdmin(admin.ModelAdmin):
     )
     list_filter = (
         'cliente',
+        'estado',
         ('fecha', DateRangeFilter),
     )
     search_fields = [
         'cliente__nombre',
     ]
 
-    readonly_fields = ['fecha','referencia','referencia_pasarela','cliente','tipo_pasarela','total',
+    readonly_fields = ['fecha','referencia','estado','referencia_pasarela','cliente','tipo_pasarela','total',
                        'cliente_nombre','cliente_farsali','cliente_telefono','cliente_email','cliente_direccion']
 
     fieldsets = [

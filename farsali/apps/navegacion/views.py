@@ -18,6 +18,8 @@ import json
 from farsali.settings import MERCADOPAGO_ACCESS_TOKEN, WOMPI_PUBLIC_KEY, EPAYCO_PUBLIC_KEY
 
 from django.views.generic import ListView
+from django.views.decorators.csrf import csrf_exempt
+from django.http import HttpResponse
 
 
 def dict_producto(producto):
@@ -194,23 +196,6 @@ def productsView(request):
             0, p['calificacion']+1)) if p.get('calificacion') else []
     
     return JsonResponse({'error':False,'data':list(productos)}, status=200 ,safe=False)
-
-
-def callbackGatewayWompiView(request):
-    if request.method=="POST":
-        json_data = json.loads(request.body.decode("utf-8"))
-        print("WompiCallback")
-        if json_data["event"] == 'transaction.updated':
-            print("data")
-            print(json_data["data"])
-            data=json_data["data"]["transaction"]
-            data_reference=data["reference"].split("-")
-            cobrus = Cobru.objects.filter(url=data_reference[0])
-            return HttpResponse("Todo ok")
-        else:
-            return HttpResponse("event not found")
-    return HttpResponse("method not allowed")
-
 
 class homeView(TemplateView):
     template_name = "base/home.html"
@@ -476,6 +461,54 @@ class paymentClienteView(View):
         )
 
 
+class redirectPaymentView(View):
+    page_name = 'Confirmacion de Pago'
+
+    def get(self, request, *args, **kwargs):
+        venta_id = self.kwargs['reference']
+        success = self.kwargs['success'] if self.kwargs['success'] else None
+        failure = self.kwargs['failure'] if self.kwargs['failure'] else None
+        venta = Venta.objects.get(pk=venta_id)
+        if venta.tipo_pasarela == 0:
+            if success:
+                if venta.estado == "proceso":
+                    ventas_productos = VentaProducts.objects.filter(venta=venta)
+                    for item in ventas_productos:
+                        item.producto.cantidad -= item.cantidad
+                        item.producto.save()
+                venta.estado = "aprobado"
+            elif failure:
+                if venta.estado == "espera_respuesta_pasarela":
+                    ventas_productos = VentaProducts.objects.filter(venta=venta)
+                    for item in ventas_productos:
+                        item.producto.cantidad -= item.cantidad
+                        item.producto.save()
+                venta.estado = "rechazado"
+            else:
+                if venta.estado == "proceso":
+                    ventas_productos = VentaProducts.objects.filter(venta=venta)
+                    for item in ventas_productos:
+                        item.producto.cantidad -= item.cantidad
+                        item.producto.save()
+                venta.estado = "espera_respuesta_pasarela"
+            
+        elif venta.tipo_pasarela == 1:
+            if venta.estado == "proceso":
+                venta.estado = "espera_respuesta_pasarela"
+                ventas_productos = VentaProducts.objects.filter(venta=venta)
+                for item in ventas_productos:
+                    item.producto.cantidad -= item.cantidad
+                    item.producto.save()
+        venta.save()
+        return render(
+            request,
+            "base/redirect_payment.html",
+            context={
+                'page_name': self.page_name,
+                'venta': venta
+            }
+        )
+
 class paymentView(View):
     page_name = 'Resumen de la compra'
 
@@ -525,26 +558,30 @@ class paymentView(View):
         response = None
         wompi = None
         epayco = None
+        url_redirect = None
 
         if pasarela.origen == 0:
             preference = {
-                "items": items
+                "items": items,
+                "back_urls": {
+                    "success": f'https://www.farsalicolombia.com/redirect_pago/{ventas.id}/?success=1',
+                    "failure": f'https://www.farsalicolombia.com/redirect_pago/{ventas.id}/?failure=1',
+                    "pending": f'https://www.farsalicolombia.com/redirect_pago/{ventas.id}/'
+                },
+                "auto_return": "approved",
             }
-
             create_preference_result = mp.create_preference(preference)
             response = create_preference_result["response"]["id"]
             ventas.referencia_pasarela = response
         elif pasarela.origen == 1:
             response = ventas.referencia
             wompi = WOMPI_PUBLIC_KEY
-            url_redirect = ""
+            url_redirect = f'https://www.farsalicolombia.com/redirect_pago/{ventas.id}/'
 
         elif pasarela.origen == 2:
-            print(EPAYCO_PUBLIC_KEY)
             response = ventas.referencia
             epayco = EPAYCO_PUBLIC_KEY
             url_redirect = ""
-            print(epayco)
 
         ventas.tipo_pasarela = pasarela
         ventas.total = total
@@ -560,7 +597,8 @@ class paymentView(View):
                 'epayco': epayco,
                 'products': items,
                 'total': total,
-                "client": client
+                "client": client,
+                "url_redirect": url_redirect
             }
         )
 
@@ -573,3 +611,48 @@ class registerFarsali(TemplateView):
         context = super().get_context_data(**kwargs)
         context.update({'page_name': self.page_name})
         return context
+
+
+#callback of the payments
+
+@csrf_exempt
+def callbackGatewayWompiView(request):
+    print(request.method)
+    if request.method=="POST":
+        json_data = json.loads(request.body.decode("utf-8"))
+        print("WompiCallback")
+        print(json_data)
+        if json_data["event"] == 'transaction.updated':
+            data=json_data["data"]["transaction"]
+            venta = Venta.objects.get(referencia=data["reference"])
+            venta.metodo_pago = data["payment_method_type"]
+            venta.transaccion_id = data["id"]
+            if data["status"] == 'APPROVED' and not (venta.estado=="rechazado" or venta.estado=="aprobado"):
+                if venta.estado == "proceso":
+                    ventas_productos = VentaProducts.objects.filter(venta=venta)
+                    for item in ventas_productos:
+                        item.producto.cantidad -= item.cantidad
+                        item.producto.save()
+                venta.estado = "aprobado"
+                
+            elif data["status"] == 'DECLINED' and not (venta.estado=="rechazado" or venta.estado=="aprobado"):
+                if venta.estado == "espera_respuesta_pasarela":
+                    ventas_productos = VentaProducts.objects.filter(venta=venta)
+                    for item in ventas_productos:
+                            item.producto.cantidad += item.cantidad
+                            item.producto.save()
+                venta.estado = "rechazado"
+                
+            else:
+                if venta.estado == "espera_respuesta_pasarela":
+                    ventas_productos = VentaProducts.objects.filter(venta=venta)
+                    for item in ventas_productos:
+                        item.producto.cantidad += item.cantidad
+                        item.producto.save()
+                venta.estado = "error_pasarela"
+                
+            venta.save()
+            return HttpResponse("Todo ok")
+        else:
+            return HttpResponse("event not found")
+    return HttpResponse("method not allowed")

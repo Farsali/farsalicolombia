@@ -1,0 +1,31 @@
+{% extends "base/base.html" %}
+{% load farsali_tags humanize %}
+
+{% block extracss %}
+{{ block.super }}
+
+{% endblock %}
+
+{% block content %}
+<div class="container" style="margin-top: 140px;">
+      <div class="card mb-3">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-lg-12">
+              <h5 class="mb-3 fs-0"><strong>Resumen de la Compra</strong><h5>
+              <h6 class="mb-3 fs-0"><strong>Su compra ha sido exitosa, en esto momento esta en proceso, su número de referencia es: {{  venta.referencia }}</strong><h6>
+              <h6 class="mb-2">{{ venta.cliente.nombre }}</h6>
+              <p class="mb-1 fs--1">{{ venta.cliente.direccion }}</p>
+              <p class="mb-0 fs--1"> <strong>Email: </strong>{{ venta.cliente.email }}</p>
+              <p class="mb-0 fs--1"> <strong>Phone: </strong>{{ venta.cliente.telefono }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+</div>
+{% if not logged_usser %}
+  {% include "modules/call-to-action/call-to-action.html" %}
+{% endif %}
+{% endblock %}
+
+

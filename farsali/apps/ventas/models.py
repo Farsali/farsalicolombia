@@ -12,6 +12,13 @@ import uuid
 
 
 class Venta(models.Model):
+    TIPOS_ESTADO = (
+        ('proceso', _(u'Proceso')),
+        ('aprobado', _(u'Aprobado')),
+        ('rechazado', _(u'Rechazado')),
+        ('espera_respuesta_pasarela', _(u'Respuesta de Pasarela')),
+        ('error_pasarela', _(u'Error en la Pasarela')),
+    )
 
     uuid = models.UUIDField("UUID", unique=True, default=uuid.uuid4, editable=False, db_index=True)
     cliente = models.ForeignKey(
@@ -46,6 +53,21 @@ class Venta(models.Model):
         editable=False)
 
     total = models.PositiveIntegerField(_(u'Total'), default=0)
+    transaccion_id = models.CharField(
+        _(u'Transaccion de la Pasarela'),
+        max_length=150,
+        default="",
+        blank=True,
+        null=True
+    )
+    metodo_pago = models.CharField(
+        _(u'Metodo de Pago'),
+        max_length=150,
+        default="",
+        blank=True,
+        null=True
+    )
+    estado = models.CharField(_(u'Estado'), max_length=45, choices=TIPOS_ESTADO, default='proceso')
 
     class Meta:
         verbose_name = _(u"Venta")
@@ -59,16 +81,16 @@ class Venta(models.Model):
         ''' On save, update timestamps and code '''
         if not self.id:
             self.fecha = timezone.now()
-        for count in range(100):
-            try:
-                transaction_code = generate_random_chars(6)
-                self.referencia = transaction_code
-                break
-            except IntegrityError as e:
-                if 'unique constraint' in e.message and count < 100:
-                    pass
-                else:
-                    raise e
+            for count in range(100):
+                try:
+                    transaction_code = generate_random_chars(6)
+                    self.referencia = transaction_code
+                    break
+                except IntegrityError as e:
+                    if 'unique constraint' in e.message and count < 100:
+                        pass
+                    else:
+                        raise e
         return super(Venta, self).save(*args, **kwargs)
 
     @property
