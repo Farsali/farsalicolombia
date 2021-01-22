@@ -492,7 +492,7 @@ class redirectPaymentView(View):
                         item.producto.save()
                 venta.estado = "espera_respuesta_pasarela"
             
-        elif venta.tipo_pasarela == 1:
+        elif venta.tipo_pasarela == 1 or venta.tipo_pasarela == 2:
             if venta.estado == "proceso":
                 venta.estado = "espera_respuesta_pasarela"
                 ventas_productos = VentaProducts.objects.filter(venta=venta)
@@ -558,7 +558,8 @@ class paymentView(View):
         response = None
         wompi = None
         epayco = None
-        url_redirect = None
+        url_redirect = ""
+        url_response = ""
 
         if pasarela.origen == 0:
             preference = {
@@ -581,7 +582,8 @@ class paymentView(View):
         elif pasarela.origen == 2:
             response = ventas.referencia
             epayco = EPAYCO_PUBLIC_KEY
-            url_redirect = ""
+            url_redirect = f'https://www.farsalicolombia.com/redirect_pago/{ventas.id}/'
+            url_response = f'https://www.farsalicolombia.com/redirect_pago/{ventas.id}/'
 
         ventas.tipo_pasarela = pasarela
         ventas.total = total
@@ -598,6 +600,7 @@ class paymentView(View):
                 'products': items,
                 'total': total,
                 "client": client,
+                "url_response": url_response,
                 "url_redirect": url_redirect
             }
         )
