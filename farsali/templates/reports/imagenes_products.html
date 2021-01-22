@@ -1,0 +1,39 @@
+{% load static farsali_tags %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Reporte de Venta</title>
+</head>
+<style type="text/css">
+
+	body{
+	    background-position: center;
+	    background-repeat: no-repeat;
+	    background-size: cover;
+	    height: 600px;
+	    width: 100%;
+	}
+
+    .div-img{
+        margin: 70px;
+        vertical-align: center;
+    }
+
+    .img{
+        width: 220px;
+        height: 244px;
+        border-radius: 8px;
+        max-width: 100%;
+        page-break-before: "always";
+        margin: 2px;
+    }
+</style>
+<body style="background-image: url({% static 'images/fondo.jpg' %})">
+    <div class="div-img">
+        {% for imagen in data_imagenes %}
+            <img class="img" title="{{ imagen.nombre }}" alt="blah" src="{{ imagen.imagen.url }}" />
+        {% endfor %}
+    </div>
+</body>
+</html>
+    

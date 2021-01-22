@@ -3,8 +3,16 @@ from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
 from sorl.thumbnail.admin import AdminImageMixin
 
-from .models import CategoriaProducto, Producto, GaleriaProducto, Comentario, Marca
+from .models import (CategoriaProducto, Producto, GaleriaProducto, Comentario,
+                     Marca)
 from farsali.forms import ImagenAdminForm
+
+from weasyprint import HTML
+from io import BytesIO
+from django.template.loader import get_template
+from django.http import HttpResponse
+from django.core.files.base import ContentFile
+import random
 
 
 class CategoriaProductoAdmin(admin.ModelAdmin):
@@ -18,9 +26,8 @@ class CategoriaProductoAdmin(admin.ModelAdmin):
     )
     list_display_links = (
         'id',
-        'nombre', 
+        'nombre',
     )
-
 
     fieldsets = [
         [_(u'General'), {
@@ -50,9 +57,8 @@ class MarcaAdmin(admin.ModelAdmin):
     )
     list_display_links = (
         'id',
-        'nombre', 
+        'nombre',
     )
-
 
     fieldsets = [
         [_(u'General'), {
@@ -61,7 +67,7 @@ class MarcaAdmin(admin.ModelAdmin):
                 'descripcion',
                 'tipo_marca',
                 'logo',
-                ('orden','activo'),
+                ('orden', 'activo'),
             )
         }]
     ]
@@ -117,7 +123,7 @@ class ProductoAdmin(admin.ModelAdmin):
                 'codigo',
                 'costo',
                 ('costo_adicional', 'cantidad_cajas'),
-                ('costo_farsali','cantidad_cajas_prefer'),
+                ('costo_farsali', 'cantidad_cajas_prefer'),
                 'cantidad',
                 'calificacion',
                 'codigo_video',
@@ -168,6 +174,27 @@ class ImagenesProductoAdmin(admin.ModelAdmin):
         'nombre',
         'producto__nombre',
     )
+    list_filter = ('producto',)
+
+    actions = ('generate_pdf',)
+
+    def generate_pdf(self, request, queryset):
+        template = get_template("reports/imagenes_products.html")
+        html_template = template.render({
+            "data_imagenes": list(queryset)
+        })
+        response = BytesIO()
+        html = HTML(string=html_template.encode("UTF-8"),
+                    base_url=request.build_absolute_uri())
+        html.write_pdf(response)
+        number = random.randrange(100000)
+        filename = f'fotos_{number}.pdf'
+        response = HttpResponse(ContentFile(response.getvalue()),
+                                content_type='application/pdf')
+        response['Content-Disposition'] = f'attachment; filename={filename}'
+        return response
+
+    generate_pdf.short_description = "Generar PDF de fotos"
 
 
 admin.site.register(Comentario, ComentarioAdmin)
