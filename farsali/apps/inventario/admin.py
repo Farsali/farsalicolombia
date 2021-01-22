@@ -19,7 +19,7 @@ class CategoriaProductoAdmin(admin.ModelAdmin):
     form = ImagenAdminForm
 
     list_display = (
-        'id', 
+        'id',
         'nombre',
         'descripcion',
         'orden',
@@ -49,7 +49,7 @@ class MarcaAdmin(admin.ModelAdmin):
     form = ImagenAdminForm
 
     list_display = (
-        'id', 
+        'id',
         'nombre',
         'descripcion',
         'tipo_marca',

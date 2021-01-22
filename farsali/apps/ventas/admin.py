@@ -90,6 +90,7 @@ class VentaAdmin(admin.ModelAdmin):
             "reference": item.referencia,
             "date_now":  datetime.now().strftime("%d de %B del %Y"),
             "name_client": item.cliente.nombre,
+            "document_client": item.cliente.cedula,
             "address": item.cliente.direccion,
             "location": item.cliente.locacion,
             "phone": item.cliente.telefono,
