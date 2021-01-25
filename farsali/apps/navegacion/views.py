@@ -466,10 +466,10 @@ class redirectPaymentView(View):
 
     def get(self, request, *args, **kwargs):
         venta_id = self.kwargs['reference']
-        success = self.kwargs['success'] if self.kwargs['success'] else None
-        failure = self.kwargs['failure'] if self.kwargs['failure'] else None
+        success = request.GET.get('success')if request.GET.get('success') else None
+        failure = request.GET.get('failure') if request.GET.get('failure') else None
         venta = Venta.objects.get(pk=venta_id)
-        if venta.tipo_pasarela == 0:
+        if venta.tipo_pasarela.origen == 0:
             if success:
                 if venta.estado == "proceso":
                     ventas_productos = VentaProducts.objects.filter(venta=venta)
@@ -492,7 +492,7 @@ class redirectPaymentView(View):
                         item.producto.save()
                 venta.estado = "espera_respuesta_pasarela"
             
-        elif venta.tipo_pasarela == 1 or venta.tipo_pasarela == 2:
+        elif venta.tipo_pasarela.origen  == 1 or venta.tipo_pasarela.origen  == 2:
             if venta.estado == "proceso":
                 venta.estado = "espera_respuesta_pasarela"
                 ventas_productos = VentaProducts.objects.filter(venta=venta)
