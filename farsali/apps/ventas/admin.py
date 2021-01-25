@@ -68,6 +68,7 @@ class VentaAdmin(admin.ModelAdmin):
                 'cliente_email',
                 'cliente_direccion',
                 'referencia',
+                'estado',
                 'total',
                 'fecha',
                 'tipo_pasarela',

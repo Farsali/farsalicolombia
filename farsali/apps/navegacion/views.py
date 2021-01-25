@@ -157,7 +157,8 @@ def productsView(request):
         'imagen',
         'calificacion',
         'costo',
-        'cantidad_cajas'
+        'cantidad_cajas',
+        'costo_adicional'
     ]
     map_fields = {
         'categoria_url': F('categoria__url'),
@@ -424,11 +425,15 @@ class checkoutView(View):
         items = []
         total = 0
         for item in json_data:
+            producto = Producto.objects.get(id=int(item["id"]))
             total += int(item["precio"])*int(item["cantidad"])
+            total += int(item["precio_caja"])*int(item["cantidad_cajas"])
             items.append(
                 {
-                    "title": item["titulo"],
+                    "title": producto.nombre,
                     "quantity": int(item["cantidad"]),
+                    "quantity_box": int(item["cantidad_cajas"]),
+                    "unit_price_box": int(item["precio_caja"]),
                     "currency_id": "COP",
                     "unit_price": int(item["precio"]),
                     "specs": item["especificaciones"],
@@ -474,22 +479,34 @@ class redirectPaymentView(View):
                 if venta.estado == "proceso":
                     ventas_productos = VentaProducts.objects.filter(venta=venta)
                     for item in ventas_productos:
-                        item.producto.cantidad -= item.cantidad
-                        item.producto.save()
+                        if item.by_venta_caja:
+                            item.producto.cantidad_cajas -= item.cantidad
+                            item.producto.save()
+                        else:
+                            item.producto.cantidad -= item.cantidad
+                            item.producto.save()
                 venta.estado = "aprobado"
             elif failure:
                 if venta.estado == "espera_respuesta_pasarela":
                     ventas_productos = VentaProducts.objects.filter(venta=venta)
                     for item in ventas_productos:
-                        item.producto.cantidad -= item.cantidad
-                        item.producto.save()
+                        if item.by_venta_caja:
+                            item.producto.cantidad_cajas += item.cantidad
+                            item.producto.save()
+                        else:
+                            item.producto.cantidad += item.cantidad
+                            item.producto.save()
                 venta.estado = "rechazado"
             else:
                 if venta.estado == "proceso":
                     ventas_productos = VentaProducts.objects.filter(venta=venta)
                     for item in ventas_productos:
-                        item.producto.cantidad -= item.cantidad
-                        item.producto.save()
+                        if item.by_venta_caja:
+                            item.producto.cantidad_cajas -= item.cantidad
+                            item.producto.save()
+                        else:
+                            item.producto.cantidad -= item.cantidad
+                            item.producto.save()
                 venta.estado = "espera_respuesta_pasarela"
             
         elif venta.tipo_pasarela.origen  == 1 or venta.tipo_pasarela.origen  == 2:
@@ -497,8 +514,12 @@ class redirectPaymentView(View):
                 venta.estado = "espera_respuesta_pasarela"
                 ventas_productos = VentaProducts.objects.filter(venta=venta)
                 for item in ventas_productos:
-                    item.producto.cantidad -= item.cantidad
-                    item.producto.save()
+                    if item.by_venta_caja:
+                        item.producto.cantidad_cajas -= item.cantidad
+                        item.producto.save()
+                    else:
+                        item.producto.cantidad -= item.cantidad
+                        item.producto.save()
         venta.save()
         return render(
             request,
@@ -517,6 +538,7 @@ class paymentView(View):
         mp = mercadopago.MP(MERCADOPAGO_ACCESS_TOKEN)
         items = []
         total = 0
+        cantidad_total = 0
 
         try:
             client = Cliente.objects.get(cedula=request.POST.get('document'))
@@ -539,20 +561,36 @@ class paymentView(View):
 
         ventas = Venta(cliente=client)
         ventas.save()
-        by_box = True if request.POST.get('boxes') else False
         for item in json_data:
+            producto = Producto.objects.get(id=int(item["id"]))
             total += int(item["unit_price"])*int(item["quantity"])
-            items.append(
-                {
-                    "title": item["title"],
-                    "quantity": int(item["quantity"]),
-                    "currency_id": "COP",
-                    "unit_price": int(item["unit_price"])
-                }
-            )
-            products = VentaProducts(venta=ventas, producto_id=item["id"], cantidad=int(item["quantity"]),
-                                    precio=int(item["unit_price"]), especificaciones=item["specs"], by_venta_caja=by_box)
-            products.save()
+            total += int(item["unit_price_box"])*int(item["quantity_box"])
+            
+            if int(item["quantity"]) > 0:
+                items.append(
+                    {
+                        "title": producto.nombre,
+                        "quantity": int(item["quantity"]),
+                        "currency_id": "COP",
+                        "unit_price": int(item["unit_price"])
+                    }
+                )
+                products = VentaProducts(venta=ventas, producto_id=item["id"], cantidad=int(item["quantity"]),
+                                        precio=int(item["unit_price"]), especificaciones=item["specs"], by_venta_caja=False)
+                products.save()
+            
+            if int(item["quantity_box"]) > 0:
+                items.append(
+                    {
+                        "title": producto.nombre + "x Caja",
+                        "quantity": int(item["quantity_box"]),
+                        "currency_id": "COP",
+                        "unit_price": int(item["unit_price_box"])
+                    }
+                )
+                products = VentaProducts(venta=ventas, producto_id=item["id"], cantidad=int(item["quantity_box"]),
+                                        precio=int(item["unit_price_box"]), especificaciones=item["specs"], by_venta_caja=True)
+                products.save()
 
         pasarela = Pasarelas.objects.filter(activo=True).first()
         response = None
@@ -634,14 +672,22 @@ def callbackGatewayWompiView(request):
                 if venta.estado == "proceso":
                     ventas_productos = VentaProducts.objects.filter(venta=venta)
                     for item in ventas_productos:
-                        item.producto.cantidad -= item.cantidad
-                        item.producto.save()
+                        if item.by_venta_caja:
+                            item.producto.cantidad_cajas -= item.cantidad
+                            item.producto.save()
+                        else:
+                            item.producto.cantidad -= item.cantidad
+                            item.producto.save()
                 venta.estado = "aprobado"
                 
             elif data["status"] == 'DECLINED' and not (venta.estado=="rechazado" or venta.estado=="aprobado"):
                 if venta.estado == "espera_respuesta_pasarela":
                     ventas_productos = VentaProducts.objects.filter(venta=venta)
                     for item in ventas_productos:
+                        if item.by_venta_caja:
+                            item.producto.cantidad_cajas += item.cantidad
+                            item.producto.save()
+                        else:
                             item.producto.cantidad += item.cantidad
                             item.producto.save()
                 venta.estado = "rechazado"
@@ -650,8 +696,12 @@ def callbackGatewayWompiView(request):
                 if venta.estado == "espera_respuesta_pasarela":
                     ventas_productos = VentaProducts.objects.filter(venta=venta)
                     for item in ventas_productos:
-                        item.producto.cantidad += item.cantidad
-                        item.producto.save()
+                        if item.by_venta_caja:
+                            item.producto.cantidad_cajas += item.cantidad
+                            item.producto.save()
+                        else:
+                            item.producto.cantidad += item.cantidad
+                            item.producto.save()
                 venta.estado = "error_pasarela"
                 
             venta.save()

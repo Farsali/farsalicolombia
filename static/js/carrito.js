@@ -50,6 +50,7 @@ function getValueCantidadProducts(){
   cantidad_total = 0
   productosLS.forEach(function(producto) {
         cantidad_total += parseInt(producto.cantidad)
+        cantidad_total += parseInt(producto.cantidad_cajas)
   });
   localStorage.setItem('cantidad_total', cantidad_total );
   return cantidad_total
@@ -83,24 +84,37 @@ function comprarproducto(e) {
   if(e.target.classList.contains('add-carrito') ) {
     const producto = JSON.parse(e.target.getAttribute('data-product-serialize'));
     const cantidad = document.getElementById('cantidad-' + producto.id + '')
+    const cantidad_cajas = document.getElementById('cantidad_cajas-' + producto.id + '')
     const especificaciones = document.getElementById('especificaciones-' + producto.id + '')
     producto.especificaciones = ""
     producto.cantidad = 0
+    producto.cantidad_cajas = 0
     producto.total_precio = producto.costo
+    producto.total_precio_caja = producto.costo_adicional
     if(especificaciones){
       producto.especificaciones = especificaciones.value
     }
-    if (cantidad && cantidad.value){
-      producto.cantidad = cantidad.value
-      producto.total_precio = producto.total_precio * producto.cantidad
+    if ((cantidad && cantidad.value > 0) || (cantidad_cajas && cantidad_cajas.value > 0)){
+
+        if (cantidad && cantidad.value > 0){
+          producto.cantidad = cantidad.value
+          producto.total_precio = producto.total_precio * producto.cantidad
+        }
+
+        if (cantidad_cajas && cantidad_cajas.value > 0){
+          producto.cantidad_cajas = cantidad_cajas.value
+          producto.total_precio_caja = producto.total_precio_caja * producto.cantidad_cajas
+        }
+        msgCarrito.style.display = "block";
+        
+        setTimeout(function() {
+            msgCarrito.style.display = "none";         
+        },2500);
+        // Enviamos el producto seleccionado para obtener sus datos
+        leerDatosproducto(producto);
+    }else{
+      alert("Debe ingresar algun valor para insertar en el carrito")
     }
-    msgCarrito.style.display = "block";
-    
-    setTimeout(function() {
-        msgCarrito.style.display = "none";         
-    },2500);
-    // Enviamos el producto seleccionado para obtener sus datos
-    leerDatosproducto(producto);
   }
 }
 
@@ -109,8 +123,11 @@ function leerDatosproducto(producto) {
   const infoProducto = {
     titulo: producto.nombre,
     precio: producto.costo,
-    total_precio: producto.total_precio,
-    cantidad: producto.cantidad,
+    total_precio: producto.total_precio ? producto.total_precio : 0,
+    cantidad: producto.cantidad ? producto.cantidad : 0,
+    precio_caja: producto.costo_adicional ? producto.costo_adicional : 0,
+    total_precio_caja: producto.total_precio_caja ? producto.total_precio_caja : 0,
+    cantidad_cajas: producto.cantidad_cajas ? producto.cantidad_cajas : 0,
     especificaciones: producto.especificaciones,
     id: producto.id
   };
@@ -120,33 +137,57 @@ function leerDatosproducto(producto) {
 
 // Muestra el producto seleccionado en el carrito
 function insertarCarrito(producto) {
-  const row = document.createElement('tr');
+  
   var ifProductExist = checkIfItemExists(producto.id);
-  row.innerHTML = `
-    <th scope="row">${producto.titulo}</th>
-    <td>${producto.cantidad}</td>
-    <td>$ ${producto.precio} COP</td>
-    <td>$ ${producto.total_precio} COP</td>
-    <td class="delete-check">
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" value=""
-            id="defaultCheck1">
-        </div>
-        <a style="color:red;" href="#" data-precio-total="${producto.total_precio}" data-cantidad="${producto.cantidad}" data-precio="${producto.precio}" data-id="${producto.id}" class="icon-trash-empty"></a>
-    </td>`;
+
   if (!ifProductExist) {
-    listaproductos.appendChild(row);
-    valorTotalSuma += parseInt(producto.total_precio)
-    displayTotal(valorTotalSuma)
 
-    cantidad_total = localStorage.getItem('cantidad_total') ? localStorage.getItem('cantidad_total') : 0;
-    cantidad_total = parseInt(cantidad_total) + parseInt(producto.cantidad)
-    localStorage.setItem('cantidad_total', cantidad_total );
-    displayTotalProductos(cantidad_total)
-
-    if(divCarritoProductos.style.display == "none"){
-      divCarritoProductos.style.display = "block";
+    const row = document.createElement('tr');
+    if (producto.cantidad && producto.cantidad > 0){
+      row.innerHTML = `
+      <th scope="row">${producto.titulo}</th>
+      <td>${producto.cantidad}</td>
+      <td>$ ${producto.precio} COP</td>
+      <td>$ ${producto.total_precio} COP</td>
+      <td class="delete-check">
+          <div class="form-check">
+              <input class="form-check-input" type="checkbox" value=""
+              id="defaultCheck1">
+          </div>
+          <a style="color:red;" href="#" data-caja="0" data-precio-total="${producto.total_precio}" data-cantidad="${producto.cantidad}" data-precio="${producto.precio}" data-id="${producto.id}" class="icon-trash-empty"></a>
+      </td>`;
+      listaproductos.appendChild(row);
     }
+    
+    const row2 = document.createElement('tr');
+    if (producto.cantidad_cajas && producto.cantidad_cajas > 0){
+      row2.innerHTML = `
+      <th scope="row">${producto.titulo} x Caja</th>
+      <td>${producto.cantidad_cajas}</td>
+      <td>$ ${producto.precio_caja} COP</td>
+      <td>$ ${producto.total_precio_caja} COP</td>
+      <td class="delete-check">
+          <div class="form-check">
+              <input class="form-check-input" type="checkbox" value=""
+              id="defaultCheck1">
+          </div>
+          <a style="color:red;" href="#" data-caja="1" data-precio-total="${producto.total_precio_caja}" data-cantidad="${producto.cantidad_cajas}" data-precio="${producto.precio_caja}" data-id="${producto.id}" class="icon-trash-empty"></a>
+      </td>`;
+      listaproductos.appendChild(row2);
+    }
+      
+      valorTotalSuma += parseInt(producto.total_precio)
+      valorTotalSuma += parseInt(producto.total_precio_caja)
+      displayTotal(valorTotalSuma)
+
+      cantidad_total = localStorage.getItem('cantidad_total') ? localStorage.getItem('cantidad_total') : 0;
+      cantidad_total = parseInt(cantidad_total) + parseInt(producto.cantidad) + parseInt(producto.cantidad_cajas)
+      localStorage.setItem('cantidad_total', cantidad_total );
+      displayTotalProductos(cantidad_total)
+
+      if(divCarritoProductos.style.display == "none"){
+        divCarritoProductos.style.display = "block";
+      }
   }
   guardarproductoLocalStorage(producto);
 
@@ -168,6 +209,7 @@ function eliminarproducto(e) {
 
     cantidad_total = parseInt(localStorage.getItem('cantidad_total')) ? localStorage.getItem('cantidad_total') : 0;
     var cantidadProducto = producto.querySelector('a').getAttribute('data-cantidad')
+    var caja = producto.querySelector('a').getAttribute('data-caja')
     cantidad_total -= parseInt(cantidadProducto)
     cantidad_total = cantidad_total > 0 ? cantidad_total : 0;
     localStorage.setItem('cantidad_total', cantidad_total );
@@ -178,7 +220,7 @@ function eliminarproducto(e) {
     }
 
     displayTotal(valorTotalSuma)
-    eliminarproductoLocalStorage(parseInt(productoID));
+    eliminarproductoLocalStorage(parseInt(productoID), caja);
 
     
 }
@@ -232,8 +274,10 @@ function sendProduct(url){
     productosLS.forEach(function(producto) {
       data.push({
         "titulo": producto.titulo,
-        "cantidad": producto.cantidad,
-        "precio": producto.precio,
+        "cantidad": producto.cantidad ? producto.cantidad : 0,
+        "precio": producto.precio ? producto.precio : 0,
+        "cantidad_cajas": producto.cantidad_cajas ? producto.cantidad_cajas : 0,
+        "precio_caja": producto.precio_caja ? producto.precio_caja : 0,
         "especificaciones": producto.especificaciones,
         "id": producto.id
       })
@@ -258,10 +302,13 @@ function buyProduct(e) {
     const producto = JSON.parse(e.target.getAttribute('data-product-serialize'));
     const url_checkout = e.target.getAttribute('data-url-checkout');
     const cantidad = document.getElementById('cantidad-' + producto.id + '')
+    const cantidad_cajas = document.getElementById('cantidad_cajas-' + producto.id + '')
     const especificaciones = document.getElementById('especificaciones-' + producto.id + '')
     producto.especificaciones = ""
     producto.cantidad = 0
+    producto.cantidad_cajas = 0
     producto.total_precio = producto.costo
+    producto.total_precio_caja = producto.costo_adicional
     if(especificaciones){
       producto.especificaciones = especificaciones.value
     }
@@ -269,11 +316,17 @@ function buyProduct(e) {
       producto.cantidad = cantidad.value
       producto.total_precio = producto.total_precio * producto.cantidad
     }
+    if (cantidad_cajas && cantidad_cajas.value){
+      producto.cantidad_cajas = cantidad_cajas.value
+      producto.total_precio_caja = producto.total_precio_caja * producto.cantidad_cajas
+    }
     data = []
     data.push({
       "titulo": producto.descripcion,
       "cantidad": producto.cantidad,
       "precio": producto.costo,
+      "cantidad_cajas": producto.cantidad_cajas,
+      "precio_caja": producto.costo_adicional,
       "especificaciones": producto.especificaciones,
       "id": producto.id
     })
@@ -306,7 +359,9 @@ function leerLocalStorage() {
   productosLS.forEach(function(producto) {
     // Construir el template
     const row = document.createElement('tr');
-    row.innerHTML = `
+
+    if (producto.cantidad && producto.cantidad > 0){
+      row.innerHTML = `
       <th scope="row">${producto.titulo}</th>
       <td>${producto.cantidad}</td>
       <td>$ ${producto.precio} COP</td>
@@ -316,16 +371,36 @@ function leerLocalStorage() {
               <input class="form-check-input" type="checkbox" value=""
               id="defaultCheck1">
           </div>
-          <a style="color:red;" href="#" data-precio-total="${producto.total_precio}" data-cantidad="${producto.cantidad}" data-precio="${producto.precio}" data-id="${producto.id}" class="icon-trash-empty"></a>
+          <a style="color:red;" href="#" data-caja="0" data-precio-total="${producto.total_precio}" data-cantidad="${producto.cantidad}" data-precio="${producto.precio}" data-id="${producto.id}" class="icon-trash-empty"></a>
       </td>`;
-    valorTotalSuma += parseInt(producto.total_precio)
-    displayTotal(valorTotalSuma)
-    listaproductos.appendChild(row);    
+      listaproductos.appendChild(row);
+      valorTotalSuma += parseInt(producto.total_precio)
+    }
+    
+    const row2 = document.createElement('tr');
+
+    if (producto.cantidad_cajas && producto.cantidad_cajas > 0){
+      row2.innerHTML = `
+      <th scope="row">${producto.titulo} x Caja</th>
+      <td>${producto.cantidad_cajas}</td>
+      <td>$ ${producto.precio_caja} COP</td>
+      <td>$ ${producto.total_precio_caja} COP</td>
+      <td class="delete-check">
+          <div class="form-check">
+              <input class="form-check-input" type="checkbox" value=""
+              id="defaultCheck1">
+          </div>
+          <a style="color:red;" href="#" data-caja="1" data-precio-total="${producto.total_precio_caja}" data-cantidad="${producto.cantidad_cajas}" data-precio="${producto.precio_caja}" data-id="${producto.id}" class="icon-trash-empty"></a>
+      </td>`;
+      listaproductos.appendChild(row2);
+      valorTotalSuma += parseInt(producto.total_precio_caja)
+    }  
   });
+  displayTotal(valorTotalSuma)
 }
 
 // Eliminar el producto por el ID en localStorage
-function eliminarproductoLocalStorage(producto) {
+function eliminarproductoLocalStorage(producto, caja) {
   let productosLS;
 
   // Obtenemos el arreglo de productos
@@ -334,7 +409,21 @@ function eliminarproductoLocalStorage(producto) {
   // Iteramos comparando el ID del producto borrado con los del LS
   productosLS.forEach(function(productoLS, index) {
     if(productoLS.id === producto) {
-      productosLS.splice(index, 1);
+      if(parseInt(caja) == 1){
+        productoLS.cantidad_cajas = 0
+        productoLS.precio_caja = 0 
+      }
+
+      if(parseInt(caja) == 0){
+        productoLS.cantidad = 0
+        productoLS.precio = 0
+      }
+
+      if(productoLS.cantidad == 0 && productoLS.cantidad_cajas==0){
+        productosLS.splice(index, 1);
+      }else{
+        guardarproductoLocalStorage(productosLS)
+      }
     }
   });
 

@@ -25,74 +25,36 @@
             <div class="product__detail--info">
                 <div class="container">
                     <div class="info__prices">
-                        {% if not logged_usser %}
-                            <div class="info__prices--basic">
-                                <!-- Precio normal -->
+                        <div class="info__prices--basic">
+                            <!-- Precio normal -->
+                            <div class="div-box-price">
                                 <p class="product__detail-price">$ {{ producto.costo|floatformat:"0"|intcomma }} COP</p>
                                 <p class="products__detail--paragraph">{{ producto.descripcion_no_prefer|safe }}</p>
+                                <div style="width: 30%;">
+                                    <input type="number" min="0" value="0" name="quantity" id="cantidad-{{ producto.id }}" class="form-control">
+                                </div>
+                            </div>
 
+                            <div class="div-box-price">
                                 <p class="product__detail-price">$ {{ producto.costo_adicional|floatformat:"0"|intcomma }} COP</p>
                                 <p class="products__detail--paragraph">{{ producto.descripcion_adicional|safe }}</p>
-                            </div>
-                            {% if producto.costo_farsali %}
-                                <div class="info__prices-prefer">
-                                    <p class="product__detail-price">$ {{ producto.costo_farsali|floatformat:"0"|intcomma }} COP</p>
-                                    <img src="/static/images/logo-my-farsali.png" alt="">
+                                <div style="width: 30%;" >
+                                    <input type="number" min="0" value="0" name="quantity_box" id="cantidad_cajas-{{ producto.id }}" class="form-control">
                                 </div>
-
-                                <p class="products__detail--paragraph">{{ producto.descripcion_prefer|safe }}</p>
-                            {% endif %}
-                        {% endif %}
-                        {% if logged_usser %}
-                            <div class="info__prices-prefer-login">
-                                <p class="product__detail-price">$ {{ producto.costo_farsali|floatformat:"0"|intcomma }} COP</p>
-                                <img src="/static/images/logo-my-farsali.png" alt="">
                             </div>
 
-                            <p class="products__detail--paragraph">{{ producto.descripcion_prefer|safe }}</p>
-                            <div class="info__prices-prefer-login">
-                                <p class="product__detail-price">Caja x {{ producto.cantidad_cajas }} unidades</p>
-                            </div>
-                        {% endif %}
+                            
+                        </div>
                     </div>
                 </div>
 
             </div>
-
-            {% if not logged_usser %}
-
-                <div class="product__detail--quantity d-flex" style="margin: 1em 0;">
-                    <div class="form-group mr-2" style="width: 30%;">
-                        <label class="product__detail-quantity-title" for="quantity">Cantidad</label>
-                        <input type="number" min="0" value="0" name="quantity" id="cantidad-{{ producto.id }}" class="form-control">
-                    </div>
-
-                    <div class="form-group" style="width: 50%;">
-                        <label class="product__detail-quantity-title" for="quantity">Cantidad por Cajas</label>
-                        <input type="number" min="0" value="0" name="quantity_box" id="cantidad_cajas-{{ producto.id }}" class="form-control">
-                    </div>
-                </div>
 
 
                 <div class="form-group">
                     <label class="product__detail-quantity-title" for="quantity">Especificaciones para la compra</label>
                     <input type="text" name="specs" id="especificaciones-{{ producto.id }}" class="form-control">
                 </div>
-
-            {% else %}
-                <div class="product__detail--quantity d-flex" style="margin: 2em 0;">
-                    <div class="form-group mr-2" style="width: 20%;">
-                        <label class="product__detail-quantity-title" for="quantity">Cajas</label>
-                        <input type="number" min="1" value="1" name="quantity" id="cantidad-{{ producto.id }}" class="form-control">
-                    </div>
-
-                    <div class="form-group" style="width: 80%;">
-                        <label class="product__detail-quantity-title" for="quantity">Especificaciones para la compra</label>
-                        <input type="text" name="specs" id="especificaciones-{{ producto.id }}" class="form-control">
-                    </div>
-                </div>
-
-            {% endif %}
 
             <div class="product__detail--options">
 

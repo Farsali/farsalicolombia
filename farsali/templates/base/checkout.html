@@ -31,14 +31,27 @@
               </thead>
               <tbody>
                 {% for item in products %}
-                  <tr>
-                    <td class="align-middle">
-                      <h6 class="mb-0 text-nowrap">{{ item.title }}</h6>
-                    </td>
-                    <td class="align-middle text-center">{{ item.quantity }}</td>
-                    <td class="align-middle text-right">${{ item.unit_price|intcomma }} COP</td>
-                    <td class="align-middle text-right">${% multiply item.quantity item.unit_price %} COP</td>
-                  </tr>
+                  {% if item.quantity > 0 %}
+                    <tr>
+                      <td class="align-middle">
+                        <h6 class="mb-0 text-nowrap">{{ item.title }}</h6>
+                      </td>
+                      <td class="align-middle text-center">{{ item.quantity }}</td>
+                      <td class="align-middle text-right">${{ item.unit_price|intcomma }} COP</td>
+                      <td class="align-middle text-right">${% multiply item.quantity item.unit_price %} COP</td>
+                    </tr>
+                    {% endif %}
+
+                    {% if item.quantity_box > 0 %}
+                    <tr>
+                      <td class="align-middle">
+                        <h6 class="mb-0 text-nowrap">{{ item.title }} x Caja</h6>
+                      </td>
+                      <td class="align-middle text-center">{{ item.quantity_box }}</td>
+                      <td class="align-middle text-right">${{ item.unit_price_box|intcomma }} COP</td>
+                      <td class="align-middle text-right">${% multiply item.quantity_box item.unit_price_box %} COP</td>
+                    </tr>
+                    {% endif %}
                 {% endfor %}
               </tbody>
             </table>
