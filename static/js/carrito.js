@@ -131,7 +131,7 @@ function leerDatosproducto(producto) {
     especificaciones: producto.especificaciones,
     id: producto.id
   };
-
+  console.log(infoProducto)
   insertarCarrito(infoProducto);
 }
 
@@ -143,7 +143,7 @@ function insertarCarrito(producto) {
   if (!ifProductExist) {
 
     const row = document.createElement('tr');
-    if (producto.cantidad && producto.cantidad > 0){
+    if (producto.cantidad && parseInt(producto.cantidad) > 0){
       row.innerHTML = `
       <th scope="row">${producto.titulo}</th>
       <td>${producto.cantidad}</td>
@@ -157,10 +157,11 @@ function insertarCarrito(producto) {
           <a style="color:red;" href="#" data-caja="0" data-precio-total="${producto.total_precio}" data-cantidad="${producto.cantidad}" data-precio="${producto.precio}" data-id="${producto.id}" class="icon-trash-empty"></a>
       </td>`;
       listaproductos.appendChild(row);
+      valorTotalSuma += parseInt(producto.total_precio)
     }
     
     const row2 = document.createElement('tr');
-    if (producto.cantidad_cajas && producto.cantidad_cajas > 0){
+    if (producto.cantidad_cajas && parseInt(producto.cantidad_cajas) > 0){
       row2.innerHTML = `
       <th scope="row">${producto.titulo} x Caja</th>
       <td>${producto.cantidad_cajas}</td>
@@ -174,10 +175,9 @@ function insertarCarrito(producto) {
           <a style="color:red;" href="#" data-caja="1" data-precio-total="${producto.total_precio_caja}" data-cantidad="${producto.cantidad_cajas}" data-precio="${producto.precio_caja}" data-id="${producto.id}" class="icon-trash-empty"></a>
       </td>`;
       listaproductos.appendChild(row2);
+      valorTotalSuma += parseInt(producto.total_precio_caja)
     }
       
-      valorTotalSuma += parseInt(producto.total_precio)
-      valorTotalSuma += parseInt(producto.total_precio_caja)
       displayTotal(valorTotalSuma)
 
       cantidad_total = localStorage.getItem('cantidad_total') ? localStorage.getItem('cantidad_total') : 0;
