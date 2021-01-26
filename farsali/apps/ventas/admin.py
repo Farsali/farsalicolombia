@@ -23,7 +23,7 @@ class VentaProductsAdmin(admin.StackedInline):
         [_(u'General'), {
             'fields': (
                 'producto',
-                ('cantidad', 'precio','by_venta_caja'),
+                ('cantidad', 'precio','by_venta_caja','by_mayor'),
                 'especificaciones',
             )
         }]

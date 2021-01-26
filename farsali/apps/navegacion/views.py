@@ -158,7 +158,8 @@ def productsView(request):
         'calificacion',
         'costo',
         'cantidad_cajas',
-        'costo_adicional'
+        'costo_adicional',
+        'costo_farsali'
     ]
     map_fields = {
         'categoria_url': F('categoria__url'),
@@ -428,12 +429,15 @@ class checkoutView(View):
             producto = Producto.objects.get(id=int(item["id"]))
             total += int(item["precio"])*int(item["cantidad"])
             total += int(item["precio_caja"])*int(item["cantidad_cajas"])
+            total += int(item["precio_xmayor"])*int(item["cantidad_xmayor"])
             items.append(
                 {
                     "title": producto.nombre,
                     "quantity": int(item["cantidad"]),
                     "quantity_box": int(item["cantidad_cajas"]),
                     "unit_price_box": int(item["precio_caja"]),
+                    "quantity_xmayor": int(item["cantidad_xmayor"]),
+                    "unit_price_xmayor": int(item["precio_xmayor"]),
                     "currency_id": "COP",
                     "unit_price": int(item["precio"]),
                     "specs": item["especificaciones"],
@@ -482,6 +486,9 @@ class redirectPaymentView(View):
                         if item.by_venta_caja:
                             item.producto.cantidad_cajas -= item.cantidad
                             item.producto.save()
+                        elif item.by_mayor:
+                            item.producto.cantidad_cajas_prefer -= item.cantidad
+                            item.producto.save()
                         else:
                             item.producto.cantidad -= item.cantidad
                             item.producto.save()
@@ -493,6 +500,9 @@ class redirectPaymentView(View):
                         if item.by_venta_caja:
                             item.producto.cantidad_cajas += item.cantidad
                             item.producto.save()
+                        elif item.by_mayor:
+                            item.producto.cantidad_cajas_prefer += item.cantidad
+                            item.producto.save()
                         else:
                             item.producto.cantidad += item.cantidad
                             item.producto.save()
@@ -503,6 +513,9 @@ class redirectPaymentView(View):
                     for item in ventas_productos:
                         if item.by_venta_caja:
                             item.producto.cantidad_cajas -= item.cantidad
+                            item.producto.save()
+                        elif item.by_mayor:
+                            item.producto.cantidad_cajas_prefer -= item.cantidad
                             item.producto.save()
                         else:
                             item.producto.cantidad -= item.cantidad
@@ -516,6 +529,9 @@ class redirectPaymentView(View):
                 for item in ventas_productos:
                     if item.by_venta_caja:
                         item.producto.cantidad_cajas -= item.cantidad
+                        item.producto.save()
+                    elif item.by_mayor:
+                        item.producto.cantidad_cajas_prefer -= item.cantidad
                         item.producto.save()
                     else:
                         item.producto.cantidad -= item.cantidad
@@ -565,6 +581,7 @@ class paymentView(View):
             producto = Producto.objects.get(id=int(item["id"]))
             total += int(item["unit_price"])*int(item["quantity"])
             total += int(item["unit_price_box"])*int(item["quantity_box"])
+            total += int(item["unit_price_xmayor"])*int(item["quantity_xmayor"])
             
             if int(item["quantity"]) > 0:
                 items.append(
@@ -591,6 +608,19 @@ class paymentView(View):
                 products = VentaProducts(venta=ventas, producto_id=item["id"], cantidad=int(item["quantity_box"]),
                                         precio=int(item["unit_price_box"]), especificaciones=item["specs"], by_venta_caja=True)
                 products.save()
+            
+            if int(item["quantity_box"]) > 0:
+                items.append(
+                    {
+                        "title": producto.nombre + "x Mayor",
+                        "quantity": int(item["quantity_xmayor"]),
+                        "currency_id": "COP",
+                        "unit_price": int(item["unit_price_xmayor"])
+                    }
+                )
+                products = VentaProducts(venta=ventas, producto_id=item["id"], cantidad=int(item["quantity_xmayor"]),
+                                        precio=int(item["unit_price_xmayor"]), especificaciones=item["specs"], by_venta_caja=False, by_mayor=True)
+                products.save()
 
         pasarela = Pasarelas.objects.filter(activo=True).first()
         response = None
@@ -610,6 +640,7 @@ class paymentView(View):
                 "auto_return": "approved",
             }
             create_preference_result = mp.create_preference(preference)
+            print(create_preference_result)
             response = create_preference_result["response"]["id"]
             ventas.referencia_pasarela = response
         elif pasarela.origen == 1:
@@ -675,6 +706,9 @@ def callbackGatewayWompiView(request):
                         if item.by_venta_caja:
                             item.producto.cantidad_cajas -= item.cantidad
                             item.producto.save()
+                        elif item.by_mayor:
+                            item.producto.cantidad_cajas_prefer -= item.cantidad
+                            item.producto.save()
                         else:
                             item.producto.cantidad -= item.cantidad
                             item.producto.save()
@@ -687,6 +721,9 @@ def callbackGatewayWompiView(request):
                         if item.by_venta_caja:
                             item.producto.cantidad_cajas += item.cantidad
                             item.producto.save()
+                        elif item.by_mayor:
+                            item.producto.cantidad_cajas_prefer += item.cantidad
+                            item.producto.save()
                         else:
                             item.producto.cantidad += item.cantidad
                             item.producto.save()
@@ -698,6 +735,9 @@ def callbackGatewayWompiView(request):
                     for item in ventas_productos:
                         if item.by_venta_caja:
                             item.producto.cantidad_cajas += item.cantidad
+                            item.producto.save()
+                        elif item.by_mayor:
+                            item.producto.cantidad_cajas_prefer += item.cantidad
                             item.producto.save()
                         else:
                             item.producto.cantidad += item.cantidad

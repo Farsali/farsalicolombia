@@ -43,6 +43,14 @@
                                 </div>
                             </div>
 
+                            <div class="div-box-price">
+                                <p class="product__detail-price">$ {{ producto.costo_farsali|floatformat:"0"|intcomma }} COP</p>
+                                <p class="products__detail--paragraph">{{ producto.descripcion_prefer|safe }}</p>
+                                <div style="width: 30%;" >
+                                    <input type="number" min="0" value="0" name="quantity_box" id="cantidad_xmayor-{{ producto.id }}" class="form-control">
+                                </div>
+                            </div>
+
                             
                         </div>
                     </div>

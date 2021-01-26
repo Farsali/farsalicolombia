@@ -52,6 +52,17 @@
                       <td class="align-middle text-right">${% multiply item.quantity_box item.unit_price_box %} COP</td>
                     </tr>
                     {% endif %}
+
+                    {% if item.quantity_xmayor > 0 %}
+                      <tr>
+                        <td class="align-middle">
+                          <h6 class="mb-0 text-nowrap">{{ item.title }} x Mayor</h6>
+                        </td>
+                        <td class="align-middle text-center">{{ item.quantity_xmayor }}</td>
+                        <td class="align-middle text-right">${{ item.unit_price_xmayor|intcomma }} COP</td>
+                        <td class="align-middle text-right">${% multiply item.quantity_xmayor item.unit_price_xmayor %} COP</td>
+                      </tr>
+                    {% endif %}
                 {% endfor %}
               </tbody>
             </table>

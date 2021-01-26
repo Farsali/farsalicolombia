@@ -132,6 +132,10 @@ class VentaProducts(models.Model):
         _(u'Cantidad de Caja'),
         default=False
     )
+    by_mayor = models.BooleanField(
+        _(u'Cantidad x Mayor'),
+        default=False
+    )
     cantidad = models.PositiveIntegerField(_(u'Cantidad'), default=0)
     precio = models.PositiveIntegerField(_(u'Precio'), default=0)
     especificaciones = models.CharField(

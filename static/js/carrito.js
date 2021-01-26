@@ -51,6 +51,7 @@ function getValueCantidadProducts(){
   productosLS.forEach(function(producto) {
         cantidad_total += parseInt(producto.cantidad)
         cantidad_total += parseInt(producto.cantidad_cajas)
+        cantidad_total += parseInt(producto.cantidad_xmayor)
   });
   localStorage.setItem('cantidad_total', cantidad_total );
   return cantidad_total
@@ -85,16 +86,19 @@ function comprarproducto(e) {
     const producto = JSON.parse(e.target.getAttribute('data-product-serialize'));
     const cantidad = document.getElementById('cantidad-' + producto.id + '')
     const cantidad_cajas = document.getElementById('cantidad_cajas-' + producto.id + '')
+    const cantidad_xmayor = document.getElementById('cantidad_xmayor-' + producto.id + '')
     const especificaciones = document.getElementById('especificaciones-' + producto.id + '')
     producto.especificaciones = ""
     producto.cantidad = 0
     producto.cantidad_cajas = 0
+    producto.cantidad_xmayor = 0
     producto.total_precio = producto.costo
     producto.total_precio_caja = producto.costo_adicional
+    producto.total_precio_xmayor = producto.costo_farsali
     if(especificaciones){
       producto.especificaciones = especificaciones.value
     }
-    if ((cantidad && cantidad.value > 0) || (cantidad_cajas && cantidad_cajas.value > 0)){
+    if ((cantidad && cantidad.value > 0) || (cantidad_cajas && cantidad_cajas.value > 0) || (cantidad_xmayor && cantidad_xmayor.value > 0)){
 
         if (cantidad && cantidad.value > 0){
           producto.cantidad = cantidad.value
@@ -104,6 +108,11 @@ function comprarproducto(e) {
         if (cantidad_cajas && cantidad_cajas.value > 0){
           producto.cantidad_cajas = cantidad_cajas.value
           producto.total_precio_caja = producto.total_precio_caja * producto.cantidad_cajas
+        }
+
+        if (cantidad_xmayor && cantidad_xmayor.value > 0){
+          producto.cantidad_xmayor = cantidad_xmayor.value
+          producto.total_precio_xmayor = producto.total_precio_xmayor * producto.cantidad_xmayor
         }
         msgCarrito.style.display = "block";
         
@@ -128,6 +137,9 @@ function leerDatosproducto(producto) {
     precio_caja: producto.costo_adicional ? producto.costo_adicional : 0,
     total_precio_caja: producto.total_precio_caja ? producto.total_precio_caja : 0,
     cantidad_cajas: producto.cantidad_cajas ? producto.cantidad_cajas : 0,
+    precio_xmayor: producto.costo_farsali ? producto.costo_farsali : 0,
+    total_precio_xmayor: producto.total_precio_xmayor ? producto.total_precio_xmayor : 0,
+    cantidad_xmayor: producto.cantidad_xmayor ? producto.cantidad_xmayor : 0,
     especificaciones: producto.especificaciones,
     id: producto.id
   };
@@ -177,11 +189,29 @@ function insertarCarrito(producto) {
       listaproductos.appendChild(row2);
       valorTotalSuma += parseInt(producto.total_precio_caja)
     }
+
+    const row3 = document.createElement('tr');
+    if (producto.cantidad_xmayor && parseInt(producto.cantidad_xmayor) > 0){
+      row3.innerHTML = `
+      <th scope="row">${producto.titulo} x Mayor</th>
+      <td>${producto.cantidad_xmayor}</td>
+      <td>$ ${producto.precio_xmayor} COP</td>
+      <td>$ ${producto.total_precio_xmayor} COP</td>
+      <td class="delete-check">
+          <div class="form-check">
+              <input class="form-check-input" type="checkbox" value=""
+              id="defaultCheck1">
+          </div>
+          <a style="color:red;" href="#" data-caja="2" data-precio-total="${producto.total_precio_xmayor}" data-cantidad="${producto.cantidad_xmayor}" data-precio="${producto.precio_xmayor}" data-id="${producto.id}" class="icon-trash-empty"></a>
+      </td>`;
+      listaproductos.appendChild(row3);
+      valorTotalSuma += parseInt(producto.total_precio_xmayor)
+    }
       
       displayTotal(valorTotalSuma)
 
       cantidad_total = localStorage.getItem('cantidad_total') ? localStorage.getItem('cantidad_total') : 0;
-      cantidad_total = parseInt(cantidad_total) + parseInt(producto.cantidad) + parseInt(producto.cantidad_cajas)
+      cantidad_total = parseInt(cantidad_total) + parseInt(producto.cantidad) + parseInt(producto.cantidad_cajas) + parseInt(producto.cantidad_xmayor)
       localStorage.setItem('cantidad_total', cantidad_total );
       displayTotalProductos(cantidad_total)
 
@@ -278,6 +308,8 @@ function sendProduct(url){
         "precio": producto.precio ? producto.precio : 0,
         "cantidad_cajas": producto.cantidad_cajas ? producto.cantidad_cajas : 0,
         "precio_caja": producto.precio_caja ? producto.precio_caja : 0,
+        "cantidad_xmayor": producto.cantidad_xmayor ? producto.cantidad_xmayor : 0,
+        "precio_xmayor": producto.precio_xmayor ? producto.precio_xmayor : 0,
         "especificaciones": producto.especificaciones,
         "id": producto.id
       })
@@ -303,35 +335,50 @@ function buyProduct(e) {
     const url_checkout = e.target.getAttribute('data-url-checkout');
     const cantidad = document.getElementById('cantidad-' + producto.id + '')
     const cantidad_cajas = document.getElementById('cantidad_cajas-' + producto.id + '')
+    const cantidad_xmayor = document.getElementById('cantidad_xmayor-' + producto.id + '')
     const especificaciones = document.getElementById('especificaciones-' + producto.id + '')
     producto.especificaciones = ""
     producto.cantidad = 0
     producto.cantidad_cajas = 0
+    producto.cantidad_xmayor = 0
     producto.total_precio = producto.costo
     producto.total_precio_caja = producto.costo_adicional
-    if(especificaciones){
-      producto.especificaciones = especificaciones.value
+    producto.total_precio_xmayor = producto.costo_farsali
+
+    if ((cantidad && cantidad.value > 0) || (cantidad_cajas && cantidad_cajas.value > 0) || (cantidad_xmayor && cantidad_xmayor.value > 0)){
+        if(especificaciones){
+          producto.especificaciones = especificaciones.value
+        }
+        if (cantidad && cantidad.value){
+          producto.cantidad = cantidad.value
+          producto.total_precio = producto.total_precio * producto.cantidad
+        }
+        if (cantidad_cajas && cantidad_cajas.value){
+          producto.cantidad_cajas = cantidad_cajas.value
+          producto.total_precio_caja = producto.total_precio_caja * producto.cantidad_cajas
+        }
+        if (cantidad_xmayor && cantidad_xmayor.value){
+          producto.cantidad_xmayor = cantidad_xmayor.value
+          producto.total_precio_xmayor = producto.total_precio_xmayor * producto.cantidad_xmayor
+        }
+        data = []
+        data.push({
+          "titulo": producto.descripcion,
+          "cantidad": producto.cantidad,
+          "precio": producto.costo,
+          "cantidad_cajas": producto.cantidad_cajas,
+          "precio_caja": producto.costo_adicional,
+          "cantidad_xmayor": producto.cantidad_xmayor,
+          "precio_xmayor": producto.costo_farsali,
+          "especificaciones": producto.especificaciones,
+          "id": producto.id
+        })
+        // Enviamos el producto seleccionado al checkout
+        location.href=url_checkout+'?productos='+JSON.stringify(data)
+      }
+    else{
+      alert("Debe ingresar algun valor para hacer una compra")
     }
-    if (cantidad && cantidad.value){
-      producto.cantidad = cantidad.value
-      producto.total_precio = producto.total_precio * producto.cantidad
-    }
-    if (cantidad_cajas && cantidad_cajas.value){
-      producto.cantidad_cajas = cantidad_cajas.value
-      producto.total_precio_caja = producto.total_precio_caja * producto.cantidad_cajas
-    }
-    data = []
-    data.push({
-      "titulo": producto.descripcion,
-      "cantidad": producto.cantidad,
-      "precio": producto.costo,
-      "cantidad_cajas": producto.cantidad_cajas,
-      "precio_caja": producto.costo_adicional,
-      "especificaciones": producto.especificaciones,
-      "id": producto.id
-    })
-    // Enviamos el producto seleccionado al checkout
-    location.href=url_checkout+'?productos='+JSON.stringify(data)
   }
 }
 
@@ -395,6 +442,25 @@ function leerLocalStorage() {
       listaproductos.appendChild(row2);
       valorTotalSuma += parseInt(producto.total_precio_caja)
     }  
+
+    const row3 = document.createElement('tr');
+
+    if (producto.cantidad_xmayor && producto.cantidad_xmayor > 0){
+      row3.innerHTML = `
+      <th scope="row">${producto.titulo} x Mayor</th>
+      <td>${producto.cantidad_xmayor}</td>
+      <td>$ ${producto.precio_xmayor} COP</td>
+      <td>$ ${producto.total_precio_xmayor} COP</td>
+      <td class="delete-check">
+          <div class="form-check">
+              <input class="form-check-input" type="checkbox" value=""
+              id="defaultCheck1">
+          </div>
+          <a style="color:red;" href="#" data-caja=2" data-precio-total="${producto.total_precio_xmayor}" data-cantidad="${producto.cantidad_xmayor}" data-precio="${producto.precio_xmayor}" data-id="${producto.id}" class="icon-trash-empty"></a>
+      </td>`;
+      listaproductos.appendChild(row3);
+      valorTotalSuma += parseInt(producto.total_precio_xmayor)
+    }  
   });
   displayTotal(valorTotalSuma)
 }
@@ -419,7 +485,12 @@ function eliminarproductoLocalStorage(producto, caja) {
         productoLS.precio = 0
       }
 
-      if(productoLS.cantidad == 0 && productoLS.cantidad_cajas==0){
+      if(parseInt(caja) == 2){
+        productoLS.cantidad_xmayor = 0
+        productoLS.precio_xmayor = 0
+      }
+
+      if(productoLS.cantidad == 0 && productoLS.cantidad_cajas==0 && productoLS.cantidad_xmayor==0){
         productosLS.splice(index, 1);
       }else{
         guardarproductoLocalStorage(productosLS)
