@@ -114,6 +114,9 @@ function comprarproducto(e) {
           valorTotalSuma += producto.total_precio * parseInt(cantidad.value)
           producto.cantidad = parseInt(before_cantidad) + parseInt(cantidad.value)
           producto.total_precio = producto.total_precio * producto.cantidad
+        }else{
+          producto.cantidad = parseInt(before_cantidad)
+          producto.total_precio = producto.total_precio * producto.cantidad
         }
 
         if (cantidad_cajas && cantidad_cajas.value > 0){
@@ -121,12 +124,18 @@ function comprarproducto(e) {
           valorTotalSuma += producto.total_precio_caja * parseInt(cantidad_cajas.value)
           producto.cantidad_cajas = parseInt(before_cantidad_cajas) + parseInt(cantidad_cajas.value)
           producto.total_precio_caja = producto.total_precio_caja * producto.cantidad_cajas
+        }else{
+          producto.cantidad_cajas = parseInt(before_cantidad_cajas)
+          producto.total_precio_caja = producto.total_precio_caja * producto.cantidad_cajas
         }
 
         if (cantidad_xmayor && cantidad_xmayor.value > 0){
           cantidad_total += parseInt(cantidad_xmayor.value)
           valorTotalSuma += producto.total_precio_xmayor * parseInt(cantidad_xmayor.value)
           producto.cantidad_xmayor = parseInt(before_cantidad_xmayor) + parseInt(cantidad_xmayor.value)
+          producto.total_precio_xmayor = producto.total_precio_xmayor * producto.cantidad_xmayor
+        }else{
+          producto.cantidad_xmayor = parseInt(before_cantidad_xmayor)
           producto.total_precio_xmayor = producto.total_precio_xmayor * producto.cantidad_xmayor
         }
         msgCarrito.style.display = "block";
@@ -147,6 +156,9 @@ function leerDatosproducto(producto) {
   const infoProducto = {
     titulo: producto.nombre,
     precio: producto.costo,
+    descripcion_prefer: producto.descripcion_prefer,
+    descripcion_no_prefer: producto.descripcion_no_prefer,
+    descripcion_adicional: producto.descripcion_adicional,
     total_precio: producto.total_precio ? producto.total_precio : 0,
     cantidad: producto.cantidad ? producto.cantidad : 0,
     precio_caja: producto.costo_adicional ? producto.costo_adicional : 0,
@@ -158,7 +170,6 @@ function leerDatosproducto(producto) {
     especificaciones: producto.especificaciones,
     id: producto.id
   };
-  console.log(infoProducto)
   insertarCarrito(infoProducto);
 }
 
@@ -188,7 +199,7 @@ function insertarCarrito(producto) {
     row.id = "product-"+producto.id
     if (producto.cantidad && parseInt(producto.cantidad) > 0){
       row.innerHTML = `
-      <th scope="row">${producto.titulo}</th>
+      <th scope="row">${producto.titulo} ${producto.descripcion_no_prefer}</th>
       <td>${producto.cantidad}</td>
       <td>$ ${producto.precio} COP</td>
       <td>$ ${producto.total_precio} COP</td>
@@ -206,7 +217,7 @@ function insertarCarrito(producto) {
     row2.id = "product-caja-"+producto.id
     if (producto.cantidad_cajas && parseInt(producto.cantidad_cajas) > 0){
       row2.innerHTML = `
-      <th scope="row">${producto.titulo} x Caja</th>
+      <th scope="row">${producto.titulo} ${producto.descripcion_adicional}</th>
       <td>${producto.cantidad_cajas}</td>
       <td>$ ${producto.precio_caja} COP</td>
       <td>$ ${producto.total_precio_caja} COP</td>
@@ -224,7 +235,7 @@ function insertarCarrito(producto) {
     row3.id = "product-xmayor-"+producto.id
     if (producto.cantidad_xmayor && parseInt(producto.cantidad_xmayor) > 0){
       row3.innerHTML = `
-      <th scope="row">${producto.titulo} x Mayor</th>
+      <th scope="row">${producto.titulo} ${producto.descripcion_prefer}</th>
       <td>${producto.cantidad_xmayor}</td>
       <td>$ ${producto.precio_xmayor} COP</td>
       <td>$ ${producto.total_precio_xmayor} COP</td>
@@ -330,6 +341,9 @@ function sendProduct(url){
     productosLS.forEach(function(producto) {
       data.push({
         "titulo": producto.titulo,
+        "descripcion_prefer": producto.descripcion_prefer,
+        "descripcion_no_prefer": producto.descripcion_no_prefer,
+        "descripcion_adicional": producto.descripcion_adicional,
         "cantidad": producto.cantidad ? producto.cantidad : 0,
         "precio": producto.precio ? producto.precio : 0,
         "cantidad_cajas": producto.cantidad_cajas ? producto.cantidad_cajas : 0,
@@ -390,6 +404,9 @@ function buyProduct(e) {
         data = []
         data.push({
           "titulo": producto.descripcion,
+          "descripcion_prefer": producto.descripcion_prefer,
+          "descripcion_no_prefer": producto.descripcion_no_prefer,
+          "descripcion_adicional": producto.descripcion_adicional,
           "cantidad": producto.cantidad,
           "precio": producto.costo,
           "cantidad_cajas": producto.cantidad_cajas,
@@ -435,7 +452,7 @@ function leerLocalStorage() {
 
     if (producto.cantidad && producto.cantidad > 0){
       row.innerHTML = `
-      <th scope="row">${producto.titulo}</th>
+      <th scope="row">${producto.titulo} ${producto.descripcion_no_prefer}</th>
       <td>${producto.cantidad}</td>
       <td>$ ${producto.precio} COP</td>
       <td>$ ${producto.total_precio} COP</td>
@@ -454,7 +471,7 @@ function leerLocalStorage() {
 
     if (producto.cantidad_cajas && producto.cantidad_cajas > 0){
       row2.innerHTML = `
-      <th scope="row">${producto.titulo} x Caja</th>
+      <th scope="row">${producto.titulo} ${producto.descripcion_adicional}</th>
       <td>${producto.cantidad_cajas}</td>
       <td>$ ${producto.precio_caja} COP</td>
       <td>$ ${producto.total_precio_caja} COP</td>
@@ -473,7 +490,7 @@ function leerLocalStorage() {
 
     if (producto.cantidad_xmayor && producto.cantidad_xmayor > 0){
       row3.innerHTML = `
-      <th scope="row">${producto.titulo} x Mayor</th>
+      <th scope="row">${producto.titulo} ${producto.descripcion_prefer}</th>
       <td>${producto.cantidad_xmayor}</td>
       <td>$ ${producto.precio_xmayor} COP</td>
       <td>$ ${producto.total_precio_xmayor} COP</td>

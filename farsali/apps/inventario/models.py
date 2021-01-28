@@ -199,11 +199,15 @@ class Producto(models.Model):
         default=0
     )
 
-    descripcion_prefer = models.TextField(_(u"Descripcion del producto prefer"), blank=True, null=True)
-    descripcion_no_prefer = models.TextField(
+    descripcion_prefer = models.CharField(
+        _(u"Descripcion del producto prefer"),
+        blank=True, null=True,
+        max_length=75)
+    descripcion_no_prefer = models.CharField(
         _(u"Descripcion del producto no prefer"),
         blank=True,
-        null=True
+        null=True,
+        max_length=75
     )
 
     costo_adicional = models.FloatField(
@@ -211,10 +215,11 @@ class Producto(models.Model):
         default=0.0
     )
 
-    descripcion_adicional = models.TextField(
+    descripcion_adicional = models.CharField(
         _(u"Descripcion Adicional del producto"),
         blank=True,
-        null=True
+        null=True,
+        max_length=75
     )
 
     class Meta:

@@ -143,7 +143,7 @@ def productsView(request):
     producto_id = request.GET.get('producto_id')
     marca_id = request.GET.get('marca_id')
     quantity = 12
-    pagination=int(page_number)*quantity
+    pagination = int(page_number)*quantity
     product = None
     if producto_id and int(producto_id) > 0:
         product = Producto.objects.get(pk=producto_id)
@@ -159,7 +159,10 @@ def productsView(request):
         'costo',
         'cantidad_cajas',
         'costo_adicional',
-        'costo_farsali'
+        'costo_farsali',
+        'descripcion_prefer',
+        'descripcion_adicional',
+        'descripcion_no_prefer'
     ]
     map_fields = {
         'categoria_url': F('categoria__url'),

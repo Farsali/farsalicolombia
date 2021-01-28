@@ -137,10 +137,10 @@ class ProductoAdmin(admin.ModelAdmin):
             'fields': (
                 'nombre',
                 'url',
-                'descripcion',
                 'descripcion_adicional',
                 'descripcion_no_prefer',
                 'descripcion_prefer',
+                'descripcion',
                 'imagen',
             )
         }]
