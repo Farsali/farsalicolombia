@@ -167,19 +167,15 @@ def productsView(request):
     map_fields = {
         'categoria_url': F('categoria__url'),
     }
-    filter_kwargs = {
-        'activo': True,
-    }
-
     productos_qs = None
     if product:
         exclude = {'pk': product.id}
-        filter_kwargs = {'orden__gte':product.orden}
+        filter_kwargs = {'orden__gte':product.orden, 'activo': True}
         productos_qs_gt = Producto.objects.filter(**filter_kwargs).exclude(**exclude)[int(pagination):int(pagination)+quantity-1]
         productos_qs_gt = productos_qs_gt.values(*fields, **map_fields)
         productos_qs_lt = []
         if len(productos_qs_gt) < quantity:
-            filter_kwargs = {'orden__lt':product.orden}
+            filter_kwargs = {'orden__lt':product.orden, 'activo': True}
             productos_qs_lt = Producto.objects.filter(**filter_kwargs).exclude(**exclude)[int(pagination):int(pagination)+quantity-1]
             productos_qs_lt = productos_qs_lt.values(*fields, **map_fields)
         productos =  list(productos_qs_gt) + list(productos_qs_lt)
@@ -192,6 +188,9 @@ def productsView(request):
         productos_qs = Producto.objects.filter(**filter_kwargs)[int(pagination):int(pagination)+quantity-1]
         productos = productos_qs.values(*fields, **map_fields)
     else:
+        filter_kwargs = {
+            'activo': True
+        }
         productos_qs = Producto.objects.filter(**filter_kwargs)[int(pagination):int(pagination)+quantity-1]
         productos = productos_qs.values(*fields, **map_fields)
 
