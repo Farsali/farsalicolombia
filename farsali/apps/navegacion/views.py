@@ -172,7 +172,7 @@ def productsView(request):
     if product:
         exclude = {'pk': product.id}
         filter_kwargs = {'orden__gte':product.orden}
-        productos_qs_gt = Producto.objects.filter(**filter_kwargs).exclude(**exclude)[int(pagination):int(pagination)+quantity]
+        productos_qs_gt = Producto.objects.filter(**filter_kwargs).exclude(**exclude)[int(pagination):int(pagination)+quantity-1]
         productos_qs_gt = productos_qs_gt.values(*fields, **map_fields)
         productos_qs_lt = []
         if len(productos_qs_gt) < quantity:
