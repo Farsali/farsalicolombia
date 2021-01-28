@@ -34,7 +34,7 @@
                   {% if item.quantity > 0 %}
                     <tr>
                       <td class="align-middle">
-                        <h6 class="mb-0 text-nowrap">{{ item.title }}</h6>
+                        <h6 class="mb-0 text-nowrap">{{ item.title }} {{item.description_no_prefer }}</h6>
                       </td>
                       <td class="align-middle text-center">{{ item.quantity }}</td>
                       <td class="align-middle text-right">${{ item.unit_price|intcomma }} COP</td>
@@ -45,7 +45,7 @@
                     {% if item.quantity_box > 0 %}
                     <tr>
                       <td class="align-middle">
-                        <h6 class="mb-0 text-nowrap">{{ item.title }} x Caja</h6>
+                        <h6 class="mb-0 text-nowrap">{{ item.title }} {{item.description_aditional }}</h6>
                       </td>
                       <td class="align-middle text-center">{{ item.quantity_box }}</td>
                       <td class="align-middle text-right">${{ item.unit_price_box|intcomma }} COP</td>
@@ -56,7 +56,7 @@
                     {% if item.quantity_xmayor > 0 %}
                       <tr>
                         <td class="align-middle">
-                          <h6 class="mb-0 text-nowrap">{{ item.title }} x Mayor</h6>
+                          <h6 class="mb-0 text-nowrap">{{ item.title }} {{item.description_prefer }}</h6>
                         </td>
                         <td class="align-middle text-center">{{ item.quantity_xmayor }}</td>
                         <td class="align-middle text-right">${{ item.unit_price_xmayor|intcomma }} COP</td>

@@ -449,6 +449,7 @@ function leerLocalStorage() {
   productosLS.forEach(function(producto) {
     // Construir el template
     const row = document.createElement('tr');
+    row.id = "product-"+producto.id
 
     if (producto.cantidad && producto.cantidad > 0){
       row.innerHTML = `
@@ -468,6 +469,7 @@ function leerLocalStorage() {
     }
     
     const row2 = document.createElement('tr');
+    row2.id = "product-caja-"+producto.id
 
     if (producto.cantidad_cajas && producto.cantidad_cajas > 0){
       row2.innerHTML = `
@@ -487,6 +489,7 @@ function leerLocalStorage() {
     }  
 
     const row3 = document.createElement('tr');
+    row3.id = "product-xmayor-"+producto.id
 
     if (producto.cantidad_xmayor && producto.cantidad_xmayor > 0){
       row3.innerHTML = `

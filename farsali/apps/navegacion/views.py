@@ -436,6 +436,9 @@ class checkoutView(View):
             items.append(
                 {
                     "title": producto.nombre,
+                    "description_aditional": producto.descripcion_adicional,
+                    "description_prefer": producto.descripcion_prefer,
+                    "description_no_prefer": producto.descripcion_no_prefer,
                     "quantity": int(item["cantidad"]),
                     "quantity_box": int(item["cantidad_cajas"]),
                     "unit_price_box": int(item["precio_caja"]),
@@ -589,7 +592,7 @@ class paymentView(View):
             if int(item["quantity"]) > 0:
                 items.append(
                     {
-                        "title": producto.nombre,
+                        "title": f'{producto.nombre} {producto.descripcion_no_prefer}',
                         "quantity": int(item["quantity"]),
                         "currency_id": "COP",
                         "unit_price": int(item["unit_price"])
@@ -602,7 +605,7 @@ class paymentView(View):
             if int(item["quantity_box"]) > 0:
                 items.append(
                     {
-                        "title": producto.nombre + "x Caja",
+                        "title": f'{producto.nombre} {producto.descripcion_adicional}',
                         "quantity": int(item["quantity_box"]),
                         "currency_id": "COP",
                         "unit_price": int(item["unit_price_box"])
@@ -615,7 +618,7 @@ class paymentView(View):
             if int(item["quantity_box"]) > 0:
                 items.append(
                     {
-                        "title": producto.nombre + "x Mayor",
+                        "title": f'{producto.nombre} {producto.descripcion_prefer}',
                         "quantity": int(item["quantity_xmayor"]),
                         "currency_id": "COP",
                         "unit_price": int(item["unit_price_xmayor"])
@@ -643,7 +646,6 @@ class paymentView(View):
                 "auto_return": "approved",
             }
             create_preference_result = mp.create_preference(preference)
-            print(create_preference_result)
             response = create_preference_result["response"]["id"]
             ventas.referencia_pasarela = response
         elif pasarela.origen == 1:
