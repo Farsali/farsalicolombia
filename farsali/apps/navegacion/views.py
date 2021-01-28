@@ -177,7 +177,7 @@ def productsView(request):
         productos_qs_lt = []
         if len(productos_qs_gt) < quantity:
             filter_kwargs = {'orden__lt':product.orden}
-            productos_qs_lt = Producto.objects.filter(**filter_kwargs).exclude(**exclude)[int(pagination):int(pagination)+quantity]
+            productos_qs_lt = Producto.objects.filter(**filter_kwargs).exclude(**exclude)[int(pagination):int(pagination)+quantity-1]
             productos_qs_lt = productos_qs_lt.values(*fields, **map_fields)
         productos =  list(productos_qs_gt) + list(productos_qs_lt)
     elif marca_id and int(marca_id) > 0:
@@ -186,10 +186,10 @@ def productsView(request):
             'activo': True,
             'marca_producto': marca
         }
-        productos_qs = Producto.objects.filter(**filter_kwargs)[int(pagination):int(pagination)+quantity]
+        productos_qs = Producto.objects.filter(**filter_kwargs)[int(pagination):int(pagination)+quantity-1]
         productos = productos_qs.values(*fields, **map_fields)
     else:
-        productos_qs = Producto.objects.filter(**filter_kwargs)[int(pagination):int(pagination)+quantity]
+        productos_qs = Producto.objects.filter(**filter_kwargs)[int(pagination):int(pagination)+quantity-1]
         productos = productos_qs.values(*fields, **map_fields)
 
     for p in productos:
