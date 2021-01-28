@@ -387,7 +387,8 @@ class Constante(models.Model):
         if self.tipo == 'str':
             return self.valor
         elif self.tipo == 'int':
-            return int(self.valor, 10)
+            self.valor = self.valor.replace(" ", "")
+            return int(self.valor)
         elif self.tipo in ('list', 'dict'):
             return ast.literal_eval(self.valor)
         elif self.tipo == 'bool':
