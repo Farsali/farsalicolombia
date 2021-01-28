@@ -11,6 +11,7 @@ const msgCarrito = document.getElementById("msgAdd")
 const msgCarritoProductos = document.getElementById("text-car-product")
 const divCarritoProductos = document.getElementById("div-card-product")
 var valorTotalSuma = 0
+var cantidad_total = 0
 // var valorTotalValue = `$ ${valorTotalSuma} COP`
 // const vaciarCarritoBtn = document.getElementById('vaciar-carrito');
 
@@ -53,7 +54,6 @@ function getValueCantidadProducts(){
         cantidad_total += parseInt(producto.cantidad_cajas)
         cantidad_total += parseInt(producto.cantidad_xmayor)
   });
-  localStorage.setItem('cantidad_total', cantidad_total );
   return cantidad_total
 }
 
@@ -84,14 +84,23 @@ function comprarproducto(e) {
   // Delegation para agregar-carrito
   if(e.target.classList.contains('add-carrito') ) {
     const producto = JSON.parse(e.target.getAttribute('data-product-serialize'));
+    let before_cantidad = 0
+    let before_cantidad_cajas = 0
+    let before_cantidad_xmayor = 0
+    if(checkIfItemExists(producto.id)){
+      let data_product = checkIfItemExists(producto.id)
+      before_cantidad = data_product.cantidad
+      before_cantidad_cajas = data_product.cantidad_cajas
+      before_cantidad_xmayor = data_product.cantidad_xmayor
+    }
     const cantidad = document.getElementById('cantidad-' + producto.id + '')
     const cantidad_cajas = document.getElementById('cantidad_cajas-' + producto.id + '')
     const cantidad_xmayor = document.getElementById('cantidad_xmayor-' + producto.id + '')
     const especificaciones = document.getElementById('especificaciones-' + producto.id + '')
     producto.especificaciones = ""
-    producto.cantidad = 0
-    producto.cantidad_cajas = 0
-    producto.cantidad_xmayor = 0
+    producto.cantidad = producto.cantidad ? producto.cantidad : 0
+    producto.cantidad_cajas = producto.cantidad ? producto.cantidad : 0
+    producto.cantidad_xmayor = producto.cantidad ? producto.cantidad : 0
     producto.total_precio = producto.costo
     producto.total_precio_caja = producto.costo_adicional
     producto.total_precio_xmayor = producto.costo_farsali
@@ -101,17 +110,23 @@ function comprarproducto(e) {
     if ((cantidad && cantidad.value > 0) || (cantidad_cajas && cantidad_cajas.value > 0) || (cantidad_xmayor && cantidad_xmayor.value > 0)){
 
         if (cantidad && cantidad.value > 0){
-          producto.cantidad = cantidad.value
+          cantidad_total += parseInt(cantidad.value)
+          valorTotalSuma += producto.total_precio * parseInt(cantidad.value)
+          producto.cantidad = parseInt(before_cantidad) + parseInt(cantidad.value)
           producto.total_precio = producto.total_precio * producto.cantidad
         }
 
         if (cantidad_cajas && cantidad_cajas.value > 0){
-          producto.cantidad_cajas = cantidad_cajas.value
+          cantidad_total += parseInt(cantidad_cajas.value)
+          valorTotalSuma += producto.total_precio_caja * parseInt(cantidad_cajas.value)
+          producto.cantidad_cajas = parseInt(before_cantidad_cajas) + parseInt(cantidad_cajas.value)
           producto.total_precio_caja = producto.total_precio_caja * producto.cantidad_cajas
         }
 
         if (cantidad_xmayor && cantidad_xmayor.value > 0){
-          producto.cantidad_xmayor = cantidad_xmayor.value
+          cantidad_total += parseInt(cantidad_xmayor.value)
+          valorTotalSuma += producto.total_precio_xmayor * parseInt(cantidad_xmayor.value)
+          producto.cantidad_xmayor = parseInt(before_cantidad_xmayor) + parseInt(cantidad_xmayor.value)
           producto.total_precio_xmayor = producto.total_precio_xmayor * producto.cantidad_xmayor
         }
         msgCarrito.style.display = "block";
@@ -152,9 +167,25 @@ function insertarCarrito(producto) {
   
   var ifProductExist = checkIfItemExists(producto.id);
 
-  if (!ifProductExist) {
+  if (ifProductExist) {
+      element_1 = document.getElementById("product-"+producto.id);
+      if(element_1){
+        element_1.remove();
+      }
+
+      element_2 = document.getElementById("product-caja-"+producto.id);
+      if(element_2){
+        element_2.remove();
+      }
+
+      element_3 = document.getElementById("product-xmayor-"+producto.id);
+      if(element_3){
+        element_3.remove();
+      }
+  }
 
     const row = document.createElement('tr');
+    row.id = "product-"+producto.id
     if (producto.cantidad && parseInt(producto.cantidad) > 0){
       row.innerHTML = `
       <th scope="row">${producto.titulo}</th>
@@ -169,10 +200,10 @@ function insertarCarrito(producto) {
           <a style="color:red;" href="#" data-caja="0" data-precio-total="${producto.total_precio}" data-cantidad="${producto.cantidad}" data-precio="${producto.precio}" data-id="${producto.id}" class="icon-trash-empty"></a>
       </td>`;
       listaproductos.appendChild(row);
-      valorTotalSuma += parseInt(producto.total_precio)
     }
     
     const row2 = document.createElement('tr');
+    row2.id = "product-caja-"+producto.id
     if (producto.cantidad_cajas && parseInt(producto.cantidad_cajas) > 0){
       row2.innerHTML = `
       <th scope="row">${producto.titulo} x Caja</th>
@@ -187,10 +218,10 @@ function insertarCarrito(producto) {
           <a style="color:red;" href="#" data-caja="1" data-precio-total="${producto.total_precio_caja}" data-cantidad="${producto.cantidad_cajas}" data-precio="${producto.precio_caja}" data-id="${producto.id}" class="icon-trash-empty"></a>
       </td>`;
       listaproductos.appendChild(row2);
-      valorTotalSuma += parseInt(producto.total_precio_caja)
     }
 
     const row3 = document.createElement('tr');
+    row3.id = "product-xmayor-"+producto.id
     if (producto.cantidad_xmayor && parseInt(producto.cantidad_xmayor) > 0){
       row3.innerHTML = `
       <th scope="row">${producto.titulo} x Mayor</th>
@@ -205,22 +236,15 @@ function insertarCarrito(producto) {
           <a style="color:red;" href="#" data-caja="2" data-precio-total="${producto.total_precio_xmayor}" data-cantidad="${producto.cantidad_xmayor}" data-precio="${producto.precio_xmayor}" data-id="${producto.id}" class="icon-trash-empty"></a>
       </td>`;
       listaproductos.appendChild(row3);
-      valorTotalSuma += parseInt(producto.total_precio_xmayor)
     }
-      
-      displayTotal(valorTotalSuma)
 
-      cantidad_total = localStorage.getItem('cantidad_total') ? localStorage.getItem('cantidad_total') : 0;
-      cantidad_total = parseInt(cantidad_total) + parseInt(producto.cantidad) + parseInt(producto.cantidad_cajas) + parseInt(producto.cantidad_xmayor)
-      localStorage.setItem('cantidad_total', cantidad_total );
-      displayTotalProductos(cantidad_total)
+    displayTotal(valorTotalSuma)
+    displayTotalProductos(cantidad_total)
 
-      if(divCarritoProductos.style.display == "none"){
-        divCarritoProductos.style.display = "block";
-      }
-  }
-  guardarproductoLocalStorage(producto);
-
+    if(divCarritoProductos.style.display == "none"){
+      divCarritoProductos.style.display = "block";
+    }
+    guardarproductoLocalStorage(producto);
  
 }
 
@@ -237,12 +261,9 @@ function eliminarproducto(e) {
     var precioProducto = producto.querySelector('a').getAttribute('data-precio-total')
     valorTotalSuma -= parseInt(precioProducto)
 
-    cantidad_total = parseInt(localStorage.getItem('cantidad_total')) ? localStorage.getItem('cantidad_total') : 0;
     var cantidadProducto = producto.querySelector('a').getAttribute('data-cantidad')
     var caja = producto.querySelector('a').getAttribute('data-caja')
     cantidad_total -= parseInt(cantidadProducto)
-    cantidad_total = cantidad_total > 0 ? cantidad_total : 0;
-    localStorage.setItem('cantidad_total', cantidad_total );
     displayTotalProductos(cantidad_total)
 
     if(cantidad_total == 0){
@@ -275,10 +296,15 @@ function vaciarCarrito(e) {
 function guardarproductoLocalStorage(producto) {
   let productos;
   var ifProductExist = checkIfItemExists(producto.id);
-  // Toma el valor de un arreglo con datos de LS o vacio
   productos = obtenerproductosLocalStorage();
-
-  if (!ifProductExist) productos.push(producto);
+  if(ifProductExist){
+    productos.forEach(function(productoLS, index) {
+      if(productoLS.id === producto.id) {
+        productos.splice(index, 1);
+      }
+    })
+  }
+  productos.push(producto);
 
   localStorage.setItem('productos', JSON.stringify(productos) );
   checkIfProductsExist()
