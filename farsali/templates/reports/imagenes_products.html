@@ -31,7 +31,7 @@
 <body style="background-image: url({% static 'images/fondo.jpg' %})">
     <div class="div-img">
         {% for imagen in data_imagenes %}
-            <img class="img" title="{{ imagen.nombre }}" alt="blah" src="{{ imagen.imagen.url }}" />
+            <img style="height: 500px; width: 500px;margin-top: 7em;" title="{{ imagen.nombre }}" alt="blah" src="{{ imagen.imagen.url }}" />
         {% endfor %}
     </div>
 </body>
