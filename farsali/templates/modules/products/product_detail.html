@@ -89,7 +89,9 @@
 
                 <div class="detail__options--face">
                     <!-- <a href="javascript: void(0);" onclick="window.open('https://www.facebook.com/sharer/sharer.php?u={% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.META.HTTP_HOST }}{% url 'producto_detalle' producto.id %}','ventanacompartir', 'toolbar=0, status=0, width=650, height=450');"> -->
-                        <img src="/static/images/facebook.png" data-href="{% url 'producto_detalle' producto.id %}" data-layout="button_count" data-size="large"><a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fwww.farsalicolombia.com%2Fproductos%2F{{ producto.id }}&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore" alt="Facebook Compartir">Compartir</a>
+                    <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fwww.farsalicolombia.com%2Fproductos%2F{{ producto.id }}&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore" alt="Facebook Compartir">
+                        <img src="/static/images/facebook.png" style="cursor: pointer;" data-href="{% url 'producto_detalle' producto.id %}" data-layout="button_count" data-size="large">
+                    </a>
                     <a  href="whatsapp://send?text={% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.META.HTTP_HOST }}{% url 'producto_detalle' producto.id %}"
                     data-action="share/whatsapp/share" target="_blank">
                         <img src="/static/images/whatsapp.png" alt="">
