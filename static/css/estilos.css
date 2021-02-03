@@ -2315,8 +2315,7 @@ p {
   padding: 2rem 2rem;
   justify-content: flex-end;
   align-items: center;
-  width: 90%;
-  margin-left: 5%;
+  width: 84%;
   border-bottom: 1px solid #a3a3a3;
 }
 @media (max-width: 1024px) {
