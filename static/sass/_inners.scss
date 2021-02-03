@@ -84,7 +84,7 @@
 .backgrounds__bottom {
     background-image: url("/static/images/marcas/cinta-cine-farsali-dos.jpg");
     width: 100%;
-    height: 130px;
+    height: 150px;
     //padding: 0 2rem;
 
     .backgrounds__bottom--title {
@@ -108,15 +108,15 @@
                     outline: none;
                 }
             }
-    
+
             &-next {
-                @media (max-width:1024px) {
+                @media (max-width: 1024px) {
                     margin-right: -2rem;
                 }
             }
-    
+
             &-prev {
-                @media (max-width:1024px) {
+                @media (max-width: 1024px) {
                     margin-left: -2rem;
                 }
             }
@@ -216,6 +216,12 @@
             box-sizing: border-box;
             display: flex;
             height: 100%;
+            border: 2px solid red;
+            width: 50%;
+            justify-content: center;
+            align-items: center;
+            border-radius: 6px;
+            padding: 8px;
 
             h4 {
                 position: absolute;

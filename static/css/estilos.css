@@ -1171,7 +1171,7 @@ p {
 .backgrounds__bottom {
   background-image: url("/static/images/marcas/cinta-cine-farsali-dos.jpg");
   width: 100%;
-  height: 130px;
+  height: 150px;
   /* images */
   /* buttons */
 }
@@ -1281,6 +1281,12 @@ p {
   box-sizing: border-box;
   display: flex;
   height: 100%;
+  border: 2px solid red;
+  width: 50%;
+  justify-content: center;
+  align-items: center;
+  border-radius: 6px;
+  padding: 8px;
 }
 .backgrounds__bottom .slick-track .slick h4 {
   position: absolute;
