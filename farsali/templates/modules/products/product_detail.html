@@ -31,32 +31,27 @@
                                 <p class="product__detail-price">$ {{ producto.costo|floatformat:"0"|intcomma }} COP</p>
                                 <p class="products__detail--paragraph">{{ producto.descripcion_no_prefer|safe }}</p>
                                 <div style="width: 30%;">
-                                    <input type="number" min="0" value="0" name="quantity"
-                                        id="cantidad-{{ producto.id }}" class="form-control">
+                                    <input type="number" min="0" value="0" name="quantity" id="cantidad-{{ producto.id }}" class="form-control">
                                 </div>
                             </div>
 
                             <div class="div-box-price">
-                                <p class="product__detail-price">$ {{ producto.costo_adicional|floatformat:"0"|intcomma
-                                    }} COP</p>
+                                <p class="product__detail-price">$ {{ producto.costo_adicional|floatformat:"0"|intcomma }} COP</p>
                                 <p class="products__detail--paragraph">{{ producto.descripcion_adicional|safe }}</p>
-                                <div style="width: 30%;">
-                                    <input type="number" min="0" value="0" name="quantity_box"
-                                        id="cantidad_cajas-{{ producto.id }}" class="form-control">
+                                <div style="width: 30%;" >
+                                    <input type="number" min="0" value="0" name="quantity_box" id="cantidad_cajas-{{ producto.id }}" class="form-control">
                                 </div>
                             </div>
 
                             <div class="div-box-price">
-                                <p class="product__detail-price">$ {{ producto.costo_farsali|floatformat:"0"|intcomma }}
-                                    COP</p>
+                                <p class="product__detail-price">$ {{ producto.costo_farsali|floatformat:"0"|intcomma }} COP</p>
                                 <p class="products__detail--paragraph">{{ producto.descripcion_prefer|safe }}</p>
-                                <div style="width: 30%;">
-                                    <input type="number" min="0" value="0" name="quantity_box"
-                                        id="cantidad_xmayor-{{ producto.id }}" class="form-control">
+                                <div style="width: 30%;" >
+                                    <input type="number" min="0" value="0" name="quantity_box" id="cantidad_xmayor-{{ producto.id }}" class="form-control">
                                 </div>
                             </div>
 
-
+                            
                         </div>
                     </div>
                 </div>
@@ -64,15 +59,16 @@
             </div>
 
 
-            <div class="form-group">
-                <label class="product__detail-quantity-title" for="quantity">Especificaciones para la compra</label>
-                <input type="text" name="specs" id="especificaciones-{{ producto.id }}" class="form-control">
-            </div>
+                <div class="form-group">
+                    <label class="product__detail-quantity-title" for="quantity">Especificaciones para la compra</label>
+                    <input type="text" name="specs" id="especificaciones-{{ producto.id }}" class="form-control">
+                </div>
 
             <div class="product__detail--options">
 
                 <div class="detail__options--chart">
-                    <button class="products__info--btn add-carrito"
+                    <button 
+                        class="products__info--btn add-carrito"
                         data-product-serialize="{% json_serialize producto %}">
                         <p class="icon-basket"></p>
                         Añadir
@@ -80,8 +76,11 @@
                 </div>
 
                 <div class="detail__options--chart">
-                    <button onclick="buyProduct(event)" class="products__info--btn buy-carrito"
-                        data-product-serialize="{% json_serialize producto %}" data-url-checkout="{% url 'checkout' %}">
+                    <button 
+                        onclick="buyProduct(event)" 
+                        class="products__info--btn buy-carrito"
+                        data-product-serialize="{% json_serialize producto %}"
+                        data-url-checkout="{% url 'checkout' %}">
                         <p class="icon-basket"></p>
                         Comprar
                     </button>
@@ -90,43 +89,40 @@
 
                 <div class="detail__options--face">
                     <!-- <a href="javascript: void(0);" onclick="window.open('https://www.facebook.com/sharer/sharer.php?u={% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.META.HTTP_HOST }}{% url 'producto_detalle' producto.id %}','ventanacompartir', 'toolbar=0, status=0, width=650, height=450');"> -->
-                    <img src="/static/images/facebook.png" alt="">
+                        <img src="/static/images/facebook.png" alt="">
                     </a>
-                    <a href="whatsapp://send?text={% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.META.HTTP_HOST }}{% url 'producto_detalle' producto.id %}"
-                        data-action="share/whatsapp/share" target="_blank">
+                    <a  href="whatsapp://send?text={% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.META.HTTP_HOST }}{% url 'producto_detalle' producto.id %}"
+                    data-action="share/whatsapp/share" target="_blank">
                         <img src="/static/images/whatsapp.png" alt="">
                     </a>
                 </div>
             </div>
             <div class="boton-comentarios">
-                <button type="button" class="btn comment-product__btn" data-toggle="modal"
-                    data-target="#exampleModalComment">
+                <button type="button" class="btn comment-product__btn" data-toggle="modal" data-target="#exampleModalComment">
                     Ver comentarios del {{ producto.nombre|safe }}
-                </button>
+                    </button>
             </div>
         </div>
 
         <div class="product__detail--carousel">
             <div class="product__detail--carousel-list owl-carousel" id="product-slider">
                 {% if producto.url_video %}
-                <div class="product__detail--carousel-item">
-                    <a href="https://www.youtube.com/embed/{{ producto.url_video|safe }}?controls=0&autoplay=1&mute=0&loop=1"
-                        data-fancybox="gallery" data-caption="{{ producto.nombre|safe }}"><iframe width="560"
-                            height="315"
-                            src="https://www.youtube.com/embed/{{ producto.url_video|safe }}?controls=0&autoplay=1&mute=0&loop=1"
-                            frameborder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            allowfullscreen></iframe></a>
-                </div>
+                    <div class="product__detail--carousel-item">
+                        <a href="https://www.youtube.com/embed/{{ producto.url_video|safe }}?controls=0&autoplay=1&mute=0&loop=1" data-fancybox="gallery" data-caption="{{ producto.nombre|safe }}"><iframe width="560" height="315" src="https://www.youtube.com/embed/{{ producto.url_video|safe }}?controls=0&autoplay=1&mute=0&loop=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></a>
+                    </div>
                 {% endif %}
                 {% if producto.fotos %}
-                {% for foto in producto.fotos %}
-                <div class="product__detail--carousel-item">
-                    <a href="{{ foto.imagen.url }}" data-fancybox="gallery"
-                        data-caption="{{ producto.nombre|safe }}"><img class="d-block w-100" src="{{ foto.imagen.url }}"
-                            height="440" width="666" alt="{{ producto.nombre|safe }}"></a>
-                </div>
-                {% endfor %}
+                    {% for foto in producto.fotos %}
+                        <div class="product__detail--carousel-item">
+                            <a href="{{ foto.imagen.url }}" data-fancybox="gallery" data-caption="{{ producto.nombre|safe }}"><img 
+                                class="d-block w-100" 
+                                src="{{ foto.imagen.url }}"
+                                height="440"
+                                width="666"
+                                alt="{{ producto.nombre|safe }}"
+                            ></a>
+                        </div>
+                    {% endfor %}
                 {% endif %}
             </div>
         </div>
@@ -137,55 +133,55 @@
             <p class="products__detail--paragraph">{{ producto.descripcion|safe }}</p>
         </div>
     </div>
-
-    <div class="modal fade" id="exampleModalComment" tabindex="-1" role="dialog"
-        aria-labelledby="exampleModalCommentLabel" aria-hidden="true">
+                
+    <div class="modal fade" id="exampleModalComment" tabindex="-1" role="dialog" aria-labelledby="exampleModalCommentLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h3 class="modal-title">Comentarios del {{ producto.nombre|safe }}</h3>
-                    <p>
-                        Mira las opiniones y comentarios que ha generado el {{ producto.nombre|safe }}
-                    </p>
-                </div>
-                <div class="modal-body">
-                    <div class="pdetail__comment">
-
-                        <div class="pdetail__comment--body">
-
-                            <div class="comment__hall">
-                                {% for comentario in producto.comentarios %}
+          <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Comentarios del {{ producto.nombre|safe }}</h3>
+                <p>
+                    Mira las opiniones y comentarios que ha generado el {{ producto.nombre|safe }}
+                </p>
+            </div>
+            <div class="modal-body">
+                <div class="pdetail__comment">
+            
+                    <div class="pdetail__comment--body">
+            
+                        <div class="comment__hall">
+                            {% for comentario in producto.comentarios %}
                                 <div class="user__comment">
                                     <div class="comment__hall--title">
                                         <p><strong>{{ comentario.nombre_cliente|safe }} </strong>Comenta:</p>
                                     </div>
-
+            
                                     <div class="comment__hall--msg">
                                         <p><em>{{ comentario.comentario }}</em></p>
                                     </div>
-
+            
                                     <div class="comment__hall--info">
-                                        <p>En <strong>{{ comentario.ciudad }}</strong> a las <em>{{ comentario.fecha
-                                                }}</em></p>
+                                        <p>En <strong>{{ comentario.ciudad }}</strong> a las <em>{{ comentario.fecha }}</em></p>
                                     </div>
                                 </div>
-                                {% endfor %}
-                            </div>
-                            <div class="pdetail__comment--form">
-                                <div class="comment__form--title">
-                                    <h4>Déjanos tu comentario</h4>
-                                </div>
-                                {% include 'base/messages.html' %}
-                                {% include 'modules/form/comments_form.html' %}
-                            </div>
-
+                            {% endfor %}
                         </div>
+                        <div class="pdetail__comment--form">
+                            <div class="comment__form--title">
+                                <h4>Déjanos tu comentario</h4>
+                            </div>
+                            {% include 'base/messages.html' %}
+                            {% include 'modules/form/comments_form.html' %}
+                        </div>
+            
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                </div>
             </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            </div>
+          </div>
         </div>
-    </div>
+      </div>
+
+
 </div>
