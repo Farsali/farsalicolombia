@@ -1281,12 +1281,13 @@ p {
   box-sizing: border-box;
   display: flex;
   height: 100%;
-  border: 2px solid red;
+  border: 2px solid #131313;
   width: 50%;
   justify-content: center;
   align-items: center;
   border-radius: 6px;
   padding: 8px;
+  background: #383838;
 }
 .backgrounds__bottom .slick-track .slick h4 {
   position: absolute;

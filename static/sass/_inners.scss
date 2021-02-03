@@ -216,12 +216,13 @@
             box-sizing: border-box;
             display: flex;
             height: 100%;
-            border: 2px solid red;
+            border: 2px solid $Grisb;
             width: 50%;
             justify-content: center;
             align-items: center;
             border-radius: 6px;
             padding: 8px;
+            background: $Grisw;
 
             h4 {
                 position: absolute;
