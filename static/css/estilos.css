@@ -910,6 +910,8 @@ p {
 }
 .owl-carousel .owl-stage {
   position: relative;
+  display: flex;
+  align-items: center;
 }
 .owl-carousel .owl-stage::after {
   clear: both;
