@@ -2047,6 +2047,7 @@ p {
   width: 100%;
 }
 .product__detail .container .product__detail--body .product__detail--description .products__detail--paragraph {
+  width: 86%;
   text-align: left;
 }
 .product__detail .container .product__detail--body .product__detail-price {
@@ -2322,7 +2323,7 @@ p {
 @media (max-width: 1024px) {
   .comment-product {
     flex-direction: column;
-    width: 100%;
+    width: 84%;
   }
 }
 .comment-product__btn {
@@ -2342,7 +2343,7 @@ p {
 }
 
 .div-description-product {
-  width: 52%;
+  width: 53%;
   text-align: justify;
 }
 @media (max-width: 1024px) {
