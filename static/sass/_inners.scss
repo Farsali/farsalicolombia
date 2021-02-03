@@ -82,9 +82,9 @@
 }
 
 .backgrounds__bottom {
-    background-color: #202020;
+    background-image: url("/static/images/marcas/cinta-cine-farsali-dos.jpg");
     width: 100%;
-    padding: 0 2rem;
+    //padding: 0 2rem;
 
     .backgrounds__bottom--title {
         color: white;
@@ -95,10 +95,6 @@
     .Carousel {
         width: 100%;
         margin: 0;
-
-        .img-cinta-cine {
-            width: 100%;
-        }
 
         .owl {
             &-next,
