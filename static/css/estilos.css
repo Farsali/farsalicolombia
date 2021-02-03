@@ -2023,6 +2023,9 @@ p {
   width: 40%;
   padding-right: 3rem;
 }
+.product__detail .container .product__detail--body .boton-comentarios {
+  margin: 20px 0px;
+}
 .product__detail .container .product__detail--body .product__detail--description {
   text-align: center;
 }
@@ -2310,7 +2313,7 @@ p {
 .comment-product {
   display: flex;
   padding: 2rem 2rem;
-  justify-content: space-evenly;
+  justify-content: flex-end;
   align-items: center;
   width: 90%;
   margin-left: 5%;
