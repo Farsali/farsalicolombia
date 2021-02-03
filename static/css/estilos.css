@@ -1287,7 +1287,7 @@ p {
   align-items: center;
   border-radius: 6px;
   padding: 8px;
-  background: #383838;
+  background: #ffff;
 }
 .backgrounds__bottom .slick-track .slick .marca-borde a img {
   object-fit: cover;
@@ -1304,7 +1304,7 @@ p {
   z-index: 1;
   font-size: 22px;
   line-height: 23px;
-  color: #fff;
+  color: #131313;
   padding: 15px;
 }
 .backgrounds__bottom .slick-track .slick h4 small {
