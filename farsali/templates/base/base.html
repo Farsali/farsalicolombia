@@ -9,19 +9,23 @@
         content="Farsáli Colombia | Mayorista de proveedores cosméticos | Al Mayor y al Detal">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://www.farsalicolombia.com/">
-    <meta property="og:image" content="https://farsali-col-bucket.s3.amazonaws.com/uploads/farsali/backgrounds/IMG_20201122_225641_Vg4gWvP.jpg">
+    <meta property="og:image"
+        content="https://farsali-col-bucket.s3.amazonaws.com/uploads/farsali/backgrounds/IMG_20201122_225641_Vg4gWvP.jpg">
     <meta property="og:image:width" content="878">
     <meta property="og:image:height" content="768">
     <meta property="og:image:type" content="image/jpg">
     <meta property="og:local" content="es_LA">
     <title>Farsáli Colombia | Mayorista de Cosméticos</title>
-    <meta name="description" content="Farsáli Colombia | Mayorista de proveedores cosméticos | Ventas al pormayor y al detal.">
+    <meta name="description"
+        content="Farsáli Colombia | Mayorista de proveedores cosméticos | Ventas al pormayor y al detal.">
     <meta name="keywords" content="farsali, Farsáli, Colombia, colombia, farsali colombia, Farsáli Colombia, Maquillaje, Cosméticos, productos de belleza, fitness
     polvo, pintalabios, rubor, maquillaje profesional, cosméticos al por mayor">
     <link rel="icon" href="/static/images/favicon.ico">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <meta name="author" content="k1n0com">
+    <!-- Facebook ID -->
+    <meta property="fb:app_id" content="247122750125242">
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-180246803-1"></script>
     <!-- Schema -->
@@ -29,7 +33,7 @@
         type="application/ld+json">{"@context": "https://schema.org","@type": "Organization","url": "https://www.farsalicolombia.com/","contactPoint":[{"@type": "ContactPoint","telephone": "+57-350-741-6434","contactType": "customer service"}],"address": {"@type": "PostalAddress","addressLocality": "Medellín, Colombia","postalCode": "050012","streetAddress": "Carrera 51 N° 45-70 Edificio Orión 9° Piso, Medellín - Antioquia"},"email": "farsalicolombia@gmail.com", "member": [{"@type": "Organization"}],"alumni": [{"@type": "Person","name": "Fabian"}],"name": "Jose Fabian","telephone": "(+57 4) 350-741-6434"}</script>
     <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.20/lodash.min.js"></script>
-    
+
     <script>
         window.dataLayer = window.dataLayer || [];
         function gtag() { dataLayer.push(arguments); }
@@ -62,13 +66,14 @@
 
 
     <button onclick="topFunction()" id="scrollTop" class="scrollToTop">
-       <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 24 24">
-          <path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"/>
-          <path d="M0 0h24v24H0z" fill="none"/>
-       </svg>
+        <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 24 24">
+            <path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z" />
+            <path d="M0 0h24v24H0z" fill="none" />
+        </svg>
     </button>
 
-    <div id="msgAdd" style="display: none" class="alert-comment alert alert-success alert-dismissible fade show" role="alert">
+    <div id="msgAdd" style="display: none" class="alert-comment alert alert-success alert-dismissible fade show"
+        role="alert">
         El producto se ha añadido al carrito.
     </div>
 
@@ -100,33 +105,37 @@
     <script src="/static/js/carousel_highlights.js"></script>
     <script src="/static/js/carousel_marcas.js"></script>
     <script>
-        $('.btn-search').click(function(){
-            var strAncla=$(this).attr('href'); 
-              $('body,html').stop(true,true).animate({        
+        $('.btn-search').click(function () {
+            var strAncla = $(this).attr('href');
+            $('body,html').stop(true, true).animate({
                 scrollTop: $(strAncla).offset().top
-              },1000); 
+            }, 1000);
         });
 
 
         var mybutton = document.getElementById("scrollTop")
 
         // When the user scrolls down 20px from the top of the document, show the button
-        window.onscroll = function() {scrollFunction()};
+        window.onscroll = function () { scrollFunction() };
 
         function scrollFunction() {
-          if (document.body.scrollTop > 50 || document.documentElement.scrollTop > 50) {
-            mybutton.style.display = "block";
-          } else {
-            mybutton.style.display = "none";
-          }
+            if (document.body.scrollTop > 50 || document.documentElement.scrollTop > 50) {
+                mybutton.style.display = "block";
+            } else {
+                mybutton.style.display = "none";
+            }
         }
 
         // When the user clicks on the button, scroll to the top of the document
         function topFunction() {
-          document.body.scrollTop = 0;
-          document.documentElement.scrollTop = 0;
+            document.body.scrollTop = 0;
+            document.documentElement.scrollTop = 0;
         }
     </script>
+    <div id="fb-root"></div>
+    <script async defer crossorigin="anonymous"
+        src="https://connect.facebook.net/es_ES/sdk.js#xfbml=1&version=v9.0&appId=247122750125242&autoLogAppEvents=1"
+        nonce="lm5veouZ"></script>
 </body>
 
 </html>
