@@ -97,6 +97,11 @@
                     </a>
                 </div>
             </div>
+            <div class="ml-3">
+                <button type="button" class="btn comment-product__btn" data-toggle="modal" data-target="#exampleModalComment">
+                    Ver comentarios del {{ producto.nombre|safe }}
+                    </button>
+            </div>
         </div>
 
         <div class="product__detail--carousel">
@@ -120,12 +125,6 @@
                     {% endfor %}
                 {% endif %}
             </div>
-        </div>
-
-        <div class="ml-3">
-            <button type="button" class="btn comment-product__btn" data-toggle="modal" data-target="#exampleModalComment">
-                Ver comentarios del {{ producto.nombre|safe }}
-                </button>
         </div>
     </div>
 
