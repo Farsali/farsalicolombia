@@ -1169,6 +1169,7 @@ p {
 .backgrounds__bottom {
   background-image: url("/static/images/marcas/cinta-cine-farsali-dos.jpg");
   width: 100%;
+  height: 130px;
   /* images */
   /* buttons */
 }
