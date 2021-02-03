@@ -34,6 +34,7 @@
                     }
                 }
                 .products__detail--paragraph {
+                    width: 86%;
                     text-align: left;
                 }
             }
@@ -371,7 +372,7 @@
 
     @media (max-width: 1024px) {
         flex-direction: column;
-        width: 100%;
+        width: 90%;
     }
 
     &__btn {
@@ -393,7 +394,7 @@
 }
 
 .div-description-product{
-    width: 52%;
+    width: 53%;
     text-align: justify;
     @media (max-width: 1024px) {
         margin-top: 2em;
