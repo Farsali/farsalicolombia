@@ -2322,6 +2322,7 @@ p {
 @media (max-width: 1024px) {
   .comment-product {
     flex-direction: column;
+    width: 100%;
   }
 }
 .comment-product__btn {
@@ -2341,6 +2342,7 @@ p {
 }
 
 .div-description-product {
+  width: 52%;
   text-align: justify;
 }
 @media (max-width: 1024px) {

@@ -371,6 +371,7 @@
 
     @media (max-width: 1024px) {
         flex-direction: column;
+        width: 100%;
     }
 
     &__btn {
@@ -392,6 +393,7 @@
 }
 
 .div-description-product{
+    width: 52%;
     text-align: justify;
     @media (max-width: 1024px) {
         margin-top: 2em;
