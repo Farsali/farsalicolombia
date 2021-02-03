@@ -1660,6 +1660,7 @@ p {
 
 .products__info--title,
 .products__info--link {
+  text-align: center;
   font-size: 18px;
   font-weight: 700;
   color: black;
