@@ -5,6 +5,13 @@ body {
   margin: 0;
 }
 
+.fb-xfbml-parse-ignore {
+  text-decoration: none;
+}
+.fb-xfbml-parse-ignore:hover {
+  text-decoration: none;
+}
+
 p,
 ul,
 li,
