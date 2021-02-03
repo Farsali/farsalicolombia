@@ -1550,6 +1550,9 @@ p {
   margin: 10px 10px 10px 10px;
   padding: 1rem;
   width: 23%;
+  height: 410px;
+  display: flex;
+  justify-content: space-between;
 }
 .products .products__container .scroll__animate .products__items:hover {
   cursor: pointer;
@@ -2005,11 +2008,13 @@ p {
   left: calc(50% - 45px);
 }
 
-.fade-enter-active, .fade-leave-active {
+.fade-enter-active,
+.fade-leave-active {
   transition: opacity 0.5s;
 }
 
-.fade-enter, .fade-leave-to {
+.fade-enter,
+.fade-leave-to {
   opacity: 0;
 }
 
