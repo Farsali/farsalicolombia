@@ -237,6 +237,10 @@
                         }
                     }
                 }
+
+                p {
+                    color: $Grisb;
+                }
             }
 
             h4 {
@@ -244,7 +248,7 @@
                 z-index: 1;
                 font-size: 22px;
                 line-height: 23px;
-                color: $Grisb;
+                color: #fff;
                 padding: 15px;
 
                 small {

@@ -1299,12 +1299,15 @@ p {
 .backgrounds__bottom .slick-track .slick .marca-borde a img:hover {
   opacity: 0.85;
 }
+.backgrounds__bottom .slick-track .slick .marca-borde p {
+  color: #131313;
+}
 .backgrounds__bottom .slick-track .slick h4 {
   position: absolute;
   z-index: 1;
   font-size: 22px;
   line-height: 23px;
-  color: #131313;
+  color: #fff;
   padding: 15px;
 }
 .backgrounds__bottom .slick-track .slick h4 small {
