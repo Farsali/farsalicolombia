@@ -2316,6 +2316,7 @@ p {
   justify-content: flex-end;
   align-items: center;
   width: 84%;
+  margin-left: 5%;
   border-bottom: 1px solid #a3a3a3;
 }
 @media (max-width: 1024px) {
@@ -2340,7 +2341,6 @@ p {
 }
 
 .div-description-product {
-  width: 50%;
   text-align: justify;
 }
 @media (max-width: 1024px) {
