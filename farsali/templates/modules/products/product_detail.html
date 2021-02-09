@@ -73,6 +73,11 @@
                         <p class="icon-basket"></p>
                         Añadir
                     </button>
+                    <script type="text/javascript" id="addToCartButton">
+                        $('#$addToCartButton').click(function() {
+                          fbq('track', 'Purchase', {currency: "COP", value: 30.000});
+                        });
+                    </script>
                 </div>
 
                 <div class="detail__options--chart">
