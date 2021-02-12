@@ -10,6 +10,10 @@
             width: 40%;
             padding-right: 3rem;
 
+            .boton-comentarios {
+                margin: 20px 0px;
+            }
+
             .product__detail--description {
                 text-align: center;
                 .products__detail--rating {
@@ -30,6 +34,7 @@
                     }
                 }
                 .products__detail--paragraph {
+                    width: 86%;
                     text-align: left;
                 }
             }
@@ -359,14 +364,15 @@
 .comment-product {
     display: flex;
     padding: 2rem 2rem;
-    justify-content: space-evenly;
+    justify-content: flex-end;
     align-items: center;
-    width: 90%;
+    width: 84%;
     margin-left: 5%;
     border-bottom: 1px solid rgb(163, 163, 163);
 
     @media (max-width: 1024px) {
         flex-direction: column;
+        width: 84%;
     }
 
     &__btn {
@@ -388,7 +394,7 @@
 }
 
 .div-description-product{
-    width: 50%;
+    width: 53%;
     text-align: justify;
     @media (max-width: 1024px) {
         margin-top: 2em;

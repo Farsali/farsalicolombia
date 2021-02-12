@@ -73,6 +73,11 @@
                         <p class="icon-basket"></p>
                         Añadir
                     </button>
+                    <script type="text/javascript" id="addToCartButton">
+                        $('#$addToCartButton').click(function() {
+                          fbq('track', 'Purchase', {currency: "COP", value: 30.000});
+                        });
+                    </script>
                 </div>
 
                 <div class="detail__options--chart">
@@ -89,13 +94,19 @@
 
                 <div class="detail__options--face">
                     <!-- <a href="javascript: void(0);" onclick="window.open('https://www.facebook.com/sharer/sharer.php?u={% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.META.HTTP_HOST }}{% url 'producto_detalle' producto.id %}','ventanacompartir', 'toolbar=0, status=0, width=650, height=450');"> -->
-                        <img src="/static/images/facebook.png" alt="">
+                    <a target="_blank" style="text-decoration: none;" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fwww.farsalicolombia.com%2Fproductos%2F{{ producto.id }}&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore" alt="Facebook Compartir">
+                        <img src="/static/images/facebook.png" style="cursor: pointer;" data-href="{% url 'producto_detalle' producto.id %}" data-layout="button_count" data-size="large">
                     </a>
                     <a  href="whatsapp://send?text={% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.META.HTTP_HOST }}{% url 'producto_detalle' producto.id %}"
                     data-action="share/whatsapp/share" target="_blank">
                         <img src="/static/images/whatsapp.png" alt="">
                     </a>
                 </div>
+            </div>
+            <div class="boton-comentarios">
+                <button type="button" class="btn comment-product__btn" data-toggle="modal" data-target="#exampleModalComment">
+                    Ver comentarios del {{ producto.nombre|safe }}
+                    </button>
             </div>
         </div>
 
@@ -124,12 +135,6 @@
     </div>
 
     <div class="comment-product">
-        <div class="ml-3">
-            <button type="button" class="btn comment-product__btn" data-toggle="modal" data-target="#exampleModalComment">
-                Ver comentarios del {{ producto.nombre|safe }}
-                </button>
-        </div>
-
         <div class="div-description-product">
             <p class="products__detail--paragraph">{{ producto.descripcion|safe }}</p>
         </div>

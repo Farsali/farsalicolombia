@@ -82,9 +82,10 @@
 }
 
 .backgrounds__bottom {
-    background-color: #202020;
+    background-image: url("/static/images/marcas/cinta-cine-farsali-dos.jpg");
     width: 100%;
-    padding: 0 2rem;
+    height: 150px;
+    //padding: 0 2rem;
 
     .backgrounds__bottom--title {
         color: white;
@@ -107,15 +108,15 @@
                     outline: none;
                 }
             }
-    
+
             &-next {
-                @media (max-width:1024px) {
+                @media (max-width: 1024px) {
                     margin-right: -2rem;
                 }
             }
-    
+
             &-prev {
-                @media (max-width:1024px) {
+                @media (max-width: 1024px) {
                     margin-left: -2rem;
                 }
             }
@@ -214,7 +215,33 @@
             float: left;
             box-sizing: border-box;
             display: flex;
-            height: 100%;
+            height: 90px;
+            border: 4px solid $Grisb;
+            width: 100px;
+            justify-content: center;
+            align-items: center;
+            border-radius: 6px;
+            padding: 8px;
+            background: $Blanco;
+
+            .marca-borde {
+                a {
+                    img {
+                        object-fit: cover;
+                        width: 100%;
+                        border-radius: 4px;
+                        box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.5);
+                        transition: 0.3s ease-in-out;
+                        &:hover {
+                            opacity: 0.85;
+                        }
+                    }
+                }
+
+                p {
+                    color: $Grisb;
+                }
+            }
 
             h4 {
                 position: absolute;
@@ -230,18 +257,7 @@
                 }
             }
 
-            a {
-                img {
-                    object-fit: cover;
-                    width: 100%;
-                    border-radius: 4px;
-                    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.5);
-                    transition: 0.3s ease-in-out;
-                    &:hover {
-                        opacity: 0.85;
-                    }
-                }
-            }
+            
         }
     }
 

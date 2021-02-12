@@ -6,14 +6,14 @@
             <div class="slick-track owl-carousel" id="track">
                 {% for marca in marcas %}
                     <div class="slick">
-                        <div>
+                        <div class="marca-borde">
                             <a href="{% url 'marcas' marca.id %}"> <!--Marca Detalle-->
                                 {% thumbnail marca.logo "60x60" as thumb %}
                                     <img src="{{ thumb.url }}" alt="{{ marca.nombre|safe }}"
                                         title="{{ marca.nombre|safe }}" height="{{ thumb.y }}" width="{{ thumb.x }}">
                                 {% endthumbnail %}
                             </a>
-                            <p class="text-center mb-1" style="color: white;font-size: 12px">{{ marca.get_tipo_marca }}</p>
+                            <p class="text-center mb-1">{{ marca.get_tipo_marca }}</p>
                         </div>
                     </div>
                 {% endfor %}

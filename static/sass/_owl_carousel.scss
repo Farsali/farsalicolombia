@@ -19,6 +19,8 @@
 
   .owl-stage {
     position: relative;
+    display: flex;
+    align-items: center;
 
     &::after {
       clear: both;
