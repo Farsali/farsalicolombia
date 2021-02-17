@@ -82,10 +82,16 @@
               </table>
             </div>
           </div>
-
-        <div class="card-footer bg-light d-flex justify-content-end">
-            <button class="btn btn-sm btn-checkout"
-            onclick="sendCheckout('{% url 'datos_cliente' %}', '{% json_serialize products %}')">Finalizar Compra</button>
+        
+        <form id="form-checkout" method="POST" action="{% url 'datos_cliente' %}">
+            {% csrf_token %}
+            <input type="hidden" id="productos-payment" name="productos-payment" />
+            <div class="card-footer bg-light d-flex justify-content-end">
+              <button class="btn btn-sm btn-checkout" type="submit">Finalizar Compra</button>
+            </div>
+        </form>
+        
+            
         </div>
       </div>
 </div>

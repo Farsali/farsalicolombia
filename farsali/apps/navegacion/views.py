@@ -1,7 +1,7 @@
 
 # coding: utf-8
 from django.views.generic import TemplateView
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
 from django.http import Http404
 from django.db.models import F
 from django.core.paginator import Paginator
@@ -20,6 +20,8 @@ from farsali.settings import MERCADOPAGO_ACCESS_TOKEN, WOMPI_PUBLIC_KEY, EPAYCO_
 from django.views.generic import ListView
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
+
+from django.urls import reverse
 
 
 def dict_producto(producto):
@@ -419,13 +421,11 @@ class productsDetailView(TemplateView):
         return context
 
 
-class checkoutView(View):
-    page_name = 'Compra'
-
-    def get(self, request, *args, **kwargs):
-        json_data = json.loads(request.GET["productos"])
-        items = []
-        total = 0
+def checkoutView(request):
+    items = []
+    total = 0
+    if request.POST:
+        json_data = json.loads(request.POST.get('productos-checkout'))
         for item in json_data:
             producto = Producto.objects.get(id=int(item["id"]))
             total += int(item["precio"])*int(item["cantidad"])
@@ -447,31 +447,32 @@ class checkoutView(View):
                     "specs": item["especificaciones"],
                     "id": int(item["id"])
                 }
-            )
-        return render(
-            request,
-            "base/checkout.html",
-            context={
-                'page_name': self.page_name,
-                'products': items,
-                'total': total
-            }
-        )
+            )      
+    return render(
+        request,
+        "base/checkout.html",
+        context={
+            'page_name': "Compra",
+            'products': items,
+            'total': total
+        }
+    )
 
-
-class paymentClienteView(View):
+def paymentClienteView(request):
     page_name = 'Datos del Cliente'
-
-    def get(self, request, *args, **kwargs):
-        json_data = json.loads(request.GET["productos"])
-        return render(
-            request,
-            "base/payment_client.html",
-            context={
-                'page_name': self.page_name,
-                'products': json_data
-            }
-        )
+    json_data = []
+    if request.POST:
+        print("entrooo")
+        print(request.POST.get('productos-payment'))
+        json_data = json.loads(request.POST.get('productos-payment'))
+    return render(
+        request,
+        "base/payment_client.html",
+        context={
+            'page_name': page_name,
+            'products': json_data
+        }
+    )
 
 
 class redirectPaymentView(View):

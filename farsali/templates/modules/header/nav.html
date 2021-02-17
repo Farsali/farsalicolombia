@@ -105,12 +105,15 @@
                                                 <h5>$ 86.400 COP</h5>
                                             </div>
                                         </div>
-
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary"
-                                                data-dismiss="modal">Cerrar</button>
-                                            <button onclick="sendProduct('{% url 'checkout' %}')" type="button" class="btn btn-primary">Comprar</button>
-                                        </div>
+                                        <form id="form-products" method="POST" action="{% url 'checkout' %}">
+                                            {% csrf_token %}
+                                            <input type="hidden" id="productos-checkout" name="productos-checkout" />
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-dismiss="modal">Cerrar</button>
+                                                <button type="submit" class="btn btn-primary">Comprar</button>
+                                            </div>
+                                        </form>
                                     </div>
                                 </div>
                             </div>

@@ -45,8 +45,8 @@ urlpatterns = [
     ),
     path('marcas/<pk>/', marcasView.as_view(), name='marcas'),
     path('tienda/', tiendaView.as_view(), name='tienda'),
-    path('compra/', checkoutView.as_view(), name='checkout'),
-    path('datos_cliente/', paymentClienteView.as_view(), name='datos_cliente'),
+    path('compra/', checkoutView, name='checkout'),
+    path('datos_cliente/', paymentClienteView, name='datos_cliente'),
     path('resumen_pago/', paymentView.as_view(), name='resumen_pago'),
     path('lista_productos/', productsView, name='lista_productos'),
 

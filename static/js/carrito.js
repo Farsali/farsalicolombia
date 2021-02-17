@@ -334,10 +334,37 @@ function checkIfItemExists (id) {
 }
 
 // send to url product
-function sendProduct(url){
-  productosLS = JSON.parse( localStorage.getItem('productos') );
+
+
+window.onload = function() {
+  document.getElementById('form-products').onsubmit = function(event) {
+    /* do what you want with the form */
+    //event.preventDefault()
+
+    // Should be triggered on form submit
+    data_productos = document.getElementById('productos-checkout');
+    data_productos.value = JSON.stringify(sendProduct())
+    // You must return false to prevent the default form behavior
+    return true;
+  }
+  if(document.getElementById('form-checkout')){
+    document.getElementById('form-checkout').onsubmit = function(event) {
+      /* do what you want with the form */
+      //event.preventDefault()
+  
+      // Should be triggered on form submit
+      data_productos = document.getElementById('productos-payment');
+      data_productos.value = JSON.stringify(sendProduct())
+      // You must return false to prevent the default form behavior
+      return true;
+    }
+  }
+  
+}
+function sendProduct(){
+  data = []
+  productosLS = JSON.parse(localStorage.getItem('productos') );
   if (productosLS && productosLS.length) {
-    data = []
     productosLS.forEach(function(producto) {
       data.push({
         "titulo": producto.titulo,
@@ -354,8 +381,9 @@ function sendProduct(url){
         "id": producto.id
       })
     })
-    location.href=url+'?productos='+JSON.stringify(data)
   }
+
+  return data
 }
 
 // send to url checkout
