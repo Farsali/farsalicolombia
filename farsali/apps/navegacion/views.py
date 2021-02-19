@@ -143,8 +143,8 @@ def get_marcas(**kwargs):
 def productsView(request):
     page_number = request.GET.get('page') if request.GET.get('producto_id') else None
     producto_id = request.GET.get('producto_id') if request.GET.get('producto_id') else None
-    marca_id = request.GET.get('marca_id')
-    quantity = 12
+    marca_id = request.GET.get('marca_id') if request.GET.get('marca_id') else None
+    quantity = 10
     pagination = int(page_number)*quantity
     product = None
     if producto_id and int(producto_id) > 0:
@@ -172,12 +172,12 @@ def productsView(request):
     productos_qs = None
     if product:
         filter_kwargs = {'orden__gte':product.orden, 'activo': True}
-        productos_qs_gt = Producto.objects.filter(**filter_kwargs).exclude(id=product.id)[int(pagination):int(pagination)+quantity]
+        productos_qs_gt = Producto.objects.filter(**filter_kwargs).exclude(id=product.id).order_by("orden", "id")[int(pagination):int(pagination)+quantity]
         productos_qs_gt = productos_qs_gt.values(*fields, **map_fields)
         productos_qs_lt = []
         if len(productos_qs_gt) < quantity:
             filter_kwargs = {'orden__lt':product.orden, 'activo': True}
-            productos_qs_lt = Producto.objects.filter(**filter_kwargs).exclude(id=product.id)[int(pagination):int(pagination)+quantity]
+            productos_qs_lt = Producto.objects.filter(**filter_kwargs).exclude(id=product.id).order_by("orden", "id")[int(pagination):int(pagination)+quantity]
             productos_qs_lt = productos_qs_lt.values(*fields, **map_fields)
         productos =  list(productos_qs_gt) + list(productos_qs_lt)
     elif marca_id and int(marca_id) > 0:
@@ -186,13 +186,13 @@ def productsView(request):
             'activo': True,
             'marca_producto': marca
         }
-        productos_qs = Producto.objects.filter(**filter_kwargs)[int(pagination):int(pagination)+quantity]
+        productos_qs = Producto.objects.filter(**filter_kwargs).order_by("orden", "id")[int(pagination):int(pagination)+quantity]
         productos = productos_qs.values(*fields, **map_fields)
     else:
         filter_kwargs = {
             'activo': True
         }
-        productos_qs = Producto.objects.filter(**filter_kwargs)[int(pagination):int(pagination)+quantity-1]
+        productos_qs = Producto.objects.filter(**filter_kwargs).order_by("orden", "id")[int(pagination):int(pagination)+quantity]
         productos = productos_qs.values(*fields, **map_fields)
 
     for p in productos:

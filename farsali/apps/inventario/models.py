@@ -22,7 +22,7 @@ class CategoriaProducto(models.Model):
         verbose_name = _(u"Categoría Producto")
         verbose_name_plural = _(u"Categorías Productos")
         # translate = ('nombre', 'url', 'descripcion')
-        ordering = ('orden', )
+        ordering = ('orden', 'id', )
 
     def __unicode__(self):
         return self.nombre
