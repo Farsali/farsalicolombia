@@ -447,7 +447,7 @@ def checkoutView(request):
                     "specs": item["especificaciones"],
                     "id": int(item["id"])
                 }
-            )      
+            )
     return render(
         request,
         "base/checkout.html",
@@ -462,8 +462,6 @@ def paymentClienteView(request):
     page_name = 'Datos del Cliente'
     json_data = []
     if request.POST:
-        print("entrooo")
-        print(request.POST.get('productos-payment'))
         json_data = json.loads(request.POST.get('productos-payment'))
     return render(
         request,
@@ -614,7 +612,7 @@ class paymentView(View):
                                         precio=int(item["unit_price_box"]), especificaciones=item["specs"], by_venta_caja=True)
                 products.save()
             
-            if int(item["quantity_box"]) > 0:
+            if int(item["quantity_xmayor"]) > 0:
                 items.append(
                     {
                         "title": f'{producto.nombre} {producto.descripcion_prefer}',
@@ -633,7 +631,6 @@ class paymentView(View):
         epayco = None
         url_redirect = ""
         url_response = ""
-
         if pasarela.origen == 0:
             preference = {
                 "items": items,
