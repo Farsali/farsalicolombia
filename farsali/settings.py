@@ -20,7 +20,7 @@ SECRET_KEY = 'lr+ke#n6om%_evagj1-=-piroo%b^x4_ktr+*b8!(57#49%8oe'
 MEDIA_URL = '/'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = [
     'farsalicol.herokuapp.com',
@@ -224,14 +224,10 @@ django_heroku.settings(locals())
 
 
 # Api keys of mercadopagos
-MERCADOPAGO_PUBLIC_KEY = os.environ.get('MERCADOPAGO_PUBLIC_KEY_PROD')
-MERCADOPAGO_ACCESS_TOKEN = os.environ.get('MERCADOPAGO_ACCESS_TOKEN_PROD')
+MERCADOPAGO_PUBLIC_KEY = "TEST-6962c4d4-7168-4608-bec3-b416a4d11e10"
+MERCADOPAGO_ACCESS_TOKEN = "TEST-1611010299166741-092904-abb0230b86de1595bd111a73404ffcb0-652583311"
 MERCADOPAGO_CLIENT_ID = "1611010299166741"
 MERCADOPAGO_CLIENT_SECRET = "CCrznaGLOIf33iM6arHjHFP5hlhv7FAv"
-
-if(DEBUG):
-    MERCADOPAGO_PUBLIC_KEY = os.environ.get('MERCADOPAGO_PUBLIC_KEY_TEST')
-    MERCADOPAGO_ACCESS_TOKEN = os.environ.get('MERCADOPAGO_ACCESS_TOKEN_TEST')
 
 
 # Api keys of wompi
