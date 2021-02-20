@@ -22,6 +22,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
 
 from django.urls import reverse
+from django.core.exceptions import ObjectDoesNotExist
 
 
 def dict_producto(producto):
@@ -427,27 +428,30 @@ def checkoutView(request):
     if request.POST:
         json_data = json.loads(request.POST.get('productos-checkout'))
         for item in json_data:
-            producto = Producto.objects.get(id=int(item["id"]))
-            total += int(item["precio"])*int(item["cantidad"])
-            total += int(item["precio_caja"])*int(item["cantidad_cajas"])
-            total += int(item["precio_xmayor"])*int(item["cantidad_xmayor"])
-            items.append(
-                {
-                    "title": producto.nombre,
-                    "description_aditional": producto.descripcion_adicional,
-                    "description_prefer": producto.descripcion_prefer,
-                    "description_no_prefer": producto.descripcion_no_prefer,
-                    "quantity": int(item["cantidad"]),
-                    "quantity_box": int(item["cantidad_cajas"]),
-                    "unit_price_box": int(item["precio_caja"]),
-                    "quantity_xmayor": int(item["cantidad_xmayor"]),
-                    "unit_price_xmayor": int(item["precio_xmayor"]),
-                    "currency_id": "COP",
-                    "unit_price": int(item["precio"]),
-                    "specs": item["especificaciones"],
-                    "id": int(item["id"])
-                }
-            )
+            try:
+                producto = Producto.objects.get(id=int(item["id"]))
+                total += int(item["precio"])*int(item["cantidad"])
+                total += int(item["precio_caja"])*int(item["cantidad_cajas"])
+                total += int(item["precio_xmayor"])*int(item["cantidad_xmayor"])
+                items.append(
+                    {
+                        "title": producto.nombre,
+                        "description_aditional": producto.descripcion_adicional,
+                        "description_prefer": producto.descripcion_prefer,
+                        "description_no_prefer": producto.descripcion_no_prefer,
+                        "quantity": int(item["cantidad"]),
+                        "quantity_box": int(item["cantidad_cajas"]),
+                        "unit_price_box": int(item["precio_caja"]),
+                        "quantity_xmayor": int(item["cantidad_xmayor"]),
+                        "unit_price_xmayor": int(item["precio_xmayor"]),
+                        "currency_id": "COP",
+                        "unit_price": int(item["precio"]),
+                        "specs": item["especificaciones"],
+                        "id": int(item["id"])
+                    }
+                )
+            except ObjectDoesNotExist:
+                pass
     return render(
         request,
         "base/checkout.html",
