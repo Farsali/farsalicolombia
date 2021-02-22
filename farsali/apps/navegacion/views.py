@@ -635,6 +635,7 @@ class paymentView(View):
         epayco = None
         url_redirect = ""
         url_response = ""
+        url_mercadopgos = ""
         if pasarela.origen == 0:
             preference = {
                 "items": items,
@@ -646,7 +647,9 @@ class paymentView(View):
                 "auto_return": "approved",
             }
             create_preference_result = mp.create_preference(preference)
+            print(create_preference_result)
             response = create_preference_result["response"]["id"]
+            url_mercadopgos = create_preference_result["response"]["init_point"]
             ventas.referencia_pasarela = response
         elif pasarela.origen == 1:
             response = ventas.referencia
@@ -674,6 +677,7 @@ class paymentView(View):
                 'products': items,
                 'total': total,
                 "client": client,
+                "url_mercadopgos": url_mercadopgos,
                 "url_response": url_response,
                 "url_redirect": url_redirect
             }

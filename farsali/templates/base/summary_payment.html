@@ -67,10 +67,7 @@
 
       <div class="d-flex justify-content-end">
         {% if pasarela == 0 %}
-          <script
-            src="https://www.mercadopago.com.co/integrations/v1/web-payment-checkout.js"
-            data-preference-id="{{preference}}">
-          </script>
+          <a href="{{url_mercadopgos}}">Pagar con Mercado Pago</a>
         {% elif pasarela == 1 %}
           <form>
             <script
