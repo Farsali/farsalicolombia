@@ -65,15 +65,30 @@
                                                 <form action="">
                                                     <div class="form-group">
                                                         <label for="">[[ producto.nombre ]] [[ producto.descripcion_no_prefer ]]</label>
-                                                        <input type="number" min="0" value="0" name="" :id="'cantidad-' + [[ producto.id ]]" class="form-control">
+                                                        <template v-if="producto.cantidad==0">
+                                                            <p>No hay producto disponible en esta presentación</p>
+                                                        </template>
+                                                        <template v-else>
+                                                            <input type="number" min="0" value="0" name="" :id="'cantidad-' + [[ producto.id ]]" class="form-control">
+                                                        </template>
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="">[[ producto.nombre ]] [[ producto.descripcion_adicional ]]</label>
-                                                        <input type="number" min="0" value="0" name="" :id="'cantidad_cajas-' + [[ producto.id ]]" class="form-control">
+                                                        <template v-if="producto.cantidad_cajas==0">
+                                                            <p>No hay producto disponible en esta presentación</p>
+                                                        </template>
+                                                        <template v-else>
+                                                            <input type="number" min="0" value="0" name="" :id="'cantidad_cajas-' + [[ producto.id ]]" class="form-control">
+                                                        </template>
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="">[[ producto.nombre ]] [[ producto.descripcion_prefer ]]</label>
-                                                        <input type="number" min="0" value="0" name="" :id="'cantidad_xmayor-' + [[ producto.id ]]" class="form-control">
+                                                        <template v-if="producto.cantidad_cajas_prefer==0">
+                                                            <p>No hay producto disponible en esta presentación</p>
+                                                        </template>
+                                                        <template v-else>
+                                                            <input type="number" min="0" value="0" name="" :id="'cantidad_xmayor-' + [[ producto.id ]]" class="form-control">
+                                                        </template>
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="">Especificaciones para la compra</label>
@@ -111,7 +126,7 @@
 </div>
 {% block scripts %}
     <script type="text/javascript">
-       const API_URL = 'https://www.farsalicolombia.com'
+       const API_URL = 'http://localhost:8000'
        const URL_BUCKET = 'https://farsali-col-bucket.s3.amazonaws.com/'
        var app2 = new Vue({
             el: '#products',

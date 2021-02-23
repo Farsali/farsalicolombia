@@ -3,7 +3,7 @@
 from django.views.generic import TemplateView
 from django.shortcuts import get_object_or_404, render, redirect
 from django.http import Http404
-from django.db.models import F
+from django.db.models import Q, F
 from django.core.paginator import Paginator
 from django.http import JsonResponse
 from ..inventario.models import Producto, CategoriaProducto, Comentario, Marca
@@ -60,6 +60,8 @@ def dict_producto(producto):
         'categoria_id': producto.categoria_id,
         'codigo': producto.codigo,
         'imagen': producto.imagen,
+        'cantidad': producto.cantidad,
+        'cantidad_cajas_prefer': producto.cantidad_cajas_prefer,
         'calificacion': producto.calificacion,
         'cantidad_cajas': producto.cantidad_cajas,
         'costo_adicional': producto.costo_adicional,
@@ -160,6 +162,8 @@ def productsView(request):
         'imagen',
         'calificacion',
         'costo',
+        'cantidad',
+        'cantidad_cajas_prefer',
         'cantidad_cajas',
         'costo_adicional',
         'costo_farsali',
@@ -180,7 +184,7 @@ def productsView(request):
             filter_kwargs = {'orden__lt':product.orden, 'activo': True}
             productos_qs_lt = Producto.objects.filter(**filter_kwargs).exclude(id=product.id).order_by("orden", "id")[int(pagination):int(pagination)+quantity]
             productos_qs_lt = productos_qs_lt.values(*fields, **map_fields)
-        productos =  list(productos_qs_gt) + list(productos_qs_lt)
+        productos = list(productos_qs_gt) + list(productos_qs_lt)
     elif marca_id and int(marca_id) > 0:
         marca = Marca.objects.get(pk=marca_id)
         filter_kwargs = {
@@ -190,10 +194,8 @@ def productsView(request):
         productos_qs = Producto.objects.filter(**filter_kwargs).order_by("orden", "id")[int(pagination):int(pagination)+quantity]
         productos = productos_qs.values(*fields, **map_fields)
     else:
-        filter_kwargs = {
-            'activo': True
-        }
-        productos_qs = Producto.objects.filter(**filter_kwargs).order_by("orden", "id")[int(pagination):int(pagination)+quantity]
+        queryset = ((Q(activo=True))&(Q(cantidad__gt=0)|Q(cantidad_cajas__gt=0)|Q(cantidad_cajas_prefer__gt=0)))
+        productos_qs = Producto.objects.filter(queryset).order_by("orden", "id")[int(pagination):int(pagination)+quantity]
         productos = productos_qs.values(*fields, **map_fields)
 
     for p in productos:

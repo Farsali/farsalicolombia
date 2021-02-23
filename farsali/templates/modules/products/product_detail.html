@@ -31,7 +31,11 @@
                                 <p class="product__detail-price">$ {{ producto.costo|floatformat:"0"|intcomma }} COP</p>
                                 <p class="products__detail--paragraph">{{ producto.descripcion_no_prefer|safe }}</p>
                                 <div style="width: 30%;">
-                                    <input type="number" min="0" value="0" name="quantity" id="cantidad-{{ producto.id }}" class="form-control">
+                                    {% if producto.cantidad == 0 %}
+                                        <p class="products__detail--paragraph">No esta disponible</p>
+                                    {% else %}
+                                        <input type="number" min="0" value="0" name="quantity" id="cantidad-{{ producto.id }}" class="form-control">
+                                    {% endif %}
                                 </div>
                             </div>
 
@@ -39,7 +43,11 @@
                                 <p class="product__detail-price">$ {{ producto.costo_adicional|floatformat:"0"|intcomma }} COP</p>
                                 <p class="products__detail--paragraph">{{ producto.descripcion_adicional|safe }}</p>
                                 <div style="width: 30%;" >
-                                    <input type="number" min="0" value="0" name="quantity_box" id="cantidad_cajas-{{ producto.id }}" class="form-control">
+                                    {% if producto.cantidad_cajas == 0 %}
+                                        <p class="products__detail--paragraph">No esta disponible</p>
+                                    {% else %}
+                                        <input type="number" min="0" value="0" name="quantity_box" id="cantidad_cajas-{{ producto.id }}" class="form-control">
+                                    {% endif %}
                                 </div>
                             </div>
 
@@ -47,7 +55,11 @@
                                 <p class="product__detail-price">$ {{ producto.costo_farsali|floatformat:"0"|intcomma }} COP</p>
                                 <p class="products__detail--paragraph">{{ producto.descripcion_prefer|safe }}</p>
                                 <div style="width: 30%;" >
-                                    <input type="number" min="0" value="0" name="quantity_box" id="cantidad_xmayor-{{ producto.id }}" class="form-control">
+                                    {% if producto.cantidad_cajas_prefer == 0 %}
+                                        <p class="products__detail--paragraph">No esta disponible</p>
+                                    {% else %}
+                                        <input type="number" min="0" value="0" name="quantity_box" id="cantidad_xmayor-{{ producto.id }}" class="form-control">
+                                    {% endif %}
                                 </div>
                             </div>
 
