@@ -15,7 +15,7 @@
 	}
 
 	.div-margin{
-        margin: 1em;
+        margin: 0.5em;
     }
 
     .div-start{
@@ -113,12 +113,21 @@
 		    	{% for product in products %}
 		    		{% if product.by_venta_caja %}
 				        <p class="p-subtitle">
-				        	{{ product.producto.codigo }} {{ product.producto.nombre }} {{ product.cantidad }} Cajas x {{ product.productos.cantidad_cajas }} Unidad(es) c/u: $ {% multiply product.cantidad product.precio %}
+							{{ product.producto.codigo }} {{ product.producto.nombre }} Cajas x {{ product.producto.cantidad_cajas }} Unidad(es) c/u
+							<strong>{{ product.cantidad }} Cantidad, Total $ {% multiply product.cantidad product.precio %}</strong>
 				        </p>
-			        {% else %}
-			        	<p class="p-subtitle">
-				        	{{ product.producto.codigo }} {{ product.producto.nombre }} x {{ product.cantidad }} Unidad(es): $ {% multiply product.cantidad product.precio %}
-				        </p>
+					{% else %}
+						{% if product.by_mayor %}
+							<p class="p-subtitle">
+								{{ product.producto.codigo }} {{ product.producto.nombre }} x {{ product.producto.cantidad_cajas_prefer }} Unidad(es) c/u Por mayor
+								<strong>{{ product.cantidad }} Cantidad, Total $ {% multiply product.cantidad product.precio %}</strong>
+							</p>
+						{% else %}
+							<p class="p-subtitle">
+								{{ product.producto.codigo }} {{ product.producto.nombre }} x {{ product.producto.cantidad }} Unidad(es)
+								<strong>{{ product.cantidad }} Cantidad, Total $ {% multiply product.cantidad product.precio %}</strong>
+							</p>
+						{% endif %}
 			        {% endif %}
 		       	{% endfor %}
 		    </div>
