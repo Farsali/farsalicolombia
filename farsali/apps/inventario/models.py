@@ -1,6 +1,7 @@
 # coding: utf-8
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+from django.utils.safestring import mark_safe
 # from transmeta import TransMeta
 
 
@@ -242,9 +243,21 @@ class GaleriaProducto(ImagenBase, models.Model):
         verbose_name=_(u'Producto'),
         on_delete=models.CASCADE
     )
+    descripcion = models.TextField(null=True, blank=True)
 
     def __str__(self):
         return self.nombre
+
+    def preview_img(self):
+        html = "<div style='display:flex;' >"
+        if not self.imagen:
+            return mark_safe("<p> No hay imagen para mostrar </p>")
+        link = self.imagen.url
+        html += '<a target="_blank" href="'+link + \
+            '" ><img style="width:90px;height:90px;border-radius:100px;margin:5px;" src="'+link+'" /></a>'
+        html += "</div>"
+        return mark_safe(html)
+    preview_img.short_description = "Foto del producto"
 
     class Meta:
         verbose_name = _(u'Imagen Producto')
