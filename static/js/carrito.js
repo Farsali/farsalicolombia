@@ -10,6 +10,8 @@ const BuyCarritoDetail = document.getElementsByClassName('buy-carrito');
 const msgCarrito = document.getElementById("msgAdd")
 const msgCarritoProductos = document.getElementById("text-car-product")
 const divCarritoProductos = document.getElementById("div-card-product")
+const form_checkout_up = document.getElementById("form-checkout-up")
+const form_checkout_down = document.getElementById("form-checkout-down")
 var valorTotalSuma = 0
 var cantidad_total = 0
 // var valorTotalValue = `$ ${valorTotalSuma} COP`
@@ -44,6 +46,36 @@ function cargarEventListeners() {
 
   // // Al cargar el documento mostrar LS
   document.addEventListener('DOMContentLoaded', leerLocalStorage);
+  if(form_checkout_up){
+    form_checkout_up.addEventListener('submit', checkoutSubmit);
+  }
+  if(form_checkout_down){
+    form_checkout_down.addEventListener('submit', checkoutSubmit);
+  }
+}
+
+window.onload = function() {
+  document.getElementById('form-products').onsubmit = function(event) {
+    /* do what you want with the form */
+    //event.preventDefault()
+
+    // Should be triggered on form submit
+    data_productos = document.getElementById('productos-checkout');
+    data_productos.value = JSON.stringify(sendProduct())
+    // You must return false to prevent the default form behavior
+    return true;
+  }
+}
+
+function checkoutSubmit(event) {
+    /* do what you want with the form */
+    //event.preventDefault()
+
+    // Should be triggered on form submit
+    data_productos = document.getElementById('productos-payment');
+    data_productos.value = JSON.stringify(sendProduct())
+    // You must return false to prevent the default form behavior
+    return true;
 }
 
 function getValueCantidadProducts(){
@@ -362,29 +394,7 @@ function checkIfItemExists (id) {
 // send to url product
 
 
-window.onload = function() {
-  document.getElementById('form-products').onsubmit = function(event) {
-    /* do what you want with the form */
-    //event.preventDefault()
 
-    // Should be triggered on form submit
-    data_productos = document.getElementById('productos-checkout');
-    data_productos.value = JSON.stringify(sendProduct())
-    // You must return false to prevent the default form behavior
-    return true;
-  }
-  document.getElementById('form-checkout').onsubmit = function(event) {
-    /* do what you want with the form */
-    //event.preventDefault()
-
-    // Should be triggered on form submit
-    data_productos = document.getElementById('productos-payment');
-    data_productos.value = JSON.stringify(sendProduct())
-    // You must return false to prevent the default form behavior
-    return true;
-  }
-  
-}
 function sendProduct(){
   data = []
   productosLS = JSON.parse(localStorage.getItem('productos') );

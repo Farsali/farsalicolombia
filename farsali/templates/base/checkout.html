@@ -17,9 +17,9 @@
             <div class="col-md-auto">
                 <div class="d-flex">
                   <a class="btn btn-checkout border-300 mr-2" href="{% url 'home' %}"> <span class="fas fa-chevron-left mr-1" data-fa-transform="shrink-4"></span>Continuar Comprando</a>
-                  <form id="form-checkout" method="POST" action="{% url 'datos_cliente' %}">
+                  <form id="form-checkout-up" method="POST" action="{% url 'datos_cliente' %}">
                     {% csrf_token %}
-                    <input type="hidden" name="productos-payment">
+                    <input type="hidden" id="productos-payment" name="productos-payment">
                     <button class="btn btn-sm btn-checkout" type="submit">Finalizar Compra</button>
                 </form>
               </div>
@@ -92,9 +92,9 @@
             </div>
           </div>
         
-        <form id="form-checkout" method="POST" action="{% url 'datos_cliente' %}">
+        <form id="form-checkout-down" method="POST" action="{% url 'datos_cliente' %}">
             {% csrf_token %}
-            <input type="hidden" name="productos-payment">
+            <input type="hidden" id="productos-payment"  name="productos-payment">
             <div class="card-footer bg-light d-flex justify-content-end">
               <button class="btn btn-sm btn-checkout" type="submit">Finalizar Compra</button>
             </div>
