@@ -259,6 +259,32 @@ function insertarCarrito(producto) {
  
 }
 
+function eliminarItem(event, producto, type){
+  event.parentNode.parentNode.parentNode.removeChild(event.parentNode.parentNode);
+  var precioProducto = 0
+  var cantidadProducto = 0
+  if(type==0){
+    precioProducto = producto.quantity * producto.unit_price
+    cantidadProducto = producto.quantity
+  }else if(type==1){
+    precioProducto = producto.quantity_box * producto.unit_price_box
+    cantidadProducto = producto.quantity_box
+  }else{
+    precioProducto = producto.quantity_xmayor * producto.unit_price_xmayor
+    cantidadProducto = producto.quantity_xmayor
+  }
+  valorTotalSuma -= parseInt(precioProducto)
+  cantidad_total -= parseInt(cantidadProducto)
+  displayTotalProductos(cantidad_total)
+
+  if(cantidad_total == 0){
+    divCarritoProductos.style.display = "none";
+  }
+
+  displayTotal(valorTotalSuma)
+  eliminarproductoLocalStorage(parseInt(producto.id), type);
+}
+
 // Elimina el producto del carrito en el DOM
 function eliminarproducto(e) {
   e.preventDefault();
@@ -530,7 +556,7 @@ function leerLocalStorage() {
               <input class="form-check-input" type="checkbox" value=""
               id="defaultCheck1">
           </div>
-          <a style="color:red;" href="#" data-caja=2" data-precio-total="${producto.total_precio_xmayor}" data-cantidad="${producto.cantidad_xmayor}" data-precio="${producto.precio_xmayor}" data-id="${producto.id}" class="icon-trash-empty"></a>
+          <a style="color:red;" href="#" data-caja="2" data-precio-total="${producto.total_precio_xmayor}" data-cantidad="${producto.cantidad_xmayor}" data-precio="${producto.precio_xmayor}" data-id="${producto.id}" class="icon-trash-empty"></a>
       </td>`;
       listaproductos.appendChild(row3);
       valorTotalSuma += parseInt(producto.total_precio_xmayor)

@@ -67,13 +67,31 @@
                                 <div class="form__cantidad">
                                     <form action="">
                                         <div class="form-group">
-                                            <label for="">{{ producto.nombre|safe }}</label>
-                                            {% if logged_usser %}
-                                                <label for="">Caja x {{ producto.cantidad_cajas }} unidades</label>
+                                            <label for="">{{ producto.nombre|safe }} {{ producto.descripcion_no_prefer|safe }}</label>
+                                            {% if not producto.cantidad %}
+                                                <p>No hay producto disponible</p>
+                                            {% else %}
+                                                <input type="number" min="0" value="0" name="" id="'cantidad-{{ producto.id }}" class="form-control">
                                             {% endif %}
-                                            <input type="number" name="" id="cantidad-{{ producto.id }}" class="form-control">
                                         </div>
                                         <div class="form-group">
+                                            <label for="">{{ producto.nombre|safe }} {{ producto.descripcion_adicional|safe }}</label>
+                                            {% if not producto.cantidad or not producto.cantidad_cajas %}
+                                                <p>No hay producto disponible</p>
+                                            {% else %}
+                                                <input type="number" min="0" value="0" name="" id="'cantidad_cajas-{{ producto.id }}" class="form-control">
+                                            {% endif %}
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="">{{ producto.nombre|safe }} {{ producto.cantidad_cajas_prefer|safe }}</label>
+                                            {% if not producto.cantidad or not producto.cantidad_cajas_prefer %}
+                                                <p>No hay producto disponible</p>
+                                            {% else %}
+                                                <input type="number" min="0" value="0" name="" id="'cantidad_xmayor-{{ producto.id }}" class="form-control">
+                                            {% endif %}
+                                        </div>
+                                        <div class="form-group">
+                                            <p class="products__detail--paragraph">{{ producto.cantidad }} disponibles</p>
                                             <label for="">Especificaciones para la compra</label>
                                             <input type="text" name="" id="especificaciones-{{ producto.id }}" class="form-control">
                                         </div>

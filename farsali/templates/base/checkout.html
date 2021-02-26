@@ -19,7 +19,7 @@
                   <a class="btn btn-checkout border-300 mr-2" href="{% url 'home' %}"> <span class="fas fa-chevron-left mr-1" data-fa-transform="shrink-4"></span>Continuar Comprando</a>
                   <form id="form-checkout" method="POST" action="{% url 'datos_cliente' %}">
                     {% csrf_token %}
-                    <input type="hidden" name="productos-payment" value="{% json_serialize products %}">
+                    <input type="hidden" name="productos-payment">
                     <button class="btn btn-sm btn-checkout" type="submit">Finalizar Compra</button>
                 </form>
               </div>
@@ -45,6 +45,7 @@
                       <td class="align-middle text-center">{{ item.quantity }}</td>
                       <td class="align-middle text-right">${{ item.unit_price|intcomma }} COP</td>
                       <td class="align-middle text-right">${% multiply item.quantity item.unit_price %} COP</td>
+                      <td><a style="color:red;" onclick="eliminarItem(this, {% json_serialize item %}, 0)" href="#"  class="icon-trash-empty"></a></td>
                     </tr>
                     {% endif %}
 
@@ -56,6 +57,7 @@
                       <td class="align-middle text-center">{{ item.quantity_box }}</td>
                       <td class="align-middle text-right">${{ item.unit_price_box|intcomma }} COP</td>
                       <td class="align-middle text-right">${% multiply item.quantity_box item.unit_price_box %} COP</td>
+                      <td><a style="color:red;" onclick="eliminarItem(this, {% json_serialize item %}, 1)" href="#"  class="icon-trash-empty"></a></td>
                     </tr>
                     {% endif %}
 
@@ -67,6 +69,7 @@
                         <td class="align-middle text-center">{{ item.quantity_xmayor }}</td>
                         <td class="align-middle text-right">${{ item.unit_price_xmayor|intcomma }} COP</td>
                         <td class="align-middle text-right">${% multiply item.quantity_xmayor item.unit_price_xmayor %} COP</td>
+                        <td><a style="color:red;" onclick="eliminarItem(this, {% json_serialize item %}, 2)" href="#"  class="icon-trash-empty"></a></td>
                       </tr>
                     {% endif %}
                 {% endfor %}
@@ -91,7 +94,7 @@
         
         <form id="form-checkout" method="POST" action="{% url 'datos_cliente' %}">
             {% csrf_token %}
-            <input type="hidden" name="productos-payment" value="{% json_serialize products %}">
+            <input type="hidden" name="productos-payment">
             <div class="card-footer bg-light d-flex justify-content-end">
               <button class="btn btn-sm btn-checkout" type="submit">Finalizar Compra</button>
             </div>
