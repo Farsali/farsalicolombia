@@ -595,47 +595,47 @@ class paymentView(View):
         ventas.save()
         for item in json_data:
             producto = Producto.objects.get(id=int(item["id"]))
-            total += int(item["unit_price"])*int(item["quantity"])
-            total += int(item["unit_price_box"])*int(item["quantity_box"])
-            total += int(item["unit_price_xmayor"])*int(item["quantity_xmayor"])
+            total += int(item["precio"])*int(item["cantidad"])
+            total += int(item["precio_caja"])*int(item["cantidad_cajas"])
+            total += int(item["precio_xmayor"])*int(item["cantidad_xmayor"])
             
-            if int(item["quantity"]) > 0:
+            if int(item["cantidad"]) > 0:
                 items.append(
                     {
                         "title": f'{producto.nombre} {producto.descripcion_no_prefer}',
-                        "quantity": int(item["quantity"]),
+                        "quantity": int(item["cantidad"]),
                         "currency_id": "COP",
-                        "unit_price": int(item["unit_price"])
+                        "unit_price": int(item["precio"])
                     }
                 )
-                products = VentaProducts(venta=ventas, producto_id=item["id"], cantidad=int(item["quantity"]),
-                                        precio=int(item["unit_price"]), especificaciones=item["specs"], by_venta_caja=False)
+                products = VentaProducts(venta=ventas, producto_id=item["id"], cantidad=int(item["cantidad"]),
+                                        precio=int(item["cantidad"]), especificaciones=item["especificaciones"], by_venta_caja=False)
                 products.save()
             
-            if int(item["quantity_box"]) > 0:
+            if int(item["cantidad_cajas"]) > 0:
                 items.append(
                     {
                         "title": f'{producto.nombre} {producto.descripcion_adicional}',
                         "quantity": int(item["quantity_box"]),
                         "currency_id": "COP",
-                        "unit_price": int(item["unit_price_box"])
+                        "unit_price": int(item["precio_caja"])
                     }
                 )
-                products = VentaProducts(venta=ventas, producto_id=item["id"], cantidad=int(item["quantity_box"]),
-                                        precio=int(item["unit_price_box"]), especificaciones=item["specs"], by_venta_caja=True)
+                products = VentaProducts(venta=ventas, producto_id=item["id"], cantidad=int(item["cantidad_cajas"]),
+                                        precio=int(item["precio_caja"]), especificaciones=item["especificaciones"], by_venta_caja=True)
                 products.save()
             
-            if int(item["quantity_xmayor"]) > 0:
+            if int(item["cantidad_xmayor"]) > 0:
                 items.append(
                     {
                         "title": f'{producto.nombre} {producto.descripcion_prefer}',
-                        "quantity": int(item["quantity_xmayor"]),
+                        "quantity": int(item["cantidad_xmayor"]),
                         "currency_id": "COP",
-                        "unit_price": int(item["unit_price_xmayor"])
+                        "unit_price": int(item["precio_xmayor"])
                     }
                 )
-                products = VentaProducts(venta=ventas, producto_id=item["id"], cantidad=int(item["quantity_xmayor"]),
-                                        precio=int(item["unit_price_xmayor"]), especificaciones=item["specs"], by_venta_caja=False, by_mayor=True)
+                products = VentaProducts(venta=ventas, producto_id=item["id"], cantidad=int(item["cantidad_xmayor"]),
+                                        precio=int(item["precio_xmayor"]), especificaciones=item["especificaciones"], by_venta_caja=False, by_mayor=True)
                 products.save()
 
         pasarela = Pasarelas.objects.filter(activo=True).first()
