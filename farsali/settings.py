@@ -20,7 +20,7 @@ SECRET_KEY = 'lr+ke#n6om%_evagj1-=-piroo%b^x4_ktr+*b8!(57#49%8oe'
 MEDIA_URL = '/'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [
     'farsalicol.herokuapp.com',
@@ -174,8 +174,8 @@ LANGUAGES = (
 
 # S3 CONFIG
 
-AWS_ACCESS_KEY_ID = "AKIAQ76SOCLW25DOY754"
-AWS_SECRET_ACCESS_KEY = "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"
+AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
 AWS_STORAGE_BUCKET_NAME = 'farsali-col-bucket'
 AWS_S3_FILE_OVERWRITE = False
 AWS_DEFAULT_ACL = None

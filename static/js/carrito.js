@@ -373,17 +373,15 @@ window.onload = function() {
     // You must return false to prevent the default form behavior
     return true;
   }
-  if(document.getElementById('form-checkout')){
-    document.getElementById('form-checkout').onsubmit = function(event) {
-      /* do what you want with the form */
-      //event.preventDefault()
-  
-      // Should be triggered on form submit
-      data_productos = document.getElementById('productos-payment');
-      data_productos.value = JSON.stringify(sendProduct())
-      // You must return false to prevent the default form behavior
-      return true;
-    }
+  document.getElementById('form-checkout').onsubmit = function(event) {
+    /* do what you want with the form */
+    //event.preventDefault()
+
+    // Should be triggered on form submit
+    data_productos = document.getElementById('productos-payment');
+    data_productos.value = JSON.stringify(sendProduct())
+    // You must return false to prevent the default form behavior
+    return true;
   }
   
 }
