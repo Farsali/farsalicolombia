@@ -774,7 +774,7 @@ def callbackGatewayMercadoPagoView(request):
         if topic and payment_id:
             url_mercadopago = MERCADOPAGO_URL + payment_id
             headers = {
-                'Authorization': "Bearer " + MERCADOPAGO_ACCESS_TOKEN
+                'Authorization': "Bearer " + "APP_USR-1611010299166741-092904-c7a74b63ba851707b3925261263f3ed4-652583311"
             }
             response = requests.get(url_mercadopago, headers=headers)
             print(response)
@@ -783,7 +783,7 @@ def callbackGatewayMercadoPagoView(request):
                 print(data_json)
                 venta = Venta.objects.get(pk=data_json["external_reference"])
                 if data_json["status"] == 'approved' and not (venta.estado=="rechazado" or venta.estado=="aprobado"):
-                    if venta.estado == "proceso":
+                    if venta.estado == "proceso" or venta.estado == "espera_respuesta_pasarela":
                         ventas_productos = VentaProducts.objects.filter(venta=venta)
                         for item in ventas_productos:
                             cantidad = 0
@@ -798,7 +798,7 @@ def callbackGatewayMercadoPagoView(request):
                     venta.estado = "aprobado"
                     
                 elif data_json["status"] == 'rejected' and not (venta.estado=="rechazado" or venta.estado=="aprobado"):
-                    if venta.estado == "espera_respuesta_pasarela":
+                    if venta.estado == "espera_respuesta_pasarela" or venta.estado == "proceso":
                         ventas_productos = VentaProducts.objects.filter(venta=venta)
                         for item in ventas_productos:
                             cantidad = 0
@@ -826,6 +826,21 @@ def callbackGatewayMercadoPagoView(request):
                             item.producto.cantidad += cantidad
                             item.producto.save()
                     venta.estado = "error_pasarela"
+                
+                elif data_json["status"] == 'pending' and not (venta.estado=="rechazado" or venta.estado=="aprobado"):
+                    if venta.estado == "proceso":
+                        ventas_productos = VentaProducts.objects.filter(venta=venta)
+                        for item in ventas_productos:
+                            cantidad = 0
+                            if item.by_venta_caja:
+                                cantidad = item.producto.cantidad_cajas * item.cantidad
+                            elif item.by_mayor:
+                                cantidad = item.producto.cantidad_cajas_prefer * item.cantidad
+                            else:
+                                cantidad = item.cantidad
+                            item.producto.cantidad -= cantidad
+                            item.producto.save()
+                    venta.estado = "espera_respuesta_pasarela"
 
                 venta.save()
             return HttpResponse(status=200)
