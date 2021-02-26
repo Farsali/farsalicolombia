@@ -36,8 +36,8 @@ class Marca(models.Model):
     """Model definition for Marca."""
 
     TIPOS_MARCAS = (
-        (0, _(u'Farsali')),
-        (1, _(u'Original')))
+        (0, _(u'Original Farsáli Colombia')),
+        (1, _(u'Marcas Autorizadas')))
 
     nombre = models.CharField(
         _(u'Título'),
