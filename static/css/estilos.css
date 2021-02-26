@@ -1302,7 +1302,6 @@ p {
   border-radius: 4px;
   box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.5);
   transition: 0.3s ease-in-out;
-  margin-bottom: 10px;
 }
 .backgrounds__bottom .slick-track .slick .marca-borde a img:hover {
   opacity: 0.85;
