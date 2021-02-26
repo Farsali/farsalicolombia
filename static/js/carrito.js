@@ -47,10 +47,10 @@ function cargarEventListeners() {
   // // Al cargar el documento mostrar LS
   document.addEventListener('DOMContentLoaded', leerLocalStorage);
   if(form_checkout_up){
-    form_checkout_up.addEventListener('submit', checkoutSubmit);
+    form_checkout_up.addEventListener('submit', checkoutSubmit1);
   }
   if(form_checkout_down){
-    form_checkout_down.addEventListener('submit', checkoutSubmit);
+    form_checkout_down.addEventListener('submit', checkoutSubmit2);
   }
 }
 
@@ -67,15 +67,26 @@ window.onload = function() {
   }
 }
 
-function checkoutSubmit(event) {
+function checkoutSubmit1(event) {
     /* do what you want with the form */
     //event.preventDefault()
 
     // Should be triggered on form submit
-    data_productos = document.getElementById('productos-payment');
+    data_productos = document.getElementById('productos-payment-1');
     data_productos.value = JSON.stringify(sendProduct())
     // You must return false to prevent the default form behavior
     return true;
+}
+
+function checkoutSubmit2(event) {
+  /* do what you want with the form */
+  //event.preventDefault()
+
+  // Should be triggered on form submit
+  data_productos = document.getElementById('productos-payment-2');
+  data_productos.value = JSON.stringify(sendProduct())
+  // You must return false to prevent the default form behavior
+  return true;
 }
 
 function getValueCantidadProducts(){

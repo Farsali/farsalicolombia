@@ -470,7 +470,12 @@ def paymentClienteView(request):
     page_name = 'Datos del Cliente'
     json_data = []
     if request.POST:
-        json_data = json.loads(request.POST.get('productos-payment'))
+        data = None
+        if request.POST.get('productos-payment-1'):
+            data = request.POST.get('productos-payment-1')
+        elif request.POST.get('productos-payment-2'):
+            data = request.POST.get('productos-payment-2')
+        json_data = json.loads(data)
     return render(
         request,
         "base/payment_client.html",
