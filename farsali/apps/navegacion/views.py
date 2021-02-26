@@ -609,7 +609,7 @@ class paymentView(View):
                     }
                 )
                 products = VentaProducts(venta=ventas, producto_id=item["id"], cantidad=int(item["cantidad"]),
-                                        precio=int(item["cantidad"]), especificaciones=item["especificaciones"], by_venta_caja=False)
+                                        precio=int(item["precio"]), especificaciones=item["especificaciones"], by_venta_caja=False)
                 products.save()
             
             if int(item["cantidad_cajas"]) > 0:
