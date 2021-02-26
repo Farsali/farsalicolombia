@@ -1308,7 +1308,8 @@ p {
 }
 .backgrounds__bottom .slick-track .slick .marca-borde p {
   color: #131313;
-  font-size: 16px;
+  font-size: 12px;
+  margin-top: 8px;
 }
 .backgrounds__bottom .slick-track .slick h4 {
   position: absolute;
