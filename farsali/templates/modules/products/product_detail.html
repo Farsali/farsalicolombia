@@ -43,7 +43,7 @@
                                 <p class="product__detail-price">$ {{ producto.costo_adicional|floatformat:"0"|intcomma }} COP</p>
                                 <p class="products__detail--paragraph">{{ producto.descripcion_adicional|safe }}</p>
                                 <div style="width: 30%;" >
-                                    {% if producto.cantidad_cajas == 0 %}
+                                    {% if producto.cantidad == 0 or producto.cantidad_cajas == 0 %}
                                         <p class="products__detail--paragraph">No esta disponible</p>
                                     {% else %}
                                         <input type="number" min="0" value="0" name="quantity_box" id="cantidad_cajas-{{ producto.id }}" class="form-control">
@@ -55,7 +55,7 @@
                                 <p class="product__detail-price">$ {{ producto.costo_farsali|floatformat:"0"|intcomma }} COP</p>
                                 <p class="products__detail--paragraph">{{ producto.descripcion_prefer|safe }}</p>
                                 <div style="width: 30%;" >
-                                    {% if producto.cantidad_cajas_prefer == 0 %}
+                                    {% if producto.cantidad == 0 or producto.cantidad_cajas_prefer == 0 %}
                                         <p class="products__detail--paragraph">No esta disponible</p>
                                     {% else %}
                                         <input type="number" min="0" value="0" name="quantity_box" id="cantidad_xmayor-{{ producto.id }}" class="form-control">
@@ -72,6 +72,7 @@
 
 
                 <div class="form-group">
+                    <p class="products__detail--paragraph">{{ producto.cantidad }} disponibles</p>
                     <label class="product__detail-quantity-title" for="quantity">Especificaciones para la compra</label>
                     <input type="text" name="specs" id="especificaciones-{{ producto.id }}" class="form-control">
                 </div>

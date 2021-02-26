@@ -17,7 +17,8 @@ from .views import (
     registerFarsali,
     productsView,
     callbackGatewayWompiView,
-    redirectPaymentView
+    redirectPaymentView,
+    callbackGatewayMercadoPagoView
     # ajax_highligths
 )
 
@@ -52,6 +53,7 @@ urlpatterns = [
 
     # callback de las pasarelas de pagos
     path('callback_pago_wompi/', callbackGatewayWompiView, name='callback_pago_wompi'),
+    path('callback_pago_mercadopago/', callbackGatewayMercadoPagoView, name='callback_pago_mercadopago'),
     path('redirect_pago/<reference>/', redirectPaymentView.as_view(), name='redirect_pago'),
 
     path(

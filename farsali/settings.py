@@ -224,6 +224,7 @@ django_heroku.settings(locals())
 
 
 # Api keys of mercadopagos
+MERCADOPAGO_URL = "https://api.mercadopago.com/v1/payments/"
 MERCADOPAGO_PUBLIC_KEY = os.environ.get('MERCADOPAGO_PUBLIC_KEY_PROD')
 MERCADOPAGO_ACCESS_TOKEN = os.environ.get('MERCADOPAGO_ACCESS_TOKEN_PROD')
 MERCADOPAGO_CLIENT_ID = "1611010299166741"
