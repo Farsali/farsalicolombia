@@ -12,6 +12,8 @@ const msgCarritoProductos = document.getElementById("text-car-product")
 const divCarritoProductos = document.getElementById("div-card-product")
 const form_checkout_up = document.getElementById("form-checkout-up")
 const form_checkout_down = document.getElementById("form-checkout-down")
+const form_detail_product = document.getElementById("form-detail-products")
+
 var valorTotalSuma = 0
 var cantidad_total = 0
 // var valorTotalValue = `$ ${valorTotalSuma} COP`
@@ -52,6 +54,9 @@ function cargarEventListeners() {
   if(form_checkout_down){
     form_checkout_down.addEventListener('submit', checkoutSubmit2);
   }
+  if(form_detail_product){
+    form_detail_product.addEventListener('submit', checkoutSubmitDetail);
+  }
 }
 
 window.onload = function() {
@@ -66,6 +71,18 @@ window.onload = function() {
     return true;
   }
 }
+
+function checkoutSubmitDetail(event) {
+  /* do what you want with the form */
+  //event.preventDefault()
+
+  // Should be triggered on form submit
+  data_productos = document.getElementById('productos-checkout-detail');
+  data_productos.value = JSON.stringify(sendProduct())
+  // You must return false to prevent the default form behavior
+  return true;
+}
+
 
 function checkoutSubmit1(event) {
     /* do what you want with the form */
@@ -324,9 +341,18 @@ function eliminarItem(event, producto, type){
     divCarritoProductos.style.display = "none";
   }
 
+  console.log(valorTotalSuma)
+
+  element_subtotal = document.getElementById("subtotal")
+  element_subtotal.innerHTML = "$"+valorTotalSuma+ " COP"
+
+  element_total = document.getElementById("total")
+  element_total.innerHTML = "$"+valorTotalSuma+ " COP"
+
   displayTotal(valorTotalSuma)
   eliminarproductoLocalStorage(parseInt(producto.id), type);
 }
+
 
 // Elimina el producto del carrito en el DOM
 function eliminarproducto(e) {

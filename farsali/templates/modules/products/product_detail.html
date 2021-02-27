@@ -94,14 +94,15 @@
                 </div>
 
                 <div class="detail__options--chart">
-                    <button 
-                        onclick="buyProduct(event)" 
-                        class="products__info--btn buy-carrito"
-                        data-product-serialize="{% json_serialize producto %}"
-                        data-url-checkout="{% url 'checkout' %}">
-                        <p class="icon-basket"></p>
-                        Comprar
-                    </button>
+                    <form id="form-detail-products" method="POST" action="{% url 'checkout' %}">
+                        {% csrf_token %}
+                        <input type="hidden" id="productos-checkout-detail" name="productos-checkout-detail" />
+                        <button 
+                            class="products__info--btn buy-carrito" type="submit">
+                            <p class="icon-basket"></p>
+                            Comprar
+                        </button>
+                    </form>
 
                 </div>
 
