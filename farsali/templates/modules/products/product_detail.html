@@ -22,6 +22,8 @@
                 </div>
             </div>
 
+            <form id="form-detail-products" method="POST" action="{% url 'checkout' %}">
+                {% csrf_token %}
             <div class="product__detail--info">
                 <div class="container">
                     <div class="info__prices">
@@ -94,16 +96,13 @@
                 </div>
 
                 <div class="detail__options--chart">
-                    <form id="form-detail-products" method="POST" action="{% url 'checkout' %}">
-                        {% csrf_token %}
                         <input type="hidden" id="productos-checkout-detail" name="productos-checkout-detail" />
-                        <button 
+                        <input type="hidden" value="{% json_serialize producto %}" id="data-product-serialize-detail" name="data-product-serialize-detail" />
+                        <button
                             class="products__info--btn buy-carrito" type="submit">
                             <p class="icon-basket"></p>
                             Comprar
                         </button>
-                    </form>
-
                 </div>
 
                 <div class="detail__options--face">
@@ -122,6 +121,9 @@
                     Ver comentarios del {{ producto.nombre|safe }}
                     </button>
             </div>
+
+                </form>
+
         </div>
 
         <div class="product__detail--carousel">
