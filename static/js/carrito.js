@@ -120,6 +120,8 @@ function checkoutSubmitDetail(e) {
         })
         // Enviamos el producto seleccionado al checkout
           // Should be triggered on form submit
+          localStorage.removeItem('productos_detail')
+          localStorage.setItem('productos_detail', JSON.stringify(data) );
           data_productos = document.getElementById('productos-checkout-detail');
           data_productos.value = JSON.stringify(data)
           // You must return false to prevent the default form behavior
@@ -130,6 +132,7 @@ function checkoutSubmitDetail(e) {
       alert("Debe ingresar algun valor para hacer una compra")
     }
 }
+
 
 // send to url checkout direct
 function buyProduct(e) {
@@ -145,7 +148,11 @@ function checkoutSubmit1(event) {
 
     // Should be triggered on form submit
     data_productos = document.getElementById('productos-payment-1');
-    data_productos.value = JSON.stringify(sendProduct())
+    if(document.getElementById('validate_buy')){
+      data_productos.value = JSON.stringify(sendProductDetail())
+    }else{
+      data_productos.value = JSON.stringify(sendProduct())
+    }
     // You must return false to prevent the default form behavior
     return true;
 }
@@ -156,7 +163,11 @@ function checkoutSubmit2(event) {
 
   // Should be triggered on form submit
   data_productos = document.getElementById('productos-payment-2');
-  data_productos.value = JSON.stringify(sendProduct())
+  if(document.getElementById('validate_buy')){
+    data_productos.value = JSON.stringify(sendProductDetail())
+  }else{
+    data_productos.value = JSON.stringify(sendProduct())
+  }
   // You must return false to prevent the default form behavior
   return true;
 }
@@ -204,7 +215,7 @@ function comprarproducto(e) {
     let before_cantidad_xmayor = 0
 
     let validate_cantidad_cajas = producto.cantidad_cajas
-    let validate_cantidad_xmayor = producto.cantidad_xmayor
+    let validate_cantidad_xmayor = producto.cantidad_cajas_prefer
     let validate_cantidad = producto.cantidad
     if(checkIfItemExists(producto.id)){
       let data_product = checkIfItemExists(producto.id)
@@ -245,7 +256,7 @@ function comprarproducto(e) {
         if(cantidad_xmayor && cantidad_xmayor.value > 0){
           total_cantidad += ((parseInt(cantidad_xmayor.value) + before_cantidad_xmayor) * parseInt(validate_cantidad_xmayor))
         }else{
-          total_cantidad += (before_cantidad_xmayor * parseInt(validate_cantidad_cajas))
+          total_cantidad += (before_cantidad_xmayor * parseInt(validate_cantidad_xmayor))
         }
 
         if(total_cantidad <= parseInt(validate_cantidad)){
@@ -404,6 +415,10 @@ function insertarCarrito(producto) {
 }
 
 function eliminarItem(event, producto, type){
+  element_validate_buy = false
+  if(document.getElementById("validate_buy")){
+    element_validate_buy = true
+  }
   event.parentNode.parentNode.parentNode.removeChild(event.parentNode.parentNode);
   var precioProducto = 0
   var cantidadProducto = 0
@@ -417,24 +432,71 @@ function eliminarItem(event, producto, type){
     precioProducto = producto.quantity_xmayor * producto.unit_price_xmayor
     cantidadProducto = producto.quantity_xmayor
   }
-  valorTotalSuma -= parseInt(precioProducto)
-  cantidad_total -= parseInt(cantidadProducto)
-  displayTotalProductos(cantidad_total)
+  let total = parseInt(document.getElementById("total_buy").value)
+  total -= parseInt(precioProducto)
+  document.getElementById("total_buy").value = total
+  if(!element_validate_buy){
 
-  if(cantidad_total == 0){
-    divCarritoProductos.style.display = "none";
+    valorTotalSuma -= parseInt(precioProducto)
+    cantidad_total -= parseInt(cantidadProducto)
+    displayTotalProductos(cantidad_total)
+
+    if(cantidad_total == 0){
+      divCarritoProductos.style.display = "none";
+    }
+
+    console.log(valorTotalSuma)
+
+    displayTotal(valorTotalSuma)
+    eliminarproductoLocalStorage(parseInt(producto.id), type);
+  }else{
+    eliminarproductoDetailLocalStorage(parseInt(producto.id), type);
   }
 
-  console.log(valorTotalSuma)
-
   element_subtotal = document.getElementById("subtotal")
-  element_subtotal.innerHTML = "$"+valorTotalSuma+ " COP"
+  element_subtotal.innerHTML = "$"+total+ " COP"
 
   element_total = document.getElementById("total")
-  element_total.innerHTML = "$"+valorTotalSuma+ " COP"
+  element_total.innerHTML = "$"+total+ " COP"
+}
 
-  displayTotal(valorTotalSuma)
-  eliminarproductoLocalStorage(parseInt(producto.id), type);
+
+
+// Eliminar el producto por el ID en localStorage
+function eliminarproductoDetailLocalStorage(producto, caja) {
+  let productosLS;
+
+  // Obtenemos el arreglo de productos
+  if(localStorage.getItem('productos_detail') === null) {
+    productosLS = [];
+  } else {
+    productosLS = JSON.parse( localStorage.getItem('productos_detail') );
+  }
+  // Iteramos comparando el ID del producto borrado con los del LS
+  productosLS.forEach(function(productoLS, index) {
+    if(productoLS.id === producto) {
+      if(parseInt(caja) == 1){
+        productoLS.cantidad_cajas = 0
+        productoLS.precio_caja = 0 
+      }
+
+      if(parseInt(caja) == 0){
+        productoLS.cantidad = 0
+        productoLS.precio = 0
+      }
+
+      if(parseInt(caja) == 2){
+        productoLS.cantidad_xmayor = 0
+        productoLS.precio_xmayor = 0
+      }
+
+      if(productoLS.cantidad == 0 && productoLS.cantidad_cajas==0 && productoLS.cantidad_xmayor==0){
+        productosLS.splice(index, 1);
+      }
+    }
+
+    localStorage.setItem('productos_detail', JSON.stringify(productosLS) );
+  });
 }
 
 
@@ -519,6 +581,31 @@ function checkIfItemExists (id) {
 function sendProduct(){
   data = []
   productosLS = JSON.parse(localStorage.getItem('productos') );
+  if (productosLS && productosLS.length) {
+    productosLS.forEach(function(producto) {
+      data.push({
+        "titulo": producto.titulo,
+        "descripcion_prefer": producto.descripcion_prefer,
+        "descripcion_no_prefer": producto.descripcion_no_prefer,
+        "descripcion_adicional": producto.descripcion_adicional,
+        "cantidad": producto.cantidad ? producto.cantidad : 0,
+        "precio": producto.precio ? producto.precio : 0,
+        "cantidad_cajas": producto.cantidad_cajas ? producto.cantidad_cajas : 0,
+        "precio_caja": producto.precio_caja ? producto.precio_caja : 0,
+        "cantidad_xmayor": producto.cantidad_xmayor ? producto.cantidad_xmayor : 0,
+        "precio_xmayor": producto.precio_xmayor ? producto.precio_xmayor : 0,
+        "especificaciones": producto.especificaciones,
+        "id": producto.id
+      })
+    })
+  }
+
+  return data
+}
+
+function sendProductDetail(){
+  data = []
+  productosLS = JSON.parse(localStorage.getItem('productos_detail') );
   if (productosLS && productosLS.length) {
     productosLS.forEach(function(producto) {
       data.push({

@@ -1,5 +1,32 @@
 {% load thumbnail farsali_tags humanize %}
 <div id="products"  class="products">
+        <div class="filter" id="search">
+            <div class="filter__container">
+                <h1 class="filter__text">
+                    Farsáli Colombia
+                </h1>
+                <h2>Encuentra productos cosméticos al Mayor y al detal</h2>
+                <div class="filter__content">
+                        <select class="filter__dropdown" name="filter_product" id="id_filter_product"  @change="onChangeCategory($event)">
+                            <option class="filter__dropdown--item" value="0">Todos</option>
+                            <option class="filter__dropdown--item" v-for="category in categories" :value="[[ category.id ]]">[[ category.nombre ]]</option>
+                        </select>
+                    <div class="filter__search--icon">
+                        <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
+                            xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 136 136"
+                            style="enable-background:new 0 0 136 136;" xml:space="preserve">
+                            <g>
+                                <path d="M132.1,117.9c-0.1-0.1-0.3-0.3-0.4-0.4L94.6,80.7c16.3-23.1,10.9-55-12.2-71.3s-55-10.9-71.3,12.2
+                            c-16.3,23.1-10.9,55,12.2,71.3c16.5,11.6,38.2,12.5,55.6,2.3l37.7,37.5c4.1,4.3,10.8,4.5,15.1,0.4C136,129,136.1,122.2,132.1,117.9
+                            z M52.8,84.2C52.8,84.2,52.8,84.2,52.8,84.2c-18.2,0-33-14.8-33-33c0-18.2,14.8-33,33-33c18.2,0,33,14.7,33,32.9
+                            C85.8,69.4,71,84.2,52.8,84.2z" />
+                            </g>
+                        </svg>
+                        <input id="id_search_product" v-model="search_product" @keyup.enter="searchProduct()" class="filter__search--input" type="text">
+                    </div>
+                </div>
+            </div>
+        </div>
     {% if productos_id %}
         <input type="hidden" value="{{ productos_id }}" ref="value_product">
     {% endif %}
@@ -135,14 +162,46 @@
             data: function(){
                 return{
                     productos: [],
+                    categories: [],
                     url: API_URL + "/productos/",
                     page: 0,
                     url_service: API_URL + "/lista_productos/?page=",
                     last_page: -1,
-                    url_images: URL_BUCKET
+                    url_images: URL_BUCKET,
+                    category_id: 0,
+                    search_product: ""
                 }
             },
             methods:{
+                async searchProduct(){
+                    this.page = 0;
+                    this.last_page = -1;
+                    this.productos = []
+                    await this.getProducts();
+                },
+                async onChangeCategory(event){
+                    this.page = 0;
+                    this.last_page = -1;
+                    this.productos = []
+                    this.category_id=event.target.value
+                    await this.getProducts();
+                },
+                async getCateory(){
+
+                    self = this
+                    let response = await fetch(API_URL+"/lista_categorias/",{
+                        method:"GET", 
+                        headers: {
+                            "Content-Type":"application/json", 
+                        }, 
+                    });
+                    if(response.status = 200){
+                        data_response = await response.json()
+                        if(data_response.data && data_response.data.length > 0){
+                            self.categories = [...self.categories, ...data_response.data]
+                        }
+                    }
+                },
                 async getProducts(){
                     let loading = this.$refs.loading;
                     loading.style.display = "block"
@@ -160,7 +219,7 @@
                     }
 
                     self = this
-                    let response = await fetch(this.url_service+this.page+"&producto_id="+producto_id+"&marca_id="+marca_id,{
+                    let response = await fetch(this.url_service+this.page+"&producto_id="+producto_id+"&marca_id="+marca_id+"&category_id="+this.category_id+"&search_product="+this.search_product,{
                         method:"GET", 
                         headers: {
                             "Content-Type":"application/json", 
@@ -179,16 +238,19 @@
                 },
                 scroll_infinite(){
                     window.addEventListener('scroll',_.debounce(()=>{
-                      const {offsetHeight} = this.$refs.ref_scroll_infinite
-                      const {scrollHeight,scrollTop,clientHeight} = document.documentElement;
-                      if(scrollTop + clientHeight >= offsetHeight && this.page!=this.last_page){
-                            this.getProducts();
+                        if(this.$refs.ref_scroll_infinite){
+                            const {offsetHeight} = this.$refs.ref_scroll_infinite
+                            const {scrollHeight,scrollTop,clientHeight} = document.documentElement;
+                            if(scrollTop + clientHeight >= offsetHeight && this.page!=this.last_page){
+                                    this.getProducts();
+                                }
                         }
                       }, 500));
                 }
             },
             mounted: async function(){
                 await this.getProducts()
+                await this.getCateory()
                 this.scroll_infinite()
             }, 
         })

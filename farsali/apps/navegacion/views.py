@@ -149,6 +149,8 @@ def productsView(request):
     page_number = request.GET.get('page') if request.GET.get('producto_id') else None
     producto_id = request.GET.get('producto_id') if request.GET.get('producto_id') else None
     marca_id = request.GET.get('marca_id') if request.GET.get('marca_id') else None
+    category_id = request.GET.get('category_id') if request.GET.get('category_id') else None
+    search_product = request.GET.get('search_product') if request.GET.get('search_product') else None
     quantity = 10
     pagination = int(page_number)*quantity
     product = None
@@ -173,32 +175,42 @@ def productsView(request):
         'descripcion_adicional',
         'descripcion_no_prefer'
     ]
-    map_fields = {
-        'categoria_url': F('categoria__url'),
-    }
     productos_qs = None
     if product:
-        filter_kwargs = {'orden__gte':product.orden, 'activo': True}
-        productos_qs_gt = Producto.objects.filter(**filter_kwargs).exclude(id=product.id).order_by("orden", "id")[int(pagination):int(pagination)+quantity]
-        productos_qs_gt = productos_qs_gt.values(*fields, **map_fields)
+        queryset = ((Q(activo=True))&(Q(orden__gte=product.orden))&(Q(cantidad__gt=0)|Q(cantidad_cajas__gt=0)|Q(cantidad_cajas_prefer__gt=0)))
+        if category_id and int(category_id) > 0:
+            queryset = queryset & (Q(categoria_id=category_id))
+        if search_product and search_product != "":
+            queryset = queryset & (Q(nombre__icontains=search_product))
+        productos_qs_gt = Producto.objects.filter(queryset).exclude(id=product.id).order_by("orden", "id")[int(pagination):int(pagination)+quantity]
+        productos_qs_gt = productos_qs_gt.values(*fields)
         productos_qs_lt = []
         if len(productos_qs_gt) < quantity:
-            filter_kwargs = {'orden__lt':product.orden, 'activo': True}
-            productos_qs_lt = Producto.objects.filter(**filter_kwargs).exclude(id=product.id).order_by("orden", "id")[int(pagination):int(pagination)+quantity]
-            productos_qs_lt = productos_qs_lt.values(*fields, **map_fields)
+            queryset = ((Q(activo=True))&(Q(orden__lt=product.orden))&(Q(cantidad__gt=0)|Q(cantidad_cajas__gt=0)|Q(cantidad_cajas_prefer__gt=0)))
+            if category_id and int(category_id) > 0:
+                queryset = queryset & (Q(categoria_id=category_id))
+            if search_product and search_product != "":
+                queryset = queryset & (Q(nombre__icontains=search_product))
+            productos_qs_lt = Producto.objects.filter(queryset).exclude(id=product.id).order_by("orden", "id")[int(pagination):int(pagination)+quantity]
+            productos_qs_lt = productos_qs_lt.values(*fields)
         productos = list(productos_qs_gt) + list(productos_qs_lt)
     elif marca_id and int(marca_id) > 0:
         marca = Marca.objects.get(pk=marca_id)
-        filter_kwargs = {
-            'activo': True,
-            'marca_producto': marca
-        }
-        productos_qs = Producto.objects.filter(**filter_kwargs).order_by("orden", "id")[int(pagination):int(pagination)+quantity]
-        productos = productos_qs.values(*fields, **map_fields)
+        queryset = ((Q(activo=True))&(Q(marca_producto=marca))&(Q(cantidad__gt=0)|Q(cantidad_cajas__gt=0)|Q(cantidad_cajas_prefer__gt=0)))
+        if category_id and int(category_id) > 0:
+            queryset = queryset & (Q(categoria_id=category_id))
+        if search_product and search_product != "":
+            queryset = queryset & (Q(nombre__icontains=search_product))
+        productos_qs = Producto.objects.filter(queryset).order_by("orden", "id")[int(pagination):int(pagination)+quantity]
+        productos = productos_qs.values(*fields)
     else:
         queryset = ((Q(activo=True))&(Q(cantidad__gt=0)|Q(cantidad_cajas__gt=0)|Q(cantidad_cajas_prefer__gt=0)))
+        if category_id and int(category_id) > 0:
+            queryset = queryset & (Q(categoria_id=category_id))
+        if search_product and search_product != "":
+            queryset = queryset & (Q(nombre__icontains=search_product))
         productos_qs = Producto.objects.filter(queryset).order_by("orden", "id")[int(pagination):int(pagination)+quantity]
-        productos = productos_qs.values(*fields, **map_fields)
+        productos = productos_qs.values(*fields)
 
     for p in productos:
         p["imagen"]
@@ -206,6 +218,10 @@ def productsView(request):
             0, p['calificacion']+1)) if p.get('calificacion') else []
     
     return JsonResponse({'error':False,'data':list(productos)}, status=200 ,safe=False)
+
+def categoryView(request):
+    category = CategoriaProducto.objects.all().values("id", "nombre", "url")
+    return JsonResponse({'error':False,'data':list(category)}, status=200 ,safe=False)
 
 class homeView(TemplateView):
     template_name = "base/home.html"
@@ -431,11 +447,14 @@ def checkoutView(request):
     total = 0
     if request.POST:
         data = None
+        validate_buy = None
         if request.POST.get('productos-checkout-detail'):
             data = request.POST.get('productos-checkout-detail')
+            validate_buy = request.POST.get('validate-buy')
         elif request.POST.get('productos-checkout'):
             data = request.POST.get('productos-checkout')
         json_data = json.loads(data)
+        print(json_data)
         for item in json_data:
             try:
                 producto = Producto.objects.get(id=int(item["id"]))
@@ -467,7 +486,8 @@ def checkoutView(request):
         context={
             'page_name': "Compra",
             'products': items,
-            'total': total
+            'total': total,
+            'validate_buy': validate_buy
         }
     )
 
@@ -481,6 +501,7 @@ def paymentClienteView(request):
         elif request.POST.get('productos-payment-2'):
             data = request.POST.get('productos-payment-2')
         json_data = json.loads(data)
+        print(json_data)
     return render(
         request,
         "base/payment_client.html",
@@ -571,7 +592,9 @@ class paymentView(View):
     page_name = 'Resumen de la compra'
 
     def post(self, request, *args, **kwargs):
+        print(request.POST.get('productos'))
         json_data = json.loads(request.POST.get('productos'))
+        print(json_data)
         mp = mercadopago.MP(MERCADOPAGO_ACCESS_TOKEN)
         items = []
         total = 0
@@ -621,7 +644,7 @@ class paymentView(View):
                 items.append(
                     {
                         "title": f'{producto.nombre} {producto.descripcion_adicional}',
-                        "quantity": int(item["quantity_box"]),
+                        "quantity": int(item["cantidad_cajas"]),
                         "currency_id": "COP",
                         "unit_price": int(item["precio_caja"])
                     }

@@ -10,12 +10,8 @@
 {% include "modules/marcas/marcas.html" %}
 <div class="canvas-home" style="padding-top: 40px;">
     {% include "modules/introductions/intro-tienda.html" %}
-    {% include "modules/filter/filter.html" %}
     {% include "modules/products/products.html" %}
     {% include "modules/highlights/highlights.html" %}
-    {% if not logged_usser %}
-        {% include "modules/call-to-action/call-to-action.html" %}
-    {% endif %}
 </div>
 
 {% endblock %}
