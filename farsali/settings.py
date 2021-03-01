@@ -20,7 +20,7 @@ SECRET_KEY = 'lr+ke#n6om%_evagj1-=-piroo%b^x4_ktr+*b8!(57#49%8oe'
 MEDIA_URL = '/'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = [
     'farsalicol.herokuapp.com',
@@ -174,8 +174,8 @@ LANGUAGES = (
 
 # S3 CONFIG
 
-AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
-AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
+AWS_ACCESS_KEY_ID = "AKIAQ76SOCLW25DOY754"
+AWS_SECRET_ACCESS_KEY = "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"
 AWS_STORAGE_BUCKET_NAME = 'farsali-col-bucket'
 AWS_S3_FILE_OVERWRITE = False
 AWS_DEFAULT_ACL = None
@@ -225,14 +225,10 @@ django_heroku.settings(locals())
 
 # Api keys of mercadopagos
 MERCADOPAGO_URL = "https://api.mercadopago.com/v1/payments/"
-MERCADOPAGO_PUBLIC_KEY = os.environ.get('MERCADOPAGO_PUBLIC_KEY_PROD')
-MERCADOPAGO_ACCESS_TOKEN = os.environ.get('MERCADOPAGO_ACCESS_TOKEN_PROD')
+MERCADOPAGO_PUBLIC_KEY = "APP_USR-3631e183-eff4-474e-8f32-704eccc16578"
+MERCADOPAGO_ACCESS_TOKEN = "APP_USR-1611010299166741-092904-c7a74b63ba851707b3925261263f3ed4-652583311"
 MERCADOPAGO_CLIENT_ID = "1611010299166741"
 MERCADOPAGO_CLIENT_SECRET = "CCrznaGLOIf33iM6arHjHFP5hlhv7FAv"
-
-if(DEBUG):
-    MERCADOPAGO_PUBLIC_KEY = os.environ.get('MERCADOPAGO_PUBLIC_KEY_TEST')
-    MERCADOPAGO_ACCESS_TOKEN = os.environ.get('MERCADOPAGO_ACCESS_TOKEN_TEST')
 
 
 # Api keys of wompi
