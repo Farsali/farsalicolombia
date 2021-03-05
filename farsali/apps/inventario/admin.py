@@ -174,7 +174,6 @@ class ImagenesProductoAdmin(admin.ModelAdmin):
 		'nombre',
 		'producto__nombre',
 		'producto__codigo',
-		'producto__categoria',
 	)
 	list_filter = ('producto__categoria',)
 	readonly_fields = ('preview_img', )
