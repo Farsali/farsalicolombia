@@ -11,6 +11,7 @@ from django.template.loader import get_template
 from django.http import HttpResponse
 from django.core.files.base import ContentFile
 from datetime import datetime
+from django.contrib import messages
 
 
 class VentaProductsAdmin(admin.StackedInline):
@@ -80,7 +81,7 @@ class VentaAdmin(admin.ModelAdmin):
 
     inlines = (VentaProductsAdmin,)
 
-    actions = ('generate_pdf', 'approved_sale','cash_sale', 'declined_sale')
+    actions = ('generate_pdf', 'approved_sale', 'declined_sale')
 
     def has_add_permission(self, request):
        return False
@@ -116,7 +117,8 @@ class VentaAdmin(admin.ModelAdmin):
         for item in queryset:
             item.status = "aprobado"
             item.save()
-        return response
+        self.message_user(request, "Se aprobaron las ventas seleccionados", level=messages.SUCCESS)
+        return
 
     approved_sale.short_description = "Aprobar Venta"
 
@@ -124,15 +126,19 @@ class VentaAdmin(admin.ModelAdmin):
         for item in queryset:
             item.status = "rechazado"
             item.save()
-        return response
-    
-    def cash_sale(self, request, queryset):
-        for item in queryset:
-            item.status = "pendiente_efectivo"
-            item.referencia_pasarela = "efectivo"
-            item.save()
-        return response
-
-    cash_sale.short_description = "Pagar en Efectivo"
+            ventas_productos = VentaProducts.objects.filter(venta=item)
+            for item in ventas_productos:
+                cantidad = 0
+                if item.by_venta_caja:
+                    cantidad = item.producto.cantidad_cajas * item.cantidad
+                elif item.by_mayor:
+                    cantidad = item.producto.cantidad_cajas_prefer * item.cantidad
+                else:
+                    cantidad = item.cantidad
+                item.producto.cantidad -= cantidad
+                item.producto.save()
+        
+        self.message_user(request, "Se rechazaron las ventas seleccionados", level=messages.SUCCESS)
+        return
 
 admin.site.register(Venta, VentaAdmin)

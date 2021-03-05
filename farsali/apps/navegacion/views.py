@@ -732,6 +732,34 @@ class registerFarsali(TemplateView):
         return context
 
 
+def paymentCashView(request):
+    page_name = 'Confirmacion de Pago'
+    venta = None
+    if request.POST:
+        venta_id = request.POST.get('venta_id')
+        venta = Venta.objects.get(pk=venta_id)
+        venta.status = "pendiente_efectivo"
+        venta.save()
+        ventas_productos = VentaProducts.objects.filter(venta=venta)
+        for item in ventas_productos:
+            cantidad = 0
+            if item.by_venta_caja:
+                cantidad = item.producto.cantidad_cajas * item.cantidad
+            elif item.by_mayor:
+                cantidad = item.producto.cantidad_cajas_prefer * item.cantidad
+            else:
+                cantidad = item.cantidad
+            item.producto.cantidad -= cantidad
+            item.producto.save()
+    return render(
+        request,
+        "base/redirect_payment.html",
+        context={
+            'page_name': self.page_name,
+            'venta': venta
+        }
+    )
+
 #callback of the payments
 
 @csrf_exempt
