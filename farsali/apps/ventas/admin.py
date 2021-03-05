@@ -80,7 +80,7 @@ class VentaAdmin(admin.ModelAdmin):
 
     inlines = (VentaProductsAdmin,)
 
-    actions = ('generate_pdf',)
+    actions = ('generate_pdf', 'approved_sale','cash_sale', 'declined_sale')
 
     def has_add_permission(self, request):
        return False
@@ -112,5 +112,27 @@ class VentaAdmin(admin.ModelAdmin):
     generate_pdf.short_description = "Generar PDF (Sólo 1)"
 
 
+    def approved_sale(self, request, queryset):
+        for item in queryset:
+            item.status = "aprobado"
+            item.save()
+        return response
+
+    approved_sale.short_description = "Aprobar Venta"
+
+    def declined_sale(self, request, queryset):
+        for item in queryset:
+            item.status = "rechazado"
+            item.save()
+        return response
+    
+    def cash_sale(self, request, queryset):
+        for item in queryset:
+            item.status = "pendiente_efectivo"
+            item.referencia_pasarela = "efectivo"
+            item.save()
+        return response
+
+    cash_sale.short_description = "Pagar en Efectivo"
 
 admin.site.register(Venta, VentaAdmin)
