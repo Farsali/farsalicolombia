@@ -739,7 +739,7 @@ def paymentCashView(request):
     if request.POST:
         venta_id = request.POST.get('venta_id')
         venta = Venta.objects.get(pk=venta_id)
-        venta.status = "pendiente_efectivo"
+        venta.estado = "pendiente_efectivo"
         venta.save()
         ventas_productos = VentaProducts.objects.filter(venta=venta)
         for item in ventas_productos:
@@ -756,7 +756,7 @@ def paymentCashView(request):
         request,
         "base/redirect_payment.html",
         context={
-            'page_name': self.page_name,
+            'page_name': page_name,
             'venta': venta
         }
     )
