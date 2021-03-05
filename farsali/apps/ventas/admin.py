@@ -48,12 +48,12 @@ class VentaAdmin(admin.ModelAdmin):
         'id',
     )
     list_filter = (
-        'cliente',
         'estado',
         ('fecha', DateRangeFilter),
     )
     search_fields = [
         'cliente__nombre',
+        'cliente__cedula',
     ]
 
     readonly_fields = ['fecha','referencia','estado','referencia_pasarela','cliente','tipo_pasarela','total',
