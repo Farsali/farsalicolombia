@@ -74,7 +74,11 @@
 
 
                 <div class="form-group">
-                    <p class="products__detail--paragraph">{{ producto.cantidad }} disponibles</p>
+                    {% if producto.cantidad > 24 %}
+                        <p class="products__detail--paragraph">{{ producto.cantidad }} disponibles</p>
+                    {% else %}
+                        <p class="products__detail--paragraph" style="color: red;">{{ producto.cantidad }} disponibles</p>
+                    {% endif %}
                     <label class="product__detail-quantity-title" for="quantity">Especificaciones para la compra</label>
                     <input type="text" name="specs" id="especificaciones-{{ producto.id }}" class="form-control">
                 </div>

@@ -161,7 +161,7 @@ class ImagenesProductoAdmin(admin.ModelAdmin):
 		'id',
 		'nombre',
 		'producto',
-		'imagen',
+		'preview_img',
 		'orden',
 		'activo',
 	)
