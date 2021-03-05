@@ -176,7 +176,7 @@ class ImagenesProductoAdmin(admin.ModelAdmin):
 		'producto__codigo',
 		'producto__categoria',
 	)
-	list_filter = ('producto', 'producto__categoria')
+	list_filter = ('producto__categoria',)
 	readonly_fields = ('preview_img', )
 
 	actions = ('generate_pdf',)
