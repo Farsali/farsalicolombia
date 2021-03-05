@@ -115,7 +115,7 @@ class VentaAdmin(admin.ModelAdmin):
 
     def approved_sale(self, request, queryset):
         for item in queryset:
-            item.status = "aprobado"
+            item.estado = "aprobado"
             item.save()
         self.message_user(request, "Se aprobaron las ventas seleccionados", level=messages.SUCCESS)
         return
@@ -124,7 +124,7 @@ class VentaAdmin(admin.ModelAdmin):
 
     def declined_sale(self, request, queryset):
         for item in queryset:
-            item.status = "rechazado"
+            item.estado = "rechazado"
             item.save()
             ventas_productos = VentaProducts.objects.filter(venta=item)
             for item in ventas_productos:
@@ -140,5 +140,7 @@ class VentaAdmin(admin.ModelAdmin):
         
         self.message_user(request, "Se rechazaron las ventas seleccionados", level=messages.SUCCESS)
         return
+    
+    declined_sale.short_description = "Rechazar Venta"
 
 admin.site.register(Venta, VentaAdmin)
