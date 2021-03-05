@@ -707,6 +707,7 @@ class paymentView(View):
             request,
             "base/summary_payment.html",
             context={
+                'venta_id': ventas.id,
                 'page_name': self.page_name,
                 'preference': response,
                 'pasarela': pasarela.origen,

@@ -66,15 +66,10 @@
       </div>
 
       <div class="d-flex justify-content-end">
-        <form id="form-checkout-down" method="POST" action="{% url 'datos_cliente' %}">
+        <form method="POST" action="{% url 'payment_cash' %}">
             {% csrf_token %}
-            {% if validate_buy %}
-              <input type="hidden" id="validate_buy"  name="validate_buy">
-            {% endif %}
-            <input type="hidden" id="productos-payment-2"  name="productos-payment-2">
-            <div class="card-footer bg-light d-flex justify-content-end">
-              <button class="btn btn-sm btn-checkout" type="submit">Finalizar Compra</button>
-            </div>
+            <input type="hidden" value="{{ venta_id }}" id="venta_id"  name="venta_id">
+            <button class="btn btn-sm btn-checkout" type="submit">Pegar en Efectivo</button>
         </form>
         {% if pasarela == 0 %}
           <a href="{{url_mercadopgos}}">Pagar con Mercado Pago</a>
