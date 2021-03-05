@@ -72,7 +72,8 @@ class VentaAdmin(admin.ModelAdmin):
                 'total',
                 'fecha',
                 'tipo_pasarela',
-                'referencia_pasarela'
+                'referencia_pasarela',
+                'razon_rechazado'
             )
         }]
     ]

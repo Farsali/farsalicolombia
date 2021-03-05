@@ -15,6 +15,7 @@ class Venta(models.Model):
     TIPOS_ESTADO = (
         ('proceso', _(u'Proceso')),
         ('aprobado', _(u'Aprobado')),
+        ('pendiente_efectivo', _(u'Pendiente Pago Efectivo')),
         ('rechazado', _(u'Rechazado')),
         ('espera_respuesta_pasarela', _(u'Respuesta de Pasarela')),
         ('error_pasarela', _(u'Error en la Pasarela')),
@@ -68,6 +69,7 @@ class Venta(models.Model):
         null=True
     )
     estado = models.CharField(_(u'Estado'), max_length=45, choices=TIPOS_ESTADO, default='proceso')
+    razon_rechazado = models.TextField(blank=True, null=True)
 
     class Meta:
         verbose_name = _(u"Venta")
