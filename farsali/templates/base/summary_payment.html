@@ -69,10 +69,10 @@
         <form method="POST" action="{% url 'payment_cash' %}">
             {% csrf_token %}
             <input type="hidden" value="{{ venta_id }}" id="venta_id"  name="venta_id">
-            <button class="btn btn-sm btn-checkout" type="submit">Pegar en Efectivo</button>
+            <button class="btn btn-sm btn-checkout mr-2" type="submit">Pegar en Efectivo</button>
         </form>
         {% if pasarela == 0 %}
-          <a href="{{url_mercadopgos}}">Pagar con Mercado Pago</a>
+          <a class="btn btn-sm btn-checkout" href="{{url_mercadopgos}}">Pagar con Mercado Pago</a>
         {% elif pasarela == 1 %}
           <form>
             <script
