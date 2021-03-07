@@ -322,8 +322,8 @@ class Descuentos(models.Model):
 					(INACTIVE, "Desactivar"))
 
 	porcentaje=models.FloatField("Porcentaje del descuento",validators=[MinValueValidator(0),MaxValueValidator(100)])
-	productos=models.ManyToManyField(Producto,verbose_name="Producto",related_name='descuento_productos')
-	categorias_productos=models.ManyToManyField(CategoriaProducto,verbose_name="CategoriaProducto",related_name='descuento_productos')
+	productos=models.ManyToManyField(Producto,verbose_name="Producto",related_name='descuento_productos', blank=True, null=True)
+	categorias_productos=models.ManyToManyField(CategoriaProducto,verbose_name="CategoriaProducto",related_name='descuento_productos', blank=True, null=True)
 	nombre = models.CharField(max_length=340)
 	estado=models.PositiveSmallIntegerField(choices=CONSTANT_STATUS,default=ACTIVO)
 	fecha_expiration = models.DateField(null=True, blank=True)
