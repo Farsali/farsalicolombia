@@ -128,7 +128,10 @@
 								<strong>{{ product.cantidad }} Cantidad, Total $ {% multiply product.cantidad product.precio %}</strong>
 							</p>
 						{% endif %}
-			        {% endif %}
+					{% endif %}
+					<p class="p-subtitle">
+						Especificaciones: <strong>{{ product.especificaciones }}</strong>
+					</p>
 		       	{% endfor %}
 		    </div>
 
