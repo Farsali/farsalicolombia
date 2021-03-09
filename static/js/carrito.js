@@ -83,9 +83,19 @@ function checkoutSubmitDetail(e) {
     producto.cantidad = 0
     producto.cantidad_cajas = 0
     producto.cantidad_xmayor = 0
-    producto.total_precio = producto.costo
-    producto.total_precio_caja = producto.costo_adicional
-    producto.total_precio_xmayor = producto.costo_farsali
+
+    if(producto.descuento_principal && producto.descuento_principal > 0){
+      producto.total_precio = producto.costo - (producto.costo * (producto.descuento_principal / 100))
+      producto.costo = producto.total_precio
+      producto.total_precio_caja = producto.costo_adicional - (producto.costo_adicional * (producto.descuento_principal / 100))
+      producto.costo_adicional = producto.total_precio_caja
+      producto.total_precio_xmayor = producto.costo_farsali - (producto.costo_farsali * (producto.descuento_principal / 100))
+      producto.costo_farsali = producto.total_precio_xmayor
+    }else{
+      producto.total_precio = producto.costo
+      producto.total_precio_caja = producto.costo_adicional
+      producto.total_precio_xmayor = producto.costo_farsali
+    }
 
     if ((cantidad && cantidad.value > 0) || (cantidad_cajas && cantidad_cajas.value > 0) || (cantidad_xmayor && cantidad_xmayor.value > 0)){
         if(especificaciones){
@@ -232,9 +242,20 @@ function comprarproducto(e) {
     producto.cantidad = producto.cantidad ? producto.cantidad : 0
     producto.cantidad_cajas = producto.cantidad ? producto.cantidad : 0
     producto.cantidad_xmayor = producto.cantidad ? producto.cantidad : 0
-    producto.total_precio = producto.costo
-    producto.total_precio_caja = producto.costo_adicional
-    producto.total_precio_xmayor = producto.costo_farsali
+
+
+    if(producto.descuento_principal && producto.descuento_principal > 0){
+      producto.total_precio = producto.costo - (producto.costo * (producto.descuento_principal / 100))
+      producto.costo = producto.total_precio
+      producto.total_precio_caja = producto.costo_adicional - (producto.costo_adicional * (producto.descuento_principal / 100))
+      producto.costo_adicional = producto.total_precio_caja
+      producto.total_precio_xmayor = producto.costo_farsali - (producto.costo_farsali * (producto.descuento_principal / 100))
+      producto.costo_farsali = producto.total_precio_xmayor
+    }else{
+      producto.total_precio = producto.costo
+      producto.total_precio_caja = producto.costo_adicional
+      producto.total_precio_xmayor = producto.costo_farsali
+    }
     if(especificaciones){
       producto.especificaciones = especificaciones.value
     }

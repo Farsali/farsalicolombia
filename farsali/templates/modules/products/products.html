@@ -54,7 +54,13 @@
                         <a class="products__info--link" :href="[[ url ]] + [[ producto.id ]]" target="_blank">
                             <p class="products__info--title">[[ producto.nombre ]]</p>
                         </a>
-                        <p class="products__info--price">$ [[ producto.costo ]] COP</p>
+                        <template v-if="producto.descuento_principal>0">
+                            <p class="products__info--price-discount">$ [[ producto.costo ]] COP</p>
+                            <p class="products__info--price">$ [[ producto.costo - (producto.costo * (producto.descuento_principal/100)) ]] COP</p>
+                        </template>
+                        <template v-else>
+                            <p class="products__info--price">$ [[ producto.costo ]] COP</p>
+                        </template>
                         <div class="products__info--rating">
                             <div class="products__info--stars">
                                     <svg  v-for="estrellas in producto.calificacion_cantidad" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
@@ -242,15 +248,15 @@
                             const {offsetHeight} = this.$refs.ref_scroll_infinite
                             const {scrollHeight,scrollTop,clientHeight} = document.documentElement;
                             if(scrollTop + clientHeight >= offsetHeight && this.page!=this.last_page){
-                                    this.getProducts();
-                                }
+                                this.getProducts();
+                            }
                         }
                       }, 500));
                 }
             },
-            mounted: async function(){
-                await this.getProducts()
-                await this.getCateory()
+            mounted: function(){
+                this.getProducts()
+                this.getCateory()
                 this.scroll_infinite()
             }, 
         })

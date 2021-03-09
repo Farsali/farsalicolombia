@@ -6,7 +6,7 @@ from django.http import Http404
 from django.db.models import Q, F
 from django.core.paginator import Paginator
 from django.http import JsonResponse
-from ..inventario.models import Producto, CategoriaProducto, Comentario, Marca
+from ..inventario.models import Producto, CategoriaProducto, Comentario, Marca, Descuentos
 from ..models import Generic, Background, Pasarelas
 from django.views.generic.base import View
 
@@ -51,11 +51,18 @@ def dict_producto(producto):
         'fecha': comentario.creado
     } for comentario in producto.comentario_producto.filter(estado=1).order_by("orden","creado")]
 
+    discount = Descuentos.objects.filter((Q(categorias_productos__id=producto.categoria_id))|(Q(productos__id=producto.id))).first()
+    descuento = discount.porcentaje if discount else 0
+
     product_dict = {
         'id': producto.id,
         'nombre': producto.nombre,
         'orden': producto.orden,
         'descripcion': producto.descripcion,
+        'descuento_principal': descuento,
+        'descuento_unidad': producto.costo - (producto.costo * (descuento/100)),
+        'descuento_mayor': producto.costo_farsali - (producto.costo_farsali * (descuento/100)),
+        'descuento_caja': producto.costo_adicional - (producto.costo_adicional * (descuento/100)),
         'descripcion_adicional': producto.descripcion_adicional if producto.descripcion_adicional else "",
         'descripcion_no_prefer': producto.descripcion_no_prefer if producto.descripcion_no_prefer else "",
         'descripcion_prefer': producto.descripcion_prefer if producto.descripcion_prefer else "",
@@ -173,7 +180,7 @@ def productsView(request):
         'costo_farsali',
         'descripcion_prefer',
         'descripcion_adicional',
-        'descripcion_no_prefer'
+        'descripcion_no_prefer',
     ]
     productos_qs = None
     if product:
@@ -210,12 +217,18 @@ def productsView(request):
         if search_product and search_product != "":
             queryset = queryset & (Q(nombre__icontains=search_product))
         productos_qs = Producto.objects.filter(queryset).order_by("orden", "id")[int(pagination):int(pagination)+quantity]
+        [item.descuento_principal for item in productos_qs]
         productos = productos_qs.values(*fields)
 
     for p in productos:
         p["imagen"]
         p['calificacion_cantidad'] = list(range(
             0, p['calificacion']+1)) if p.get('calificacion') else []
+        discount = Descuentos.objects.filter((Q(categorias_productos__id=p["categoria_id"]))|(Q(productos__id=p["id"]))).first()
+        if discount:
+            p["descuento_principal"] = discount.porcentaje
+        else:
+            p["descuento_principal"] = 0
     
     return JsonResponse({'error':False,'data':list(productos)}, status=200 ,safe=False)
 
@@ -623,6 +636,7 @@ class paymentView(View):
         ventas.save()
         for item in json_data:
             producto = Producto.objects.get(id=int(item["id"]))
+            
             total += int(item["precio"])*int(item["cantidad"])
             total += int(item["precio_caja"])*int(item["cantidad_cajas"])
             total += int(item["precio_xmayor"])*int(item["cantidad_xmayor"])

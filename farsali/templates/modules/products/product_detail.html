@@ -30,7 +30,12 @@
                         <div class="info__prices--basic">
                             <!-- Precio normal -->
                             <div class="div-box-price">
-                                <p class="product__detail-price">$ {{ producto.costo|floatformat:"0"|intcomma }} COP</p>
+                                {% if producto.descuento_principal > 0 %}
+                                    <p class="products__info--price-discount">$ {{ producto.costo|floatformat:"0"|intcomma }} COP</p>
+                                    <p class="product__detail--price">$ {{ producto.descuento_unidad|floatformat:"0"|intcomma }} COP</p>
+                                {% else %}
+                                    <p class="product__detail-price">$ {{ producto.costo|floatformat:"0"|intcomma }} COP</p>
+                                {% endif %}
                                 <p class="products__detail--paragraph">{{ producto.descripcion_no_prefer|safe }}</p>
                                 <div style="width: 30%;">
                                     {% if not producto.cantidad %}
@@ -42,7 +47,12 @@
                             </div>
 
                             <div class="div-box-price">
-                                <p class="product__detail-price">$ {{ producto.costo_adicional|floatformat:"0"|intcomma }} COP</p>
+                                {% if producto.descuento_principal > 0 %}
+                                    <p class="products__info--price-discount">$ {{ producto.costo_adicional|floatformat:"0"|intcomma }} COP</p>
+                                    <p class="product__detail--price">$ {{ producto.descuento_caja|floatformat:"0"|intcomma }} COP</p>
+                                {% else %}
+                                    <p class="product__detail-price">$ {{ producto.costo_adicional|floatformat:"0"|intcomma }} COP</p>
+                                {% endif %}
                                 <p class="products__detail--paragraph">{{ producto.descripcion_adicional|safe }}</p>
                                 <div style="width: 30%;" >
                                     {% if not producto.cantidad or not producto.cantidad_cajas %}
@@ -54,7 +64,12 @@
                             </div>
 
                             <div class="div-box-price">
-                                <p class="product__detail-price">$ {{ producto.costo_farsali|floatformat:"0"|intcomma }} COP</p>
+                                {% if producto.descuento_principal > 0 %}
+                                    <p class="products__info--price-discount">$ {{ producto.costo_farsali|floatformat:"0"|intcomma }} COP</p>
+                                    <p class="product__detail--price">$ {{ producto.descuento_mayor|floatformat:"0"|intcomma }} COP</p>
+                                {% else %}
+                                    <p class="product__detail-price">$ {{ producto.costo_farsali|floatformat:"0"|intcomma }} COP</p>
+                                {% endif %}
                                 <p class="products__detail--paragraph">{{ producto.descripcion_prefer|safe }}</p>
                                 <div style="width: 30%;" >
                                     {% if not producto.cantidad or not producto.cantidad_cajas_prefer %}

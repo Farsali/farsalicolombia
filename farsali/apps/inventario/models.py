@@ -1,5 +1,6 @@
 # coding: utf-8
 from django.db import models
+from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
 from django.utils.safestring import mark_safe
 from django.core.validators import MinValueValidator, MaxValueValidator
@@ -224,6 +225,7 @@ class Producto(models.Model):
 		max_length=75
 	)
 
+
 	class Meta:
 		verbose_name = _(u"Producto")
 		verbose_name_plural = _(u"Productos")
@@ -235,6 +237,15 @@ class Producto(models.Model):
 
 	def __str__(self):
 		return self.nombre
+	
+	@property
+	def descuento_principal(self):
+		try:
+			discount = Descuentos.objects.filter((Q(categorias_productos_id=self.categoria.id))|(Q(productos__id=self.id))).first()
+			return discount.porcentaje
+		except Exception:
+			return 0
+	
 
 
 class GaleriaProducto(ImagenBase, models.Model):
@@ -318,12 +329,12 @@ class Descuentos(models.Model):
 	ACTIVO = 1
 	INACTIVE = 2
 
-	CONSTANT_STATUS = ((ACTIVO, "Activar"),
-					(INACTIVE, "Desactivar"))
+	CONSTANT_STATUS = ((ACTIVO, "Activado"),
+					(INACTIVE, "Desactivado"))
 
 	porcentaje=models.FloatField("Porcentaje del descuento",validators=[MinValueValidator(0),MaxValueValidator(100)])
 	productos=models.ManyToManyField(Producto,verbose_name="Producto",related_name='descuento_productos', blank=True, null=True)
-	categorias_productos=models.ManyToManyField(CategoriaProducto,verbose_name="CategoriaProducto",related_name='descuento_productos', blank=True, null=True)
+	categorias_productos=models.ManyToManyField(CategoriaProducto,verbose_name="CategoriaProducto",related_name='descuento_categorias', blank=True, null=True)
 	nombre = models.CharField(max_length=340)
 	estado=models.PositiveSmallIntegerField(choices=CONSTANT_STATUS,default=ACTIVO)
 	fecha_expiration = models.DateField(null=True, blank=True)
@@ -332,3 +343,6 @@ class Descuentos(models.Model):
 
 	def __str__(self): 
 		return self.nombre
+	
+	class Meta:
+		ordering = ('prioridad', 'creado')
