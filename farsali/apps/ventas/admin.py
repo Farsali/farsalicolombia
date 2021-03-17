@@ -57,7 +57,7 @@ class VentaAdmin(admin.ModelAdmin):
         'cliente__cedula',
     ]
 
-    readonly_fields = ['fecha','referencia','estado','referencia_pasarela','cliente','tipo_pasarela','total',
+    readonly_fields = ['fecha','referencia','estado','referencia_pasarela','cliente','tipo_pasarela','total', 'metodo_pago',
                        'cliente_nombre','cliente_farsali','cliente_telefono','cliente_email','cliente_direccion']
 
     fieldsets = [
@@ -73,6 +73,7 @@ class VentaAdmin(admin.ModelAdmin):
                 'total',
                 'fecha',
                 'tipo_pasarela',
+                'metodo_pago',
                 'referencia_pasarela',
                 'razon_rechazado'
             )

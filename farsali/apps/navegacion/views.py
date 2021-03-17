@@ -918,6 +918,8 @@ def callbackGatewayMercadoPagoView(request):
                             item.producto.save()
                     venta.estado = "espera_respuesta_pasarela"
 
+                if "payment_method_id" in data_json:
+                    venta.metodo_pago = data_json["payment_method_id"]
                 venta.save()
             return HttpResponse(status=200)
         return HttpResponse(status=400)
