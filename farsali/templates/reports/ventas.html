@@ -3,8 +3,14 @@
 <html>
 <head>
     <title>Reporte de Venta</title>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" /> 
 </head>
 <style type="text/css">
+
+    @page {
+        size: letter landscape;
+        margin: 1cm;
+    }
 
 	body{
 	    background-position: center;
@@ -24,14 +30,6 @@
 	    align-items: flex-start;
     }
 
-    .div-footer{
-	    display: flex;
-	    flex-direction: column;
-	    align-items: center;
-	    text-align: center;
-	    width: 100%;
-    }
-
     .div-between{
     	display: flex;
 	    flex-direction: row;
@@ -42,32 +40,51 @@
         font-family: Montserrat;
         font-style: normal;
         font-weight: 300;
-        font-size: 24px;
-        line-height: 44px;
-        text-align: right;
+        font-size: 20px;
+        line-height: 38px;
     }
 
     .p-subtitle{
     	font-family: Montserrat;
 		font-style: normal;
 		font-weight: normal;
-		font-size: 14px;
+		font-size: 16px;
 		line-height: 24px;
-        text-align: right;
     }
 
     .hr-separated-horizontal{
     	border: none;
     	border-color: black;
 	    border-top:7px solid;
-	    width: 27em;
+	    width: 48em;
+    }
+    .content-table{
+        border-collapse: collapse;
+        margin: 25px 0;
+        font-size: 0.9em;
+        min-width: 300px;
+        margin-left: 2em;
     }
 
-    .hr-separated-vertical{
-    	border: none;
-    	border-color: black;
-	    border-left:7px solid;
-	    height: 47em;
+    .content-table thead tr{
+        background-color: #cc98c7;
+        color: white;
+        text-align: left;
+        font-weight: bold;
+    }
+    .content-table th,
+    .content-table td {
+        padding: 15px 18px;
+    }
+    .content-table tbody tr{
+        border-bottom: 1px solid #000000;
+    }
+
+    .content-table tbody tr:nth-of-type(even){
+        background-color: #f3f3f3;
+    }
+    .content-table tbody tr:last-of-type{
+        border-bottom: 2px solid #cc98c7;
     }
 </style>
 <body style="background-image: url({% static 'images/fondo.jpg' %})">
@@ -83,62 +100,87 @@
             </div>
     </div>
 
-    <div class="div-between">
-    	<div class="div-margin">
-	    	<hr class="hr-separated-vertical">
-		</div>
+    <div>
+        <p style="text-align: right; margin-right: 2em;">
+            <span class="p-title">Resumen de Compra No {{ reference }}</span><br>
+            <span class="p-subtitle">{{ date_now }}</span><br>
+            <span class="p-subtitle">{{ name_client }} C.C# {{ document_client }}</span><br>
+            <span class="p-subtitle"><strong>Dirección:</strong> {{ address }}</span><br>
+            <span class="p-subtitle"><strong>{{ location }}</strong></span><br>
+            <span class="p-subtitle"><strong>Teléfono:</strong> {{ phone }}</span><br>
+        </p>
+    </div>
 
-		<div>
-			<div class="div-margin">
-		    	<p class="p-title">Resumen de Compra No {{ reference }}</p>
-		    </div>
-
-		    <div class="div-margin">
-		        <p class="p-subtitle">{{ date_now }}</p>
-		    </div>
-
-		    <div class="div-margin">
-		        <p class="p-title">{{ name_client }} C.C# {{ document_client }}</p>
-		    </div>
-
-		    <div class="div-margin">
-		        <p class="p-subtitle"><strong>Dirección:<strong> {{ address }} {{ location }}</p>
-		    </div>
-
-		    <div class="div-margin">
-		        <p class="p-subtitle"><strong>Teléfono:</strong> {{ phone }}</p>
-		    </div>
-
-		    <div class="div-margin">
-		    	{% for product in products %}
-		    		{% if product.by_venta_caja %}
-				        <p class="p-subtitle">
-							{{ product.producto.codigo }} {{ product.producto.nombre }} Cajas x {{ product.producto.cantidad_cajas }} Unidad(es) c/u
-							<strong>{{ product.cantidad }} Cantidad, Total $ {% multiply product.cantidad product.precio %}</strong>
-				        </p>
-					{% else %}
-						{% if product.by_mayor %}
-							<p class="p-subtitle">
-								{{ product.producto.codigo }} {{ product.producto.nombre }} x {{ product.producto.cantidad_cajas_prefer }} Unidad(es) c/u Por mayor
-								<strong>{{ product.cantidad }} Cantidad, Total $ {% multiply product.cantidad product.precio %}</strong>
-							</p>
-						{% else %}
-							<p class="p-subtitle">
-								{{ product.producto.codigo }} {{ product.producto.nombre }}
-								<strong>{{ product.cantidad }} Cantidad, Total $ {% multiply product.cantidad product.precio %}</strong>
-							</p>
-						{% endif %}
-					{% endif %}
-					<p class="p-subtitle">
-						Especificaciones: <strong>{{ product.especificaciones }}</strong>
-					</p>
-		       	{% endfor %}
-		    </div>
-
-		    <div class="div-margin">
-		        <p class="p-title">Subtotal: {{ price }} COP</p>
-		    </div>
-		</div>
+    <div>
+        <table class="content-table">
+            <thead>
+                <tr>
+                    <th>
+                        Ref.
+                    </th>
+                    <th>
+                        Cant.
+                    </th>
+                    <th>
+                        Producto
+                    </th>
+                    <th>
+                        Unidad(es)
+                    </th>
+                    <th>
+                        Precio Unitario
+                    </th>
+                    <th>
+                        Total
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for product in products %}
+                    <tr>
+                        <td>
+                            {{ product.producto.codigo }}
+                        </td>
+                        <td>
+                            {{ product.cantidad }}
+                        </td>
+                        <td>
+                            {{ product.producto.nombre|safe }}
+                        </td>
+                        <td>
+                            {% if product.by_venta_caja %}
+                                {{ product.producto.cantidad_cajas }}
+                            {% else %}
+                                {% if product.by_mayor %}
+                                    {{ product.producto.cantidad_cajas_prefer }}
+                                {% else %}
+                                    1
+                                {% endif %}
+                            {% endif %}
+                        </td>
+                        <td>
+                            {{ product.precio }}
+                        </td>
+                        <td>
+                            {% multiply product.cantidad product.precio %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="6">
+                            Especificaciones: <strong>{{ product.especificaciones }}</strong>
+                        </td>
+                    </tr>
+                {% endfor %}
+                <tr>
+                    <td colspan="5" style="text-align: right;">
+                        <strong>Total:</strong>
+                    </td>
+                    <td>
+                        {{ price }} COP
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </body>
 </html>
