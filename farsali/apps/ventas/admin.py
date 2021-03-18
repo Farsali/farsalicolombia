@@ -13,6 +13,8 @@ from django.core.files.base import ContentFile
 from datetime import datetime
 from django.contrib import messages
 
+from farsali.apps.utils import send_invoice
+
 
 class VentaProductsAdmin(admin.StackedInline):
     model = VentaProducts
@@ -118,6 +120,10 @@ class VentaAdmin(admin.ModelAdmin):
         for item in queryset:
             item.estado = "aprobado"
             item.save()
+            
+            if item.cliente.email:
+                ventas_productos = VentaProducts.objects.filter(venta=item)
+                send_invoice(item.cliente.email, item, ventas_productos)
         self.message_user(request, "Se aprobaron las ventas seleccionados", level=messages.SUCCESS)
         return
 
