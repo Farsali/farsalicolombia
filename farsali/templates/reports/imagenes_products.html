@@ -28,7 +28,7 @@
         margin: 2px;
     }
 </style>
-<body style="background-image: url({% static 'images/fondo.jpg' %})">
+<body style="background-image: url(https://farsali-col-bucket.s3.us-east-2.amazonaws.com/img_reports/fondo.jpg)">
     <div class="div-img">
         {% for imagen in data_imagenes %}
             <img style="height: 500px; width: 500px;margin-top: 7em;" title="{{ imagen.nombre }}" alt="blah" src="{{ imagen.imagen.url }}" />
