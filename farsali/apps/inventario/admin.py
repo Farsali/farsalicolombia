@@ -101,6 +101,7 @@ class ProductoAdmin(admin.ModelAdmin):
 		'orden',
 		'destacado',
 		'activo',
+		'by_producto_prefer'
 	)
 	list_display_links = (
 		'id',
@@ -113,6 +114,7 @@ class ProductoAdmin(admin.ModelAdmin):
 	)
 
 	inlines = (GaleriaProductoAdmin,)
+	list_filter = ('by_producto_prefer',)
 
 	prepopulated_fields = {}
 
@@ -128,7 +130,7 @@ class ProductoAdmin(admin.ModelAdmin):
 				'calificacion',
 				'codigo_video',
 				'marca_producto',
-				'activo',
+				('activo','by_producto_prefer'),
 				'destacado',
 				('orden',),
 			)

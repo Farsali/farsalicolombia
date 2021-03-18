@@ -225,6 +225,11 @@ class Producto(models.Model):
 		max_length=75
 	)
 
+	by_producto_prefer = models.BooleanField(
+		_(u'Producto Prefer'),
+		default=False
+	)
+
 
 	class Meta:
 		verbose_name = _(u"Producto")

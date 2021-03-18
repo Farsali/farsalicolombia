@@ -24,6 +24,8 @@ from django.http import HttpResponse
 from django.urls import reverse
 from django.core.exceptions import ObjectDoesNotExist
 
+from farsali.apps.utils import send_invoice
+
 import requests
 
 
@@ -184,7 +186,7 @@ def productsView(request):
     ]
     productos_qs = None
     if product:
-        queryset = ((Q(activo=True))&(Q(orden__gte=product.orden))&(Q(cantidad__gt=0)|Q(cantidad_cajas__gt=0)|Q(cantidad_cajas_prefer__gt=0)))
+        queryset = ((Q(by_producto_prefer=False))&(Q(activo=True))&(Q(orden__gte=product.orden))&(Q(cantidad__gt=0)|Q(cantidad_cajas__gt=0)|Q(cantidad_cajas_prefer__gt=0)))
         if category_id and int(category_id) > 0:
             queryset = queryset & (Q(categoria_id=category_id))
         if search_product and search_product != "":
@@ -193,7 +195,7 @@ def productsView(request):
         productos_qs_gt = productos_qs_gt.values(*fields)
         productos_qs_lt = []
         if len(productos_qs_gt) < quantity:
-            queryset = ((Q(activo=True))&(Q(orden__lt=product.orden))&(Q(cantidad__gt=0)|Q(cantidad_cajas__gt=0)|Q(cantidad_cajas_prefer__gt=0)))
+            queryset = ((Q(by_producto_prefer=False))&(Q(activo=True))&(Q(orden__lt=product.orden))&(Q(cantidad__gt=0)|Q(cantidad_cajas__gt=0)|Q(cantidad_cajas_prefer__gt=0)))
             if category_id and int(category_id) > 0:
                 queryset = queryset & (Q(categoria_id=category_id))
             if search_product and search_product != "":
@@ -203,7 +205,7 @@ def productsView(request):
         productos = list(productos_qs_gt) + list(productos_qs_lt)
     elif marca_id and int(marca_id) > 0:
         marca = Marca.objects.get(pk=marca_id)
-        queryset = ((Q(activo=True))&(Q(marca_producto=marca))&(Q(cantidad__gt=0)|Q(cantidad_cajas__gt=0)|Q(cantidad_cajas_prefer__gt=0)))
+        queryset = ((Q(by_producto_prefer=False))&(Q(activo=True))&(Q(marca_producto=marca))&(Q(cantidad__gt=0)|Q(cantidad_cajas__gt=0)|Q(cantidad_cajas_prefer__gt=0)))
         if category_id and int(category_id) > 0:
             queryset = queryset & (Q(categoria_id=category_id))
         if search_product and search_product != "":
@@ -211,7 +213,7 @@ def productsView(request):
         productos_qs = Producto.objects.filter(queryset).order_by("orden", "id")[int(pagination):int(pagination)+quantity]
         productos = productos_qs.values(*fields)
     else:
-        queryset = ((Q(activo=True))&(Q(cantidad__gt=0)|Q(cantidad_cajas__gt=0)|Q(cantidad_cajas_prefer__gt=0)))
+        queryset = ((Q(by_producto_prefer=False))&(Q(activo=True))&(Q(cantidad__gt=0)|Q(cantidad_cajas__gt=0)|Q(cantidad_cajas_prefer__gt=0)))
         if category_id and int(category_id) > 0:
             queryset = queryset & (Q(categoria_id=category_id))
         if search_product and search_product != "":
@@ -547,6 +549,8 @@ class redirectPaymentView(View):
                             cantidad = item.cantidad
                         item.producto.cantidad -= cantidad
                         item.producto.save()
+                if venta.cliente.email:
+                    send_invoice(venta.cliente.email, venta, ventas_productos)
                 venta.estado = "aprobado"
             elif failure:
                 if venta.estado == "espera_respuesta_pasarela":
@@ -766,6 +770,8 @@ def paymentCashView(request):
                 cantidad = item.cantidad
             item.producto.cantidad -= cantidad
             item.producto.save()
+        if venta.cliente.email:
+            send_invoice(venta.cliente.email, venta, ventas_productos)
     return render(
         request,
         "base/redirect_payment.html",
@@ -871,6 +877,8 @@ def callbackGatewayMercadoPagoView(request):
                                 cantidad = item.cantidad
                             item.producto.cantidad -= cantidad
                             item.producto.save()
+                    if venta.cliente.email:
+                        send_invoice(venta.cliente.email, venta, ventas_productos)
                     venta.estado = "aprobado"
                     
                 elif data_json["status"] == 'rejected' and not (venta.estado=="rechazado" or venta.estado=="aprobado"):

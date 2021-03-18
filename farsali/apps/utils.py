@@ -4,6 +4,13 @@ from django.conf import settings
 from django.template.loader import render_to_string
 import random
 
+from datetime import datetime
+
+from weasyprint import HTML
+from io import BytesIO
+from django.template.loader import get_template
+from django.core.files.base import ContentFile
+
 
 def send_mail_farsali(contx, request):
     titulo = str('FORMULARIO DE CONFIRMACIÓN CLIENTE FARSALI')
@@ -37,3 +44,32 @@ def generate_random_chars(length, characters_allowed: str = 'ABCDEFHILKMNPQRSTUV
             pass
         else:
             return chars
+
+
+def send_invoice(email, venta, products):
+
+    template = get_template("reports/ventas.html")
+    html_template = template.render({
+        "reference": venta.referencia,
+        "date_now":  datetime.now().strftime("%d de %m del %Y"),
+        "name_client": venta.cliente.nombre,
+        "document_client": venta.cliente.cedula,
+        "address": venta.cliente.direccion,
+        "location": venta.cliente.locacion,
+        "phone": venta.cliente.telefono,
+        "price": "{:,.0f}".format(venta.total).replace(',','.'),
+        "products": products
+    })
+    response = BytesIO()
+    html = HTML(string=html_template.encode("UTF-8"))
+    html.write_pdf(response)
+
+    subject = 'Farsali - Factura de compra'
+    body = ""
+    from_email = settings.DEFAULT_FROM_EMAIL
+    email = EmailMessage(subject, body, from_email, [email])
+    email.content_subtype = "html"
+
+    email.attach('factura.pdf', response.getvalue(), 'application/pdf')
+
+    email.send()
