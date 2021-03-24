@@ -197,19 +197,11 @@ class ClienteForm(forms.ModelForm):
                 "La cédula que intenta ingresar ya existe en nuestro sistema"
             )
 
-    def clean_edades(self, cleaned_data):
-        clean_edad = cleaned_data.get('edad')
-        if not clean_edad:
-            raise forms.ValidationError(
-                "Su edad no puede ser 0 años, ingrese una edad válida"
-            )
-
     def clean(self):
         cleaned_data = super(ClienteForm, self).clean()
         if self.request.method == "POST":
             self.clean_passwords(cleaned_data)
             self.clean_usser(cleaned_data)
-            self.clean_edades(cleaned_data)
             self.clean_cedulas(cleaned_data)
 
         # get the token submitted in the form
