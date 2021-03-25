@@ -758,6 +758,7 @@ def paymentCashView(request):
         venta_id = request.POST.get('venta_id')
         venta = Venta.objects.get(pk=venta_id)
         venta.estado = "pendiente_efectivo"
+        venta.metodo_pago = "efectivo"
         venta.save()
         ventas_productos = VentaProducts.objects.filter(venta=venta)
         for item in ventas_productos:
