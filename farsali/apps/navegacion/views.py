@@ -441,7 +441,8 @@ class productsDetailView(TemplateView):
         context = super().get_context_data(**kwargs)
         try:
             producto = dict_producto(self.producto)
-            if producto.by_producto_prefer == True and not request.user.is_authenticated:
+            user = request.session.get('username', None)
+            if producto.by_producto_prefer == True and not user:
                 producto = None
         except Producto.DoesNotExist:
             producto = None
