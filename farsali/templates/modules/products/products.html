@@ -30,7 +30,6 @@
     {% if productos_id %}
         <input type="hidden" value="{{ productos_id }}" ref="value_product">
     {% endif %}
-    {{ request.user.is_authenticated }}
     {% if request.user.is_authenticated %}
         <input type="hidden" value="0" ref="value_user">
     {% endif %}
