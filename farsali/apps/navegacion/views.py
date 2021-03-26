@@ -82,7 +82,7 @@ def dict_producto(producto):
         'url_video': producto.codigo_video,
         'fotos': fotos,
         'comentarios': comentarios,
-        'by_producto_prefer': by_producto_prefer
+        'by_producto_prefer': producto.by_producto_prefer
     }
 
     return product_dict
@@ -98,7 +98,8 @@ def get_productos(**kwargs):
         'imagen',
         'calificacion',
         'costo',
-        'cantidad_cajas'
+        'cantidad_cajas',
+        'by_producto_prefer'
     ]
     map_fields = {
         'categoria_url': F('categoria__url'),
@@ -441,12 +442,14 @@ class productsDetailView(TemplateView):
         context = super().get_context_data(**kwargs)
         try:
             producto = dict_producto(self.producto)
-            user = request.session.get('username', None)
-            if producto.by_producto_prefer == True and not user:
+            user = self.request.session.get('username', None)
+            if producto["by_producto_prefer"] == True and not user:
                 producto = None
         except Producto.DoesNotExist:
             producto = None
 
+        if not producto:
+            raise Http404("Marca no existe")
         productos_hg = get_productos(**{
             'filter': {
                 'destacado': True
