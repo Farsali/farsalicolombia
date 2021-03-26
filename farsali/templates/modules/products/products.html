@@ -31,6 +31,10 @@
         <input type="hidden" value="{{ productos_id }}" ref="value_product">
     {% endif %}
 
+    {% if request.user.is_authenticated %}
+        <input type="hidden" value="0" ref="value_user">
+    {% endif %}
+
     {% if marca_id %}
         <input type="hidden" value="{{ marca_id }}" ref="value_marca">
     {% endif %}
@@ -175,7 +179,8 @@
                     last_page: -1,
                     url_images: URL_BUCKET,
                     category_id: 0,
-                    search_product: ""
+                    search_product: "",
+                    validate_user: 0
                 }
             },
             methods:{
@@ -224,8 +229,13 @@
                         marca_id = this.$refs.value_marca.value
                     }
 
+                    if(this.$refs.value_user){
+                        this.validate_user = 1
+                    }
+
                     self = this
-                    let response = await fetch(this.url_service+this.page+"&producto_id="+producto_id+"&marca_id="+marca_id+"&category_id="+this.category_id+"&search_product="+this.search_product,{
+                    let url_page = this.url_service+this.page+"&producto_id="+producto_id+"&marca_id="+marca_id+"&category_id="+this.category_id+"&search_product="+this.search_product+"&by_producto_prefer="+this.validate_user
+                    let response = await fetch(url_page,{
                         method:"GET", 
                         headers: {
                             "Content-Type":"application/json", 

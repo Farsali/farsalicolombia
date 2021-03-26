@@ -81,7 +81,8 @@ def dict_producto(producto):
         'categoria_url': producto.categoria.url,
         'url_video': producto.codigo_video,
         'fotos': fotos,
-        'comentarios': comentarios
+        'comentarios': comentarios,
+        'by_producto_prefer': by_producto_prefer
     }
 
     return product_dict
@@ -160,11 +161,18 @@ def productsView(request):
     marca_id = request.GET.get('marca_id') if request.GET.get('marca_id') else None
     category_id = request.GET.get('category_id') if request.GET.get('category_id') else None
     search_product = request.GET.get('search_product') if request.GET.get('search_product') else None
+    producto_prefer = request.GET.get('by_producto_prefer') if request.GET.get('by_producto_prefer') else None
+
     quantity = 10
     pagination = int(page_number)*quantity
     product = None
+    by_producto_prefer = False
     if producto_id and int(producto_id) > 0:
         product = Producto.objects.get(pk=producto_id)
+    
+    if producto_prefer and int(producto_prefer) > 0:
+        by_producto_prefer = True
+
 
     fields = [
         'id',
@@ -186,7 +194,7 @@ def productsView(request):
     ]
     productos_qs = None
     if product:
-        queryset = ((Q(by_producto_prefer=False))&(Q(activo=True))&(Q(orden__gte=product.orden))&(Q(cantidad__gt=0)|Q(cantidad_cajas__gt=0)|Q(cantidad_cajas_prefer__gt=0)))
+        queryset = ((Q(by_producto_prefer=by_producto_prefer))&(Q(activo=True))&(Q(orden__gte=product.orden))&(Q(cantidad__gt=0)|Q(cantidad_cajas__gt=0)|Q(cantidad_cajas_prefer__gt=0)))
         if category_id and int(category_id) > 0:
             queryset = queryset & (Q(categoria_id=category_id))
         if search_product and search_product != "":
@@ -195,7 +203,7 @@ def productsView(request):
         productos_qs_gt = productos_qs_gt.values(*fields)
         productos_qs_lt = []
         if len(productos_qs_gt) < quantity:
-            queryset = ((Q(by_producto_prefer=False))&(Q(activo=True))&(Q(orden__lt=product.orden))&(Q(cantidad__gt=0)|Q(cantidad_cajas__gt=0)|Q(cantidad_cajas_prefer__gt=0)))
+            queryset = ((Q(by_producto_prefer=by_producto_prefer))&(Q(activo=True))&(Q(orden__lt=product.orden))&(Q(cantidad__gt=0)|Q(cantidad_cajas__gt=0)|Q(cantidad_cajas_prefer__gt=0)))
             if category_id and int(category_id) > 0:
                 queryset = queryset & (Q(categoria_id=category_id))
             if search_product and search_product != "":
@@ -205,7 +213,7 @@ def productsView(request):
         productos = list(productos_qs_gt) + list(productos_qs_lt)
     elif marca_id and int(marca_id) > 0:
         marca = Marca.objects.get(pk=marca_id)
-        queryset = ((Q(by_producto_prefer=False))&(Q(activo=True))&(Q(marca_producto=marca))&(Q(cantidad__gt=0)|Q(cantidad_cajas__gt=0)|Q(cantidad_cajas_prefer__gt=0)))
+        queryset = ((Q(by_producto_prefer=by_producto_prefer))&(Q(activo=True))&(Q(marca_producto=marca))&(Q(cantidad__gt=0)|Q(cantidad_cajas__gt=0)|Q(cantidad_cajas_prefer__gt=0)))
         if category_id and int(category_id) > 0:
             queryset = queryset & (Q(categoria_id=category_id))
         if search_product and search_product != "":
@@ -213,7 +221,7 @@ def productsView(request):
         productos_qs = Producto.objects.filter(queryset).order_by("orden", "id")[int(pagination):int(pagination)+quantity]
         productos = productos_qs.values(*fields)
     else:
-        queryset = ((Q(by_producto_prefer=False))&(Q(activo=True))&(Q(cantidad__gt=0)|Q(cantidad_cajas__gt=0)|Q(cantidad_cajas_prefer__gt=0)))
+        queryset = ((Q(by_producto_prefer=by_producto_prefer))&(Q(activo=True))&(Q(cantidad__gt=0)|Q(cantidad_cajas__gt=0)|Q(cantidad_cajas_prefer__gt=0)))
         if category_id and int(category_id) > 0:
             queryset = queryset & (Q(categoria_id=category_id))
         if search_product and search_product != "":
@@ -433,6 +441,8 @@ class productsDetailView(TemplateView):
         context = super().get_context_data(**kwargs)
         try:
             producto = dict_producto(self.producto)
+            if producto.by_producto_prefer == True and not request.user.is_authenticated:
+                producto = None
         except Producto.DoesNotExist:
             producto = None
 
