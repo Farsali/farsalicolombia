@@ -549,6 +549,7 @@ class redirectPaymentView(View):
         success = request.GET.get('success')if request.GET.get('success') else None
         failure = request.GET.get('failure') if request.GET.get('failure') else None
         venta = Venta.objects.get(pk=venta_id)
+        ventas_productos = None
         if venta.tipo_pasarela.origen == 0:
             if success:
                 if venta.estado == "proceso":
@@ -609,6 +610,9 @@ class redirectPaymentView(View):
                         cantidad = item.cantidad
                     item.producto.cantidad -= cantidad
                     item.producto.save()
+        
+        if venta.cliente.email:
+            send_invoice(venta.cliente.email, venta, ventas_productos)
         venta.save()
         return render(
             request,
@@ -892,8 +896,6 @@ def callbackGatewayMercadoPagoView(request):
                                 cantidad = item.cantidad
                             item.producto.cantidad -= cantidad
                             item.producto.save()
-                    if venta.cliente.email:
-                        send_invoice(venta.cliente.email, venta, ventas_productos)
                     venta.estado = "aprobado"
                     
                 elif data_json["status"] == 'rejected' and not (venta.estado=="rechazado" or venta.estado=="aprobado"):
@@ -940,6 +942,9 @@ def callbackGatewayMercadoPagoView(request):
                             item.producto.cantidad -= cantidad
                             item.producto.save()
                     venta.estado = "espera_respuesta_pasarela"
+
+                if venta.cliente.email:
+                    send_invoice(venta.cliente.email, venta, ventas_productos)
 
                 if "payment_method_id" in data_json:
                     venta.metodo_pago = data_json["payment_method_id"]
