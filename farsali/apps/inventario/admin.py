@@ -4,7 +4,7 @@ from django.utils.translation import ugettext_lazy as _
 from sorl.thumbnail.admin import AdminImageMixin
 
 from .models import (CategoriaProducto, Producto, GaleriaProducto, Comentario,
-					 Marca, Descuentos)
+					 Marca, Descuento)
 from farsali.forms import ImagenAdminForm
 
 from weasyprint import HTML
@@ -205,7 +205,7 @@ admin.site.register(Comentario, ComentarioAdmin)
 admin.site.register(GaleriaProducto, ImagenesProductoAdmin)
 
 
-class DescuentosAdmin(admin.ModelAdmin):
+class DescuentoAdmin(admin.ModelAdmin):
 
 	list_display = (
 		'id',
@@ -248,4 +248,4 @@ class DescuentosAdmin(admin.ModelAdmin):
 	]
 
 
-admin.site.register(Descuentos, DescuentosAdmin)
+admin.site.register(Descuento, DescuentoAdmin)

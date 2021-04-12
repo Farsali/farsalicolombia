@@ -6,7 +6,7 @@ from django.http import Http404
 from django.db.models import Q, F
 from django.core.paginator import Paginator
 from django.http import JsonResponse
-from ..inventario.models import Producto, CategoriaProducto, Comentario, Marca, Descuentos
+from ..inventario.models import Producto, CategoriaProducto, Comentario, Marca, Descuento
 from ..models import Generic, Background, Pasarelas
 from django.views.generic.base import View
 
@@ -53,7 +53,7 @@ def dict_producto(producto):
         'fecha': comentario.creado
     } for comentario in producto.comentario_producto.filter(estado=1).order_by("orden","creado")]
 
-    discount = Descuentos.objects.filter((Q(categorias_productos__id=producto.categoria_id))|(Q(productos__id=producto.id))).first()
+    discount = Descuento.objects.filter((Q(categorias_productos__id=producto.categoria_id))|(Q(productos__id=producto.id))).first()
     descuento = discount.porcentaje if discount else 0
 
     product_dict = {
@@ -235,7 +235,7 @@ def productsView(request):
         p["imagen"]
         p['calificacion_cantidad'] = list(range(
             0, p['calificacion']+1)) if p.get('calificacion') else []
-        discount = Descuentos.objects.filter((Q(categorias_productos__id=p["categoria_id"]))|(Q(productos__id=p["id"]))).first()
+        discount = Descuento.objects.filter((Q(categorias_productos__id=p["categoria_id"]))|(Q(productos__id=p["id"]))).first()
         if discount:
             p["descuento_principal"] = discount.porcentaje
         else:

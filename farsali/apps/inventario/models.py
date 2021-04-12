@@ -246,7 +246,7 @@ class Producto(models.Model):
 	@property
 	def descuento_principal(self):
 		try:
-			discount = Descuentos.objects.filter((Q(categorias_productos_id=self.categoria.id))|(Q(productos__id=self.id))).first()
+			discount = Descuento.objects.filter((Q(categorias_productos_id=self.categoria.id))|(Q(productos__id=self.id))).first()
 			return discount.porcentaje
 		except Exception:
 			return 0
@@ -329,7 +329,7 @@ class Comentario(models.Model):
 		return self.producto.nombre
 
 
-class Descuentos(models.Model):
+class Descuento(models.Model):
 
 	ACTIVO = 1
 	INACTIVE = 2

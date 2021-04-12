@@ -329,6 +329,7 @@ class Constante(models.Model):
         ('contacto_telefono1', _(u'Teléfono')),
         ('contacto_telefono2', _(u'Télefono 2')),
         ('contacto_direccion', _(u'Dirección')),
+        ('email_notificacion', _(u'Email Notificacion')),
     )
 
     TIPOS = (
