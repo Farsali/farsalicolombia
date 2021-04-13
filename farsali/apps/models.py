@@ -330,7 +330,7 @@ class Constante(models.Model):
         ('contacto_telefono2', _(u'Télefono 2')),
         ('contacto_direccion', _(u'Dirección')),
         ('email_notificacion', _(u'Email Notificacion')),
-        ('monto_max', _(u'Monto Máximo de Compra')),
+        ('monto_min', _(u'Monto Mínimo de Compra')),
     )
 
     TIPOS = (
