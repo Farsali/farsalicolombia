@@ -7,6 +7,7 @@ from .models import Venta, VentaProducts
 
 from weasyprint import HTML
 from io import BytesIO
+
 from django.template.loader import get_template
 from django.http import HttpResponse
 from django.core.files.base import ContentFile
@@ -14,6 +15,10 @@ from datetime import datetime
 from django.contrib import messages
 
 from farsali.apps.utils import send_invoice
+import xlsxwriter
+
+
+from urllib.request import urlopen
 
 
 class VentaProductsAdmin(admin.StackedInline):
@@ -84,7 +89,7 @@ class VentaAdmin(admin.ModelAdmin):
 
     inlines = (VentaProductsAdmin,)
 
-    actions = ('generate_pdf', 'approved_sale', 'declined_sale')
+    actions = ('generate_pdf', 'approved_sale', 'declined_sale', 'generate_excel')
 
     def has_add_permission(self, request):
        return False
@@ -114,6 +119,82 @@ class VentaAdmin(admin.ModelAdmin):
         return response
 
     generate_pdf.short_description = "Generar PDF (Sólo 1)"
+
+    def generate_excel(self, request, queryset):
+        item = queryset[0]
+
+        response = HttpResponse(content_type='application/vnd.ms-excel;charset=utf-8')
+        filename = f'venta_{item.referencia}.xls'
+        response['Content-Disposition'] = f'attachment; filename="{filename}"'
+
+        workbook = xlsxwriter.Workbook(response, {'in_memory': True})
+        worksheet = workbook.add_worksheet('Factura')
+        format1 = workbook.add_format({'border': 0, 'font_size': 10, 'bold': True})
+        format2 = workbook.add_format({'border': 0, 'font_size': 10})
+        currency_format = workbook.add_format({'border': 0, 'font_size': 10, 'num_format': '$#,##0.00'})
+
+        format3 = workbook.add_format({'border': 0, 'font_size': 10, 'bold': True})
+        format3.set_pattern(1)  # This is optional when using a solid fill.
+        format3.set_bg_color('#cc98c7')
+
+        currency_format.set_bg_color('#cc98c7')
+
+        worksheet.set_column(1, 1, 25)
+        worksheet.set_column(2, 2, 28)
+        worksheet.set_column(3, 10, 25)
+
+        worksheet.write('B2', f'Resumen de Compra {item.referencia}', format1)
+        worksheet.write('B3', datetime.now().strftime("%d de %B del %Y"), format1)
+        worksheet.write('B4', f'{item.cliente.nombre} {item.cliente.cedula}', format1)
+        worksheet.write('B5', f'Dirección {item.cliente.direccion}', format1)
+        worksheet.write('B5', item.cliente.locacion, format1)
+        worksheet.write('B6', f'Teléfono {item.cliente.telefono}', format1)
+
+        url = 'https://farsali-col-bucket.s3.us-east-2.amazonaws.com/img_reports/logo.png'
+        image_data = BytesIO(urlopen(url).read())
+        
+        worksheet.insert_image('D2', url, {'image_data': image_data, 'x_offset': 15, 'y_offset': 10})
+
+        worksheet.write('B9', 'REF', format3)
+        worksheet.write('C9', 'CANT', format3)
+        worksheet.write('D9', 'PRODUCTO', format3)
+        worksheet.write('E9', 'UNIDAD(ES)', format3)
+        worksheet.write('F9', 'PRECIO UNITARIO', format3)
+        worksheet.write('G9', 'TOTAL', format3)
+        worksheet.write('G9', 'ESPECIFICACIONES', format3)
+
+        row = 9
+        col = 1
+
+        products = VentaProducts.objects.filter(venta=item)
+        for product in products:
+            worksheet.write(row, col, product.producto.codigo, format2)
+            worksheet.write(row, col + 1, product.cantidad, format2)
+            worksheet.write(row, col + 2, product.producto.nombre, format2)
+
+            if product.by_venta_caja:
+                worksheet.write(row, col + 3, product.producto.cantidad_cajas, format2)
+            else:
+                if product.by_mayor:
+                    worksheet.write(row, col + 3, product.producto.cantidad_cajas_prefer, format2)
+                else:
+                    worksheet.write(row, col + 3, "1", format2)
+            worksheet.write(row, col + 4, product.precio, format2)
+            worksheet.write(row, col + 5, product.cantidad * product.precio, format2)
+            worksheet.write(row, col + 6, product.especificaciones, format2)
+            row += 1
+        
+        worksheet.write(row, col, "", format3)
+        worksheet.write(row, col + 1, "", format3)
+        worksheet.write(row, col + 2, "", format3)
+        worksheet.write(row, col + 3, "", format3)
+        worksheet.write(row, col + 4, "TOTAl", format3)
+        worksheet.write(row, col + 5, item.total, currency_format)
+
+        workbook.close()
+        return response
+
+    generate_excel.short_description = "Generar Excel (Sólo 1)"
 
 
     def approved_sale(self, request, queryset):

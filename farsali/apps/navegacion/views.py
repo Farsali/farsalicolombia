@@ -25,6 +25,7 @@ from django.urls import reverse
 from django.core.exceptions import ObjectDoesNotExist
 
 from farsali.apps.utils import send_invoice
+from farsali.apps.models import Constante
 
 import requests
 
@@ -613,6 +614,9 @@ class redirectPaymentView(View):
         
         if venta.cliente.email:
             send_invoice(venta.cliente.email, venta, ventas_productos)
+            const = Constante.objects.filter(nombre="email_notificacion").first()
+            email_notification = const.valor_tipo
+            send_invoice(email_notification, venta, ventas_productos)
         venta.save()
         return render(
             request,
@@ -791,6 +795,9 @@ def paymentCashView(request):
             item.producto.save()
         if venta.cliente.email:
             send_invoice(venta.cliente.email, venta, ventas_productos)
+            const = Constante.objects.filter(nombre="email_notificacion").first()
+            email_notification = const.valor_tipo
+            send_invoice(email_notification, venta, ventas_productos)
     return render(
         request,
         "base/redirect_payment.html",
@@ -945,6 +952,9 @@ def callbackGatewayMercadoPagoView(request):
 
                 if venta.cliente.email:
                     send_invoice(venta.cliente.email, venta, ventas_productos)
+                    const = Constante.objects.filter(nombre="email_notificacion").first()
+                    email_notification = const.valor_tipo
+                    send_invoice(email_notification, venta, ventas_productos)
 
                 if "payment_method_id" in data_json:
                     venta.metodo_pago = data_json["payment_method_id"]
