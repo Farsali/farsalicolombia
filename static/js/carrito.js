@@ -14,6 +14,8 @@ const form_checkout_up = document.getElementById("form-checkout-up")
 const form_checkout_down = document.getElementById("form-checkout-down")
 const form_detail_product = document.getElementById("form-detail-products")
 
+const valor_min = document.getElementById("valor_min")
+
 var valorTotalSuma = 0
 var cantidad_total = 0
 // var valorTotalValue = `$ ${valorTotalSuma} COP`
@@ -63,12 +65,23 @@ window.onload = function() {
   document.getElementById('form-products').onsubmit = function(event) {
     /* do what you want with the form */
     //event.preventDefault()
+    
+    min = 0
+    if(valor_min){
+      min = valor_min.value
+    }
 
-    // Should be triggered on form submit
-    data_productos = document.getElementById('productos-checkout');
-    data_productos.value = JSON.stringify(sendProduct())
-    // You must return false to prevent the default form behavior
-    return true;
+    if(valorTotalSuma>=min || min==0){
+      // Should be triggered on form submit
+      data_productos = document.getElementById('productos-checkout');
+      data_productos.value = JSON.stringify(sendProduct())
+      // You must return false to prevent the default form behavior
+      return true;
+    }else{
+      event.preventDefault()
+      alert("El valor minimo es: " + min)
+      return false;
+    }
   }
 }
 
@@ -157,14 +170,25 @@ function checkoutSubmit1(event) {
     //event.preventDefault()
 
     // Should be triggered on form submit
-    data_productos = document.getElementById('productos-payment-1');
-    if(document.getElementById('validate_buy')){
-      data_productos.value = JSON.stringify(sendProductDetail())
-    }else{
-      data_productos.value = JSON.stringify(sendProduct())
+    
+    min = 0
+    if(valor_min){
+      min = valor_min.value
     }
-    // You must return false to prevent the default form behavior
-    return true;
+
+    if(valorTotalSuma>=min || min==0){
+        data_productos = document.getElementById('productos-payment-1');
+        if(document.getElementById('validate_buy')){
+          data_productos.value = JSON.stringify(sendProductDetail())
+        }else{
+          data_productos.value = JSON.stringify(sendProduct())
+        }
+        return true;
+    }else{
+      event.preventDefault()
+      alert("El valor minimo es: " + min)
+      return false;
+    }
 }
 
 function checkoutSubmit2(event) {
@@ -172,14 +196,24 @@ function checkoutSubmit2(event) {
   //event.preventDefault()
 
   // Should be triggered on form submit
-  data_productos = document.getElementById('productos-payment-2');
-  if(document.getElementById('validate_buy')){
-    data_productos.value = JSON.stringify(sendProductDetail())
-  }else{
-    data_productos.value = JSON.stringify(sendProduct())
-  }
-  // You must return false to prevent the default form behavior
-  return true;
+    min = 0
+    if(valor_min){
+      min = valor_min.value
+    }
+
+    if(valorTotalSuma>=min || min==0){
+      data_productos = document.getElementById('productos-payment-2');
+      if(document.getElementById('validate_buy')){
+        data_productos.value = JSON.stringify(sendProductDetail())
+      }else{
+        data_productos.value = JSON.stringify(sendProduct())
+      }
+      return true;
+    }else{
+      event.preventDefault()
+      alert("El valor minimo es: " + min)
+      return false;
+    }
 }
 
 function getValueCantidadProducts(){

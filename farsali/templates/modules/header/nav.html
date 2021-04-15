@@ -108,6 +108,7 @@
                                         <form id="form-products" method="POST" action="{% url 'checkout' %}">
                                             {% csrf_token %}
                                             <input type="hidden" id="productos-checkout" name="productos-checkout" />
+                                            <input type="hidden" id="valor_min" name="valor_min" value="{{ monto_min.valor }}"/>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary"
                                                     data-dismiss="modal">Cerrar</button>
