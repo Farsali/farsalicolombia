@@ -168,12 +168,12 @@ def productsView(request):
     quantity = 10
     pagination = int(page_number)*quantity
     product = None
-    by_producto_prefer = [False]
+    by_producto_prefer = False
     if producto_id and int(producto_id) > 0:
         product = Producto.objects.get(pk=producto_id)
     
     if producto_prefer and int(producto_prefer) > 0:
-        by_producto_prefer = [False, True]
+        by_producto_prefer = True
 
 
     fields = [
@@ -196,7 +196,7 @@ def productsView(request):
     ]
     productos_qs = None
     if product:
-        queryset = ((Q(by_producto_prefer__in=by_producto_prefer))&(Q(activo=True))&(Q(orden__gte=product.orden))&(Q(cantidad__gt=0)|Q(cantidad_cajas__gt=0)|Q(cantidad_cajas_prefer__gt=0)))
+        queryset = ((Q(by_producto_prefer=by_producto_prefer))&(Q(destacado=False))&(Q(activo=True))&(Q(orden__gte=product.orden))&(Q(cantidad__gt=0)|Q(cantidad_cajas__gt=0)|Q(cantidad_cajas_prefer__gt=0)))
         if category_id and int(category_id) > 0:
             queryset = queryset & (Q(categoria_id=category_id))
         if search_product and search_product != "":
@@ -205,7 +205,7 @@ def productsView(request):
         productos_qs_gt = productos_qs_gt.values(*fields)
         productos_qs_lt = []
         if len(productos_qs_gt) < quantity:
-            queryset = ((Q(by_producto_prefer__in=by_producto_prefer))&(Q(activo=True))&(Q(orden__lt=product.orden))&(Q(cantidad__gt=0)|Q(cantidad_cajas__gt=0)|Q(cantidad_cajas_prefer__gt=0)))
+            queryset = ((Q(by_producto_prefer=by_producto_prefer))&(Q(destacado=False))&(Q(activo=True))&(Q(orden__lt=product.orden))&(Q(cantidad__gt=0)|Q(cantidad_cajas__gt=0)|Q(cantidad_cajas_prefer__gt=0)))
             if category_id and int(category_id) > 0:
                 queryset = queryset & (Q(categoria_id=category_id))
             if search_product and search_product != "":
@@ -215,7 +215,7 @@ def productsView(request):
         productos = list(productos_qs_gt) + list(productos_qs_lt)
     elif marca_id and int(marca_id) > 0:
         marca = Marca.objects.get(pk=marca_id)
-        queryset = ((Q(by_producto_prefer__in=by_producto_prefer))&(Q(activo=True))&(Q(marca_producto=marca))&(Q(cantidad__gt=0)|Q(cantidad_cajas__gt=0)|Q(cantidad_cajas_prefer__gt=0)))
+        queryset = ((Q(by_producto_prefer=by_producto_prefer))&(Q(destacado=False))&(Q(activo=True))&(Q(marca_producto=marca))&(Q(cantidad__gt=0)|Q(cantidad_cajas__gt=0)|Q(cantidad_cajas_prefer__gt=0)))
         if category_id and int(category_id) > 0:
             queryset = queryset & (Q(categoria_id=category_id))
         if search_product and search_product != "":
@@ -223,7 +223,7 @@ def productsView(request):
         productos_qs = Producto.objects.filter(queryset).order_by("orden", "id")[int(pagination):int(pagination)+quantity]
         productos = productos_qs.values(*fields)
     else:
-        queryset = ((Q(by_producto_prefer__in=by_producto_prefer))&(Q(activo=True))&(Q(cantidad__gt=0)|Q(cantidad_cajas__gt=0)|Q(cantidad_cajas_prefer__gt=0)))
+        queryset = ((Q(by_producto_prefer=by_producto_prefer))&(Q(destacado=False))&(Q(activo=True))&(Q(cantidad__gt=0)|Q(cantidad_cajas__gt=0)|Q(cantidad_cajas_prefer__gt=0)))
         if category_id and int(category_id) > 0:
             queryset = queryset & (Q(categoria_id=category_id))
         if search_product and search_product != "":
@@ -254,8 +254,12 @@ class homeView(TemplateView):
 
     def paginate_highlights(self, context):
         productos_qs = Producto.objects.filter(activo=True)
+        user = self.request.session.get('username', None)
+        prefer = False
+        if user:
+            prefer = True
         my_model = productos_qs.filter(
-            destacado=True)
+            destacado=True, by_producto_prefer=prefer)
         number_of_item = 6
         paginatorr = Paginator(my_model, number_of_item)
         first_page = paginatorr.page(1).object_list
@@ -277,9 +281,14 @@ class homeView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         productos_qs = get_productos()
+        user = self.request.session.get('username', None)
+        prefer = False
+        if user:
+            prefer = True
         productos_hg = get_productos(**{
             'filter': {
-                'destacado': True
+                'destacado': True,
+                'by_producto_prefer': prefer
             }
         })
         categorias_qs = CategoriaProducto.objects.all()
