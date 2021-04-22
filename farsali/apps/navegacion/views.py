@@ -196,7 +196,7 @@ def productsView(request):
     ]
     productos_qs = None
     if product:
-        queryset = ((Q(by_producto_prefer=by_producto_prefer))&(Q(destacado=False))&(Q(activo=True))&(Q(orden__gte=product.orden))&(Q(cantidad__gt=0)|Q(cantidad_cajas__gt=0)|Q(cantidad_cajas_prefer__gt=0)))
+        queryset = ((Q(by_producto_prefer=by_producto_prefer))&(Q(activo=True))&(Q(orden__gte=product.orden))&(Q(cantidad__gt=0)|Q(cantidad_cajas__gt=0)|Q(cantidad_cajas_prefer__gt=0)))
         if category_id and int(category_id) > 0:
             queryset = queryset & (Q(categoria_id=category_id))
         if search_product and search_product != "":
@@ -205,7 +205,7 @@ def productsView(request):
         productos_qs_gt = productos_qs_gt.values(*fields)
         productos_qs_lt = []
         if len(productos_qs_gt) < quantity:
-            queryset = ((Q(by_producto_prefer=by_producto_prefer))&(Q(destacado=False))&(Q(activo=True))&(Q(orden__lt=product.orden))&(Q(cantidad__gt=0)|Q(cantidad_cajas__gt=0)|Q(cantidad_cajas_prefer__gt=0)))
+            queryset = ((Q(by_producto_prefer=by_producto_prefer))&(Q(activo=True))&(Q(orden__lt=product.orden))&(Q(cantidad__gt=0)|Q(cantidad_cajas__gt=0)|Q(cantidad_cajas_prefer__gt=0)))
             if category_id and int(category_id) > 0:
                 queryset = queryset & (Q(categoria_id=category_id))
             if search_product and search_product != "":
@@ -215,7 +215,7 @@ def productsView(request):
         productos = list(productos_qs_gt) + list(productos_qs_lt)
     elif marca_id and int(marca_id) > 0:
         marca = Marca.objects.get(pk=marca_id)
-        queryset = ((Q(by_producto_prefer=by_producto_prefer))&(Q(destacado=False))&(Q(activo=True))&(Q(marca_producto=marca))&(Q(cantidad__gt=0)|Q(cantidad_cajas__gt=0)|Q(cantidad_cajas_prefer__gt=0)))
+        queryset = ((Q(by_producto_prefer=by_producto_prefer))&(Q(activo=True))&(Q(marca_producto=marca))&(Q(cantidad__gt=0)|Q(cantidad_cajas__gt=0)|Q(cantidad_cajas_prefer__gt=0)))
         if category_id and int(category_id) > 0:
             queryset = queryset & (Q(categoria_id=category_id))
         if search_product and search_product != "":
@@ -223,7 +223,7 @@ def productsView(request):
         productos_qs = Producto.objects.filter(queryset).order_by("orden", "id")[int(pagination):int(pagination)+quantity]
         productos = productos_qs.values(*fields)
     else:
-        queryset = ((Q(by_producto_prefer=by_producto_prefer))&(Q(destacado=False))&(Q(activo=True))&(Q(cantidad__gt=0)|Q(cantidad_cajas__gt=0)|Q(cantidad_cajas_prefer__gt=0)))
+        queryset = ((Q(by_producto_prefer=by_producto_prefer))&(Q(activo=True))&(Q(cantidad__gt=0)|Q(cantidad_cajas__gt=0)|Q(cantidad_cajas_prefer__gt=0)))
         if category_id and int(category_id) > 0:
             queryset = queryset & (Q(categoria_id=category_id))
         if search_product and search_product != "":
