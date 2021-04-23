@@ -30,7 +30,7 @@
                         <div class="info__prices--basic">
                             <!-- Precio normal -->
                             <div class="div-box-price">
-                                {% if producto.descuento_principal > 0 %}
+                                {% if producto.descuento_principal > 0 and producto.descuento_unidad > 0 %}
                                     <p class="products__info--price-discount">$ {{ producto.costo|floatformat:"0"|intcomma }} COP</p>
                                     <p class="product__detail--price">$ {{ producto.descuento_unidad|floatformat:"0"|intcomma }} COP</p>
                                 {% else %}
@@ -47,7 +47,7 @@
                             </div>
 
                             <div class="div-box-price">
-                                {% if producto.descuento_principal > 0 %}
+                                {% if producto.descuento_principal > 0 and producto.descuento_caja > 0 %}
                                     <p class="products__info--price-discount">$ {{ producto.costo_adicional|floatformat:"0"|intcomma }} COP</p>
                                     <p class="product__detail--price">$ {{ producto.descuento_caja|floatformat:"0"|intcomma }} COP</p>
                                 {% else %}
@@ -64,7 +64,7 @@
                             </div>
 
                             <div class="div-box-price">
-                                {% if producto.descuento_principal > 0 %}
+                                {% if producto.descuento_principal > 0 and producto.descuento_mayor > 0 %}
                                     <p class="products__info--price-discount">$ {{ producto.costo_farsali|floatformat:"0"|intcomma }} COP</p>
                                     <p class="product__detail--price">$ {{ producto.descuento_mayor|floatformat:"0"|intcomma }} COP</p>
                                 {% else %}

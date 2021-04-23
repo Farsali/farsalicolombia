@@ -57,9 +57,9 @@
                         <a class="products__info--link" :href="[[ url ]] + [[ producto.id ]]" target="_blank">
                             <p class="products__info--title">[[ producto.nombre ]]</p>
                         </a>
-                        <template v-if="producto.descuento_principal>0">
+                        <template v-if="producto.descuento_principal.descuento >0 && producto.descuento_principal.descuento_unidad > 0">
                             <p class="products__info--price-discount">$ [[ producto.costo ]] COP</p>
-                            <p class="products__info--price">$ [[ producto.costo - (producto.costo * (producto.descuento_principal/100)) ]] COP</p>
+                            <p class="products__info--price">$ [[ producto.descuento_principal.descuento_unidad ]] COP</p>
                         </template>
                         <template v-else>
                             <p class="products__info--price">$ [[ producto.costo ]] COP</p>
