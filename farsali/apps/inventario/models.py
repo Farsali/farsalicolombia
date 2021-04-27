@@ -223,6 +223,8 @@ class GaleriaProducto(ImagenBase, models.Model):
         verbose_name = _(u"Imagen Producto")
         verbose_name_plural = _(u"Galería de Productos")
 
+        ordering = ("updated_at",)
+
 
 class Comentario(models.Model):
     """Model definition for Comentario."""
