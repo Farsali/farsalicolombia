@@ -197,6 +197,7 @@ class GaleriaProducto(ImagenBase, models.Model):
         on_delete=models.CASCADE,
     )
     descripcion = models.TextField(null=True, blank=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.nombre
