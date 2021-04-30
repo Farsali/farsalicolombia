@@ -108,6 +108,7 @@ def dict_producto(producto):
         "fotos": fotos,
         "comentarios": comentarios,
         "by_producto_prefer": producto.by_producto_prefer,
+        "by_producto_prefer_general": producto.by_producto_prefer_general,
     }
 
     return product_dict
@@ -125,6 +126,7 @@ def get_productos(**kwargs):
         "costo",
         "cantidad_cajas",
         "by_producto_prefer",
+        "by_producto_prefer_general",
     ]
     map_fields = {
         "categoria_url": F("categoria__url"),
@@ -216,7 +218,7 @@ def productsView(request):
     productos_qs = None
     if product:
         queryset = (
-            (Q(by_producto_prefer=by_producto_prefer))
+            (Q(by_producto_prefer=by_producto_prefer) | Q(by_producto_prefer_general=True))
             & (Q(activo=True))
             & (Q(orden__gte=product.orden))
             & (Q(cantidad__gt=0) | Q(cantidad_cajas__gt=0) | Q(cantidad_cajas_prefer__gt=0))
@@ -234,7 +236,7 @@ def productsView(request):
         productos_qs_lt = []
         if len(productos_qs_gt) < quantity:
             queryset = (
-                (Q(by_producto_prefer=by_producto_prefer))
+                (Q(by_producto_prefer=by_producto_prefer) | Q(by_producto_prefer_general=True))
                 & (Q(activo=True))
                 & (Q(orden__lt=product.orden))
                 & (Q(cantidad__gt=0) | Q(cantidad_cajas__gt=0) | Q(cantidad_cajas_prefer__gt=0))
@@ -253,7 +255,7 @@ def productsView(request):
     elif marca_id and int(marca_id) > 0:
         marca = Marca.objects.get(pk=marca_id)
         queryset = (
-            (Q(by_producto_prefer=by_producto_prefer))
+            (Q(by_producto_prefer=by_producto_prefer) | Q(by_producto_prefer_general=True))
             & (Q(activo=True))
             & (Q(marca_producto=marca))
             & (Q(cantidad__gt=0) | Q(cantidad_cajas__gt=0) | Q(cantidad_cajas_prefer__gt=0))
@@ -268,7 +270,7 @@ def productsView(request):
         productos = productos_qs.values(*fields)
     else:
         queryset = (
-            (Q(by_producto_prefer=by_producto_prefer))
+            (Q(by_producto_prefer=by_producto_prefer) | Q(by_producto_prefer_general=True))
             & (Q(activo=True))
             & (Q(cantidad__gt=0) | Q(cantidad_cajas__gt=0) | Q(cantidad_cajas_prefer__gt=0))
         )

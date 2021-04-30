@@ -114,6 +114,7 @@ class ProductoAdmin(admin.ModelAdmin):
         "destacado",
         "activo",
         "by_producto_prefer",
+        "by_producto_prefer_general",
     )
     list_display_links = (
         "id",
@@ -144,7 +145,7 @@ class ProductoAdmin(admin.ModelAdmin):
                     "calificacion",
                     "codigo_video",
                     "marca_producto",
-                    ("activo", "by_producto_prefer"),
+                    ("activo", "by_producto_prefer", "by_producto_prefer_general"),
                     "destacado",
                     ("orden",),
                 )

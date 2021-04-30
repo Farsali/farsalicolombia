@@ -165,6 +165,9 @@ class Producto(models.Model):
     )
 
     by_producto_prefer = models.BooleanField(_(u"Producto Prefer"), default=False)
+    by_producto_prefer_general = models.BooleanField(
+        _(u"Producto Prefer y Generales"), default=False
+    )
 
     class Meta:
         verbose_name = _(u"Producto")
