@@ -12,7 +12,11 @@
 
 <div class="canvas-home" style="padding-top: 40px;">
     {% include "modules/introductions/intro-marca.html" %}
-	{% include "modules/products/products.html" %}
+    {% include "modules/products/products.html" %}
+
+    {% if not logged_usser %}
+    {% include "modules/call-to-action/call-to-action.html" %}
+    {% endif %}
 </div>
 
 {% endblock %}

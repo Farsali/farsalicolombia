@@ -1,11 +1,6 @@
 <div class="call-to-action">
     <div class="call-to-action__container">
         <div class="call-to-action__titles">
-            <p class="call-to-action__title"> Regístrate como cliente</p>
-            <a href="" data-toggle="modal" data-target="#modal-prefer">
-                <img src="/static/images/logo-my-farsali.png" alt="" class="call-to-action__img">
-            </a>
-
             <!-- Modal -->
 
             <div class="modal fade" id="modal-prefer" tabindex="-1" aria-labelledby="exampleModalLabel"
@@ -27,16 +22,19 @@
 
                                     <div class="card__signin">
                                         <div class="card bg-dark">
-                                            <form action="{% url 'login_farsali' %}" method="POST" class="prefer__signin--form">
+                                            <form action="{% url 'login_farsali' %}" method="POST"
+                                                class="prefer__signin--form">
                                                 {% csrf_token %}
                                                 <div class="form-group">
                                                     <label>Usuario:</label>
-                                                    <input type="text" name="username" id="username" class="form-control">
+                                                    <input type="text" name="username" id="username"
+                                                        class="form-control">
                                                 </div>
 
                                                 <div class="form-group">
                                                     <label>Password: </label>
-                                                    <input type="password" name="password" id="password" class="form-control">
+                                                    <input type="password" name="password" id="password"
+                                                        class="form-control">
                                                 </div>
                                                 <div class="card-footer">
                                                     <div class="form-group">
@@ -67,12 +65,6 @@
             </div>
 
         </div>
-        <p class="call-to-action__text">
-            Adquiere productos al por mayor con Ofertas y promociones inigualables
-            <span class="call-to-action__termino">
-                *Aplican términos y condiciones
-            </span>
-        </p>
 
 
 
