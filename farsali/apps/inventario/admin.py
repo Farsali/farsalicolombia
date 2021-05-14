@@ -93,6 +93,7 @@ class GaleriaProductoAdmin(AdminImageMixin, admin.StackedInline):
                 "fields": (
                     "nombre",
                     "imagen",
+                    "enlace",
                     (
                         "orden",
                         "activo",

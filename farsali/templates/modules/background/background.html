@@ -1,32 +1,28 @@
-
 {% if background %}
-    
-    {% with bg_titulo=background.titulo|default:'30%' bg_subtitulo=background.subtitulo|default:'Descuento en cuidado de la piel' %}
-        {% if background.video %}
-            <!-- Video -->
-            <div class="backgrounds__video backgrounds">
-                <div class="backgrounds__content">
-                    <p class="backgrounds__title">{{ bg_titulo|safe }}</p>
-                    <p class="backgrounds__text">{{ bg_subtitulo|safe }}</p>
-                </div>
-                <div class="backgrounds__video-container">
-                    <iframe 
-                        width="560" 
-                        height="315" 
-                        src="https://www.youtube.com/embed/{{ background.video }}?controls=0&autoplay=1&loop=1" 
-                        frameborder="0"
-                        volume="0"
-                        allow="autoplay; encrypted-media"
-                        allowfullscreen></iframe>
-                </div>
-            </div>
-        {% else %}
-            <div class="backgrounds" {% if background %} style="background-image: url({{ background.imagen.url }})" {% endif %}>
+
+{% with bg_titulo=background.titulo|default:'30%' bg_subtitulo=background.subtitulo|default:'Descuento en cuidado de lapiel' %}
+    {% if background.video %}
+        <!-- Video -->
+        <div class="backgrounds__video backgrounds">
             <div class="backgrounds__content">
                 <p class="backgrounds__title">{{ bg_titulo|safe }}</p>
                 <p class="backgrounds__text">{{ bg_subtitulo|safe }}</p>
             </div>
+            <div class="backgrounds__video-container">
+                <iframe width="560" height="315"
+                    src="https://www.youtube.com/embed/{{ background.video }}?controls=0&autoplay=1&loop=1" frameborder="0"
+                    volume="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
             </div>
-        {% endif %}
-    {% endwith %}
+        </div>
+    {% else %}
+        <a href="{{ background.enlace }}" target="blank">
+            <div class="backgrounds" {% if background %} style="background-image: url({{ background.imagen.url }})" {% endif %}>
+                    <div class="backgrounds__content">
+                        <p class="backgrounds__title">{{ bg_titulo|safe }}</p>
+                        <p class="backgrounds__text">{{ bg_subtitulo|safe }}</p>
+                    </div>
+            </div>
+        </a>
+    {% endif %}
+{% endwith %}
 {% endif %}

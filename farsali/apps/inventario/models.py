@@ -79,7 +79,11 @@ class Marca(models.Model):
 class ImagenBase(models.Model):
     nombre = models.CharField(_(u"Nombre"), max_length=100, blank=True, null=False, default="")
     imagen = models.ImageField(
-        _(u"Imagen"), upload_to="uploads/inventario/imagenes/", max_length=200
+        _(u"Imagen"),
+        upload_to="uploads/inventario/imagenes/",
+        max_length=200,
+        blank=True,
+        null=True,
     )
     orden = models.PositiveIntegerField(_(u"Orden"), default=0)
     activo = models.BooleanField(_(u"Activo"), default=True)
@@ -201,6 +205,7 @@ class GaleriaProducto(ImagenBase, models.Model):
     )
     descripcion = models.TextField(null=True, blank=True)
     updated_at = models.DateTimeField(auto_now=True)
+    enlace = models.URLField(_(u"Enlace"), max_length=200, blank=True, null=True, default="")
 
     def __str__(self):
         return self.nombre

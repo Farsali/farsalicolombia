@@ -31,7 +31,7 @@ def dict_producto(producto):
     fotos = [
         {
             "nombre": foto.nombre,
-            "imagen": {"url": foto.imagen.url if foto.imagen else None},
+            "imagen": {"url": foto.imagen.url if foto.imagen else foto.enlace},
         }
         for foto in producto.galeria_producto.all()
     ]
@@ -40,7 +40,7 @@ def dict_producto(producto):
             {
                 "nombre": producto.nombre,
                 "imagen": {
-                    "url": producto.imagen.url if producto.imagen else None,
+                    "url": producto.imagen.url if producto.imagen else foto.enlace,
                 },
             }
         ]
