@@ -174,7 +174,7 @@ class Producto(models.Model):
     )
 
     # Validacion de prefer costo y cantidad
-    costo_prefer = models.FloatField(_(u"Costo Prefer"), default=0.0)
+    costo_prefer = models.FloatField(_(u"Costo Prefer Caja"), default=0.0)
     costo_caja_prefer = models.FloatField(_(u"Costo Prefer Mayor"), default=0.0)
 
     class Meta:
