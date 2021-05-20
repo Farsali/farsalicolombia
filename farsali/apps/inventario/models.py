@@ -176,10 +176,6 @@ class Producto(models.Model):
     # Validacion de prefer costo y cantidad
     costo_prefer = models.FloatField(_(u"Costo Prefer"), default=0.0)
     costo_caja_prefer = models.FloatField(_(u"Costo Prefer Mayor"), default=0.0)
-    cantidad_prefer = models.PositiveIntegerField(_(u"Cantidad x Cajas Prefer"), default=0)
-    cantidad_cajas_farsali = models.PositiveIntegerField(
-        _(u"Cantidad x Cajas Mayor Prefer"), default=0
-    )
 
     class Meta:
         verbose_name = _(u"Producto")

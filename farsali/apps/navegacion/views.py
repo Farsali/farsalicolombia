@@ -214,6 +214,8 @@ def productsView(request):
         "descripcion_prefer",
         "descripcion_adicional",
         "descripcion_no_prefer",
+        "costo_prefer",
+        "costo_caja_prefer",
     ]
     productos_qs = None
     if product:
