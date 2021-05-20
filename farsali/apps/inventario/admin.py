@@ -153,6 +153,15 @@ class ProductoAdmin(admin.ModelAdmin):
             },
         ],
         [
+            _("Costos Prefer"),
+            {
+                "fields": (
+                    ("costo_prefer", "cantidad_prefer"),
+                    ("costo_caja_prefer", "cantidad_cajas_farsali"),
+                )
+            },
+        ],
+        [
             _("Contenido"),
             {
                 "fields": (
