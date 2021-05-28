@@ -16,14 +16,11 @@ from farsali.apps.clientes.models import Cliente
 from farsali.apps.models import Constante
 from farsali.apps.utils import send_invoice
 from farsali.apps.ventas.models import Venta, VentaProducts
-from farsali.settings import (
-    EPAYCO_PUBLIC_KEY,
-    MERCADOPAGO_ACCESS_TOKEN,
-    MERCADOPAGO_URL,
-    WOMPI_PUBLIC_KEY,
-)
+from farsali.settings import (EPAYCO_PUBLIC_KEY, MERCADOPAGO_ACCESS_TOKEN,
+                              MERCADOPAGO_URL, WOMPI_PUBLIC_KEY)
 
-from ..inventario.models import CategoriaProducto, Comentario, Descuento, Marca, Producto
+from ..inventario.models import (CategoriaProducto, Comentario, Descuento,
+                                 Marca, Producto)
 from ..models import Background, Generic, Pasarelas
 
 
@@ -862,6 +859,16 @@ class paymentView(View):
 class registerFarsali(TemplateView):
     template_name = "base/register-farsali.html"
     page_name = "Registro Clientes Farsali"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update({"page_name": self.page_name})
+        return context
+
+
+class recoverypasswordFarsali(TemplateView):
+    template_name = "modules/call-to-action/recovery-password.html"
+    page_name = "Recuperacion Contraseña"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

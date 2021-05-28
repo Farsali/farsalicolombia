@@ -11842,6 +11842,11 @@ a.text-dark:hover {
   padding-bottom: 20px;
   padding-top: 20px; }
 
+.call-to-action__con-forgot a {
+  text-decoration: none;
+  color: #fff;
+  font-size: .9rem; }
+
 @media (min-width: 320px) and (max-width: 374px) {
   .call-to-action {
     padding-top: 10px;
