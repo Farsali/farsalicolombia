@@ -62,9 +62,9 @@
 
     .content-table {
         border-collapse: collapse;
-        margin: 25px 0;
+        margin: 20px 0;
         font-size: 0.9em;
-        min-width: 300px;
+        min-width: 250px;
         margin-left: 2em;
     }
 
@@ -131,13 +131,13 @@
                         Producto
                     </th>
                     <th>
-                        Unidad(es) por Kit
+                        Unidad(es)
+                    </th>
+                    <th>
+                        Total Unidades
                     </th>
                     <th>
                         Precio Unitario
-                    </th>
-                    <th>
-                        Total de unidades
                     </th>
                     <th>
                         Total
@@ -168,12 +168,6 @@
                         {% endif %}
                     </td>
                     <td>
-                        {{ product.precio }}
-                    </td>
-                    <td>
-                        {% multiply product.cantidad product.precio %}
-                    </td>
-                    <td>
                         {% if product.by_venta_caja %}
                         {% multiply product.cantidad product.producto.cantidad_cajas %}
                         {% else %}
@@ -184,6 +178,12 @@
                         {% endif %}
                         {% endif %}
 
+                    </td>
+                    <td>
+                        {{ product.precio }}
+                    </td>
+                    <td>
+                        {% multiply product.cantidad product.precio %}
                     </td>
                 </tr>
                 <tr>
