@@ -1,14 +1,13 @@
 # coding: utf-8
-from django.db import models, IntegrityError
+import uuid
+
+from django.db import IntegrityError, models
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
-
-from farsali.apps.inventario.models import Producto
 from farsali.apps.clientes.models import Cliente
+from farsali.apps.inventario.models import Producto
 from farsali.apps.models import Pasarelas
 from farsali.apps.utils import generate_random_chars
-
-import uuid
 
 
 class Venta(models.Model):

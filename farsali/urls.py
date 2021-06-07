@@ -1,29 +1,24 @@
 # coding: utf-8
 from django.conf import settings
-from django.contrib import admin
-from django.urls import path, include
-from django.conf.urls.static import static
-
 from django.conf.urls import handler404
+from django.conf.urls.static import static
+from django.contrib import admin
+from django.urls import include, path
+
 from farsali.apps import views
 
 admin.site.site_header = "Farsali Control"
 admin.site.site_title = "Farsali Control Portal"
 admin.site.index_title = "Welcome to Farsali Researcher Portal"
 
-statics = static(
-    settings.STATIC_URL,
-    document_root=settings.STATIC_ROOT
-)
+statics = static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
-medias = static(
-    settings.MEDIA_URL,
-    document_root=settings.MEDIA_ROOT
-)
+medias = static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 urlpatterns = [
-    path('control/', admin.site.urls),
-    path('', include('farsali.apps.navegacion.urls'))
+    path("control/", admin.site.urls),
+    path("", include("farsali.apps.navegacion.urls")),
+    path("", include("farsali.apps.ventas.urls")),
 ]
 
 urlpatterns += statics
