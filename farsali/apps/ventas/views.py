@@ -7,8 +7,16 @@ def resumen_ventas(request):
     result_list = Venta.objects.all().values(
         "id", "cliente__nombre", "referencia", "total", "fecha"
     )
+    total = 0
+    for item in result_list:
+        total += item["total"]
     return render(
         request,
         "admin/resumen_ventas.html",
-        {"data": result_list, "result_headers": result_headers, "total": 0, "cantidades": 0},
+        {
+            "data": result_list,
+            "result_headers": result_headers,
+            "total": total,
+            "cantidades": len(result_list),
+        },
     )
