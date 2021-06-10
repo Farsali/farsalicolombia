@@ -24,7 +24,7 @@ DEBUG = False
 
 ALLOWED_HOSTS = [
     "farsalicol.herokuapp.com",
-    "localhost",
+    "localhost:8000",
     "www.farsalicolombia.com",
     "farsalicolombia.com",
     "polar-tor-89642.herokuapp.com",
@@ -80,7 +80,7 @@ ROOT_URLCONF = "farsali.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [os.path.join(BASE, "templates")],
+        "DIRS": [os.path.join(BASE_DIR, "templates")],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -223,14 +223,16 @@ django_heroku.settings(locals())
 
 # Api keys of mercadopagos
 MERCADOPAGO_URL = "https://api.mercadopago.com/v1/payments/"
-MERCADOPAGO_PUBLIC_KEY = os.environ.get("MERCADOPAGO_PUBLIC_KEY_PROD")
-MERCADOPAGO_ACCESS_TOKEN = os.environ.get("MERCADOPAGO_ACCESS_TOKEN_PROD")
+MERCADOPAGO_PUBLIC_KEY = "APP_USR-3631e183-eff4-474e-8f32-704eccc16578"
+MERCADOPAGO_ACCESS_TOKEN = (
+    "APP_USR-1611010299166741-092904-c7a74b63ba851707b3925261263f3ed4-652583311"
+)
 MERCADOPAGO_CLIENT_ID = "1611010299166741"
 MERCADOPAGO_CLIENT_SECRET = "CCrznaGLOIf33iM6arHjHFP5hlhv7FAv"
-
+""" 
 if DEBUG:
     MERCADOPAGO_PUBLIC_KEY = os.environ.get("MERCADOPAGO_PUBLIC_KEY_TEST")
-    MERCADOPAGO_ACCESS_TOKEN = os.environ.get("MERCADOPAGO_ACCESS_TOKEN_TEST")
+    MERCADOPAGO_ACCESS_TOKEN = os.environ.get("MERCADOPAGO_ACCESS_TOKEN_TEST") """
 
 
 # Api keys of wompi
