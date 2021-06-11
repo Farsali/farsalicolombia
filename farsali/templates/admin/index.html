@@ -1,10 +1,8 @@
 {% extends "admin/base_site.html" %}
 {% load i18n static %}
 
-{% block extrastyle %}
-{{ block.super }}
-<link rel="stylesheet" type="text/css" href="{% static 'admin/css/dashboard.css' %}">
-{% endblock %}
+{% block extrastyle %}{{ block.super }}
+<link rel="stylesheet" type="text/css" href="{% static " admin/css/dashboard.css" %}">{% endblock %}
 
 {% block coltype %}colMS{% endblock %}
 
@@ -16,71 +14,14 @@
 
 {% block content %}
 <div id="content-main">
-    {% if app_list %}
-    {% for app in app_list %}
-    <div class="app-{{ app.app_label }} module{% if app.app_url in request.path %} current-app{% endif %}">
-        <table>
-            <caption>
-                <a href="{{ app.app_url }}" class="section"
-                    title="{% blocktranslate with name=app.name %}Models in the {{ name }} application{% endblocktranslate %}">
-                    {{ app.name }}</a>
-            </caption>
-
-            {% for model in app.models %}
-            <tr
-                class="model-{{ model.object_name|lower }}{% if model.admin_url in request.path %} current-model{% endif %}">
-                {% if model.admin_url %}
-                <th scope="row"><a href="{{ model.admin_url }}" {% if model.admin_url in request.path %}
-                        aria-current="page" {% endif %}>{{ model.name }}</a></th>
-                {% else %}
-                <th scope="row">{{ model.name }}</th>
-                {% endif %}
-
-                {% if model.add_url %}
-                <td><a href="{{ model.add_url }}" class="addlink">{% translate 'Add' %}</a></td>
-                {% else %}
-                <td></td>
-                {% endif %}
-
-                {% if model.admin_url and show_changelinks %}
-                {% if model.view_only %}
-                <td><a href="{{ model.admin_url }}" class="viewlink">{% translate 'View' %}</a></td>
-                {% else %}
-                <td><a href="{{ model.admin_url }}" class="changelink">{% translate 'Change' %}</a></td>
-                {% endif %}
-                {% elif show_changelinks %}
-                <td></td>
-                {% endif %}
-            </tr>
-            {% endfor %}
-        </table>
-    </div>
-    {% endfor %}
-
-    <div class="app-ventas module">
-        <table style="width: 100%;">
-            <caption>
-                <a href="{% url 'resumen_ventas:resumen_ventas' %}" class="section" title="Resumen de Ventas">
-                    Resumen de Ventas</a>
-            </caption>
-
-            <tbody>
-                <tr class="model-venta">
-                    <th scope="row"><a href="{% url 'resumen_ventas:resumen_ventas' %}">Resumen de Ventas</a></th>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-    {% else %}
-    <p>{% translate 'You don’t have permission to view or edit anything.' %}</p>
-    {% endif %}
+    {% include "admin/app_list.html" with app_list=app_list show_changelinks=True %}
 </div>
 {% endblock %}
 
 {% block sidebar %}
 <div id="content-related">
     <div class="module" id="recent-actions-module">
-        <h2>{% translate 'Recent actions' %}</h2>
+        <h2>{% translate 'Recent' %}</h2>
         <h3>{% translate 'My actions' %}</h3>
         {% load log %}
         {% get_admin_log 10 as admin_log for_user user %}
