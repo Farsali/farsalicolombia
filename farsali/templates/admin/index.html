@@ -21,7 +21,8 @@
     <div class="app-{{ app.app_label }} module{% if app.app_url in request.path %} current-app{% endif %}">
         <table>
             <caption>
-                <a href="{{ app.app_url }}" class="section" title="Models in the {{ name }} application">
+                <a href="{{ app.app_url }}" class="section"
+                    title="{% blocktranslate with name=app.name %}Models in the {{ name }} application{% endblocktranslate %}">
                     {{ app.name }}</a>
             </caption>
 

@@ -68,6 +68,7 @@ GOOGLE_SECRET_KEY_CAPTCHA_V3 = "6LeF1OQZAAAAAD26pvXzsOWkilGTkUNlMtT3ZaOg"
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.locale.LocaleMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
