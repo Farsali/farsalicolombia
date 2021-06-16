@@ -7,9 +7,8 @@ from django.urls import include, path
 
 from farsali.apps import views
 
-admin.site.site_header = "Farsali Control"
-admin.site.site_title = "Farsali Control Portal"
 admin.site.index_title = "Welcome to Farsali Researcher Portal"
+admin.empty_value_display = "**Empty**"
 
 statics = static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

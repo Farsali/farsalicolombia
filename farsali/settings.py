@@ -34,7 +34,8 @@ ALLOWED_HOSTS = [
 # Application definition
 
 INSTALLED_APPS = [
-    "django.contrib.admin",
+    "material.admin",
+    "material.admin.default",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
@@ -42,14 +43,14 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django.contrib.humanize",
     "django_extensions",
+    "rangefilter",
+    "sorl.thumbnail",
+    "storages",
     "farsali.apps",
     "farsali.apps.clientes",
     "farsali.apps.inventario",
     "farsali.apps.ventas",
     "farsali.apps.navegacion",
-    "rangefilter",
-    "sorl.thumbnail",
-    "storages",
 ]
 
 # Config. de correo
@@ -253,3 +254,19 @@ EPAYCO_PUBLIC_KEY = os.environ.get("EPAYCO_PUBLIC_KEY_PROD")
 
 if DEBUG:
     EPAYCO_PUBLIC_KEY = os.environ.get("EPAYCO_PUBLIC_KEY_TEST")
+
+
+# Config Admin Material
+MATERIAL_ADMIN_SITE = {
+    "HEADER": "Farsali Control",
+    "TITLE": "Farsali Control Portal",
+    "FAVICON": "path/to/favicon",  # Admin site favicon (path to static should be specified)
+    # "MAIN_BG_COLOR": "#f8bd3e",
+    # "MAIN_HOVER_COLOR": "#f8bd3e",
+    # 'PROFILE_PICTURE':  'path/to/image',  # Admin site profile picture (path to static should be specified)
+    # 'PROFILE_BG':  'path/to/image',  # Admin site profile background (path to static should be specified)
+    "LOGIN_LOGO": "images/logo.png",  # Admin site logo on login page
+    "LOGOUT_BG": "",  # Admin site background on login/logout pages (path to static should be specified)
+    "SHOW_COUNTS": True,
+    "APP_ICONS": {},
+}
