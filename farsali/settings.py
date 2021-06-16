@@ -265,7 +265,7 @@ MATERIAL_ADMIN_SITE = {
     # "MAIN_HOVER_COLOR": "#f8bd3e",
     # 'PROFILE_PICTURE':  'path/to/image',  # Admin site profile picture (path to static should be specified)
     # 'PROFILE_BG':  'path/to/image',  # Admin site profile background (path to static should be specified)
-    "LOGIN_LOGO": "images/logo.png",  # Admin site logo on login page
+    "LOGIN_LOGO": "images/logo-my-farsali.png",  # Admin site logo on login page
     "LOGOUT_BG": "",  # Admin site background on login/logout pages (path to static should be specified)
     "SHOW_COUNTS": True,
     "APP_ICONS": {},
