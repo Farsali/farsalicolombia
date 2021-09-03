@@ -146,7 +146,13 @@ class ProductoAdmin(admin.ModelAdmin):
                     "calificacion",
                     "codigo_video",
                     "marca_producto",
-                    ("activo", "by_producto_prefer", "by_producto_prefer_general"),
+                    (
+                        "activo",
+                        "by_producto_prefer",
+                        "by_producto_prefer_general",
+                        "by_inactive_price_aditional",
+                        "by_inactive_price_farsali",
+                    ),
                     "destacado",
                     ("orden",),
                 )

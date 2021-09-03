@@ -177,6 +177,12 @@ class Producto(models.Model):
     costo_prefer = models.FloatField(_(u"Costo Prefer Caja"), default=0.0)
     costo_caja_prefer = models.FloatField(_(u"Costo Prefer Mayor"), default=0.0)
 
+    by_inactive_price_aditional = models.BooleanField(
+        _(u"Inactivar precio adicional"), default=False
+    )
+
+    by_inactive_price_farsali = models.BooleanField(_(u"Inactivar precio Farsali"), default=False)
+
     class Meta:
         verbose_name = _(u"Producto")
         verbose_name_plural = _(u"Productos")

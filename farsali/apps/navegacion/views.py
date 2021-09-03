@@ -16,11 +16,14 @@ from farsali.apps.clientes.models import Cliente
 from farsali.apps.models import Constante
 from farsali.apps.utils import send_invoice
 from farsali.apps.ventas.models import Venta, VentaProducts
-from farsali.settings import (EPAYCO_PUBLIC_KEY, MERCADOPAGO_ACCESS_TOKEN,
-                              MERCADOPAGO_URL, WOMPI_PUBLIC_KEY)
+from farsali.settings import (
+    EPAYCO_PUBLIC_KEY,
+    MERCADOPAGO_ACCESS_TOKEN,
+    MERCADOPAGO_URL,
+    WOMPI_PUBLIC_KEY,
+)
 
-from ..inventario.models import (CategoriaProducto, Comentario, Descuento,
-                                 Marca, Producto)
+from ..inventario.models import CategoriaProducto, Comentario, Descuento, Marca, Producto
 from ..models import Background, Generic, Pasarelas
 
 
@@ -106,6 +109,8 @@ def dict_producto(producto):
         "comentarios": comentarios,
         "by_producto_prefer": producto.by_producto_prefer,
         "by_producto_prefer_general": producto.by_producto_prefer_general,
+        "by_inactive_price_farsali": producto.by_inactive_price_farsali,
+        "by_inactive_price_aditional": producto.by_inactive_price_aditional,
     }
 
     return product_dict
@@ -124,6 +129,8 @@ def get_productos(**kwargs):
         "cantidad_cajas",
         "by_producto_prefer",
         "by_producto_prefer_general",
+        "by_inactive_price_aditional",
+        "by_inactive_price_farsali",
     ]
     map_fields = {
         "categoria_url": F("categoria__url"),
