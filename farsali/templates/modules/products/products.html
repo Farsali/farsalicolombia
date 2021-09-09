@@ -111,7 +111,8 @@
                                                             :id="'cantidad-' + [[ producto.id ]]" class="form-control">
                                                     </template>
                                                 </div>
-                                                <div class="form-group">
+
+                                                <div v-if="producto.by_inactive_price_aditional" class="form-group">
                                                     <label for="">[[ producto.nombre ]] [[
                                                         producto.descripcion_adicional ]]</label>
                                                     <template v-if="producto.cantidad==0 || producto.cantidad_cajas==0">
@@ -123,7 +124,7 @@
                                                             class="form-control">
                                                     </template>
                                                 </div>
-                                                <div class="form-group">
+                                                <div v-if="producto.by_inactive_price_farsali" class="form-group">
                                                     <label for="">[[ producto.nombre ]] [[ producto.descripcion_prefer
                                                         ]]</label>
                                                     <template
