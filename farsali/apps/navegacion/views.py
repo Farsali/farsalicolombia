@@ -220,6 +220,8 @@ def productsView(request):
         "descripcion_no_prefer",
         "costo_prefer",
         "costo_caja_prefer",
+        "by_inactive_price_farsali",
+        "by_inactive_price_aditional",
     ]
     productos_qs = None
     if product:
