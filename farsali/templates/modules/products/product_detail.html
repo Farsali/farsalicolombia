@@ -46,7 +46,7 @@
                                 </div>
                             </div>
 
-                            {% if producto.by_inactive_price_aditional %}
+                            {% if not producto.by_inactive_price_aditional %}
                                 <div class="div-box-price">
                                     {% if producto.descuento_principal > 0 and producto.descuento_caja > 0 %}
                                         <p class="products__info--price-discount">$ {{ producto.costo_adicional|floatformat:"0"|intcomma }} COP</p>
@@ -65,7 +65,7 @@
                                 </div>
                             {% endif %}
 
-                            {% if producto.by_inactive_price_farsali %}
+                            {% if not producto.by_inactive_price_farsali %}
                             <div class="div-box-price">
                                 {% if producto.descuento_principal > 0 and producto.descuento_mayor > 0 %}
                                     <p class="products__info--price-discount">$ {{ producto.costo_farsali|floatformat:"0"|intcomma }} COP</p>
