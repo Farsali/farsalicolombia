@@ -20,6 +20,7 @@
                   <form id="form-checkout-up" method="POST" action="{% url 'datos_cliente' %}">
                     {% csrf_token %}
                     <input type="hidden" id="productos-payment-1" name="productos-payment-1">
+                    <input type="hidden" value="{{ total }}" id="total_productos" name="total_productos" />
                     <button class="btn btn-sm btn-checkout" type="submit">Finalizar Compra</button>
                 </form>
               </div>
@@ -99,6 +100,7 @@
               <input type="hidden" id="validate_buy"  name="validate_buy">
             {% endif %}
             <input type="hidden" id="productos-payment-2"  name="productos-payment-2">
+            <input type="hidden" value="{{ total }}" id="total_productos" name="total_productos" />
             <div class="card-footer bg-light d-flex justify-content-end">
               <button class="btn btn-sm btn-checkout" type="submit">Finalizar Compra</button>
             </div>

@@ -573,7 +573,6 @@ def checkoutView(request):
         elif request.POST.get("productos-checkout"):
             data = request.POST.get("productos-checkout")
         json_data = json.loads(data)
-        print(json_data)
         for item in json_data:
             try:
                 producto = Producto.objects.get(id=int(item["id"]))

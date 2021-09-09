@@ -191,8 +191,8 @@ function checkoutSubmit1(event) {
   if (valor_min) {
     min = valor_min.value
   }
-
-  if (valorTotalSuma >= min || min == 0) {
+  total_productos = document.getElementById('total_productos');
+  if (total_productos >= min || min == 0) {
     data_productos = document.getElementById('productos-payment-1');
     if (document.getElementById('validate_buy')) {
       data_productos.value = JSON.stringify(sendProductDetail())
@@ -216,8 +216,8 @@ function checkoutSubmit2(event) {
   if (valor_min) {
     min = valor_min.value
   }
-
-  if (valorTotalSuma >= min || min == 0) {
+  total_productos = document.getElementById('total_productos');
+  if (total_productos >= min || min == 0) {
     data_productos = document.getElementById('productos-payment-2');
     if (document.getElementById('validate_buy')) {
       data_productos.value = JSON.stringify(sendProductDetail())
