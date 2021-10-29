@@ -1,5 +1,6 @@
 # coding: utf-8
 import random
+import sys
 from io import BytesIO
 
 from django.contrib import admin
@@ -216,6 +217,7 @@ class ImagenesProductoAdmin(admin.ModelAdmin):
     readonly_fields = ("preview_img",)
 
     actions = ("generate_pdf",)
+    list_per_page = sys.maxsize
 
     def generate_pdf(self, request, queryset):
         template = get_template("reports/imagenes_products.html")
