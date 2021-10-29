@@ -6,13 +6,13 @@
 </head>
 <style type="text/css">
 
-	body{
-	    background-position: center;
-	    background-repeat: no-repeat;
-	    background-size: cover;
-	    height: 600px;
-	    width: 100%;
-	}
+    body{
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        height: 600px;
+        width: 100%;
+    }
 
     .div-img{
         margin: 70px;
@@ -31,15 +31,17 @@
 <body style="background-image: url(https://farsali-col-bucket.s3.us-east-2.amazonaws.com/img_reports/fondo.jpg)">
     <div class="div-img">
         {% for imagen in data_imagenes %}
-            <img style="height: 500px; width: 500px;margin-top: 7em;" title="{{ imagen.nombre }}" alt="blah" src="{{ imagen.imagen.url }}" />
-            {% if imagen.nombre %}
-                <h3 style="text-align: center;">{{ imagen.nombre }}</h3>
-            {% endif %}
-            {% if imagen.producto.codigo %}
-                <p style="text-align: center;">Referencia del Producto: {{ imagen.producto.codigo }}</p>
-            {% endif %}
-            {% if imagen.descripcion %}
-                <p style="text-align: center;">{{ imagen.descripcion }}</p>
+            {% if imagen.imagen %}
+                <img style="height: 500px; width: 500px;margin-top: 7em;" title="{{ imagen.nombre }}" alt="blah" src="{{ imagen.imagen.url }}" />
+                {% if imagen.nombre %}
+                    <h3 style="text-align: center;">{{ imagen.nombre }}</h3>
+                {% endif %}
+                {% if imagen.producto.codigo %}
+                    <p style="text-align: center;">Referencia del Producto: {{ imagen.producto.codigo }}</p>
+                {% endif %}
+                {% if imagen.descripcion %}
+                    <p style="text-align: center;">{{ imagen.descripcion }}</p>
+                {% endif %}
             {% endif %}
         {% endfor %}
     </div>
