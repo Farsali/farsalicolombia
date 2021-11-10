@@ -1144,10 +1144,14 @@ p {
   z-index: 3;
 }
 .backgrounds .backgrounds__content .backgrounds__title {
-  font-size: 120px;
+  font-size: 100px;
   font-weight: 700;
   text-decoration: underline;
   max-width: 420px;
+  display: flex;
+  width: 90%;
+  padding: 10px;
+  text-align: center;
 }
 .backgrounds .backgrounds__content .backgrounds__text {
   font-size: 30px;
