@@ -3,7 +3,13 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="canonical" href="https://www.farsalicolombia.com/">
+    <script>
+        if (window.location.href.indexOf('home.html') != -1)
+            window.location.href = 'https://www.farsalicolombia.com/';
+    </script>
     <meta property="og:title" content="Farsáli Colombia | Mayorista de proveedores cosméticos">
     <meta property="og:description"
         content="Farsáli Colombia | Mayorista de proveedores cosméticos | Al Mayor y al Detal">
@@ -18,7 +24,7 @@
     <title>Farsáli Colombia | Mayorista de Cosméticos en Medellín</title>
     <meta name="description"
         content="Farsáli Colombia | Mayorista de proveedores cosméticos | Ventas al pormayor y al detal.">
-    <meta name="keywords" content="farsali, Farsáli, Colombia, colombia, farsali colombia, Farsáli Colombia, Maquillaje, Cosméticos, productos de belleza, fitness
+    <meta name="keywords" content="Farsáli Colombia, farsali, Farsáli, Colombia, colombia, farsali colombia, Farsáli Colombia, Maquillaje, Cosméticos, productos de belleza, fitness
     polvo, pintalabios, rubor, maquillaje profesional, cosméticos al por mayor">
     <link rel="icon" href="/static/images/favicon.ico">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
@@ -46,7 +52,7 @@
         !function (f, b, e, v, n, t, s) {
             if (f.fbq) return; n = f.fbq = function () {
                 n.callMethod ?
-                n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+                    n.callMethod.apply(n, arguments) : n.queue.push(arguments)
             };
             if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0';
             n.queue = []; t = b.createElement(e); t.async = !0;
