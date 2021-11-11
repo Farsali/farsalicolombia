@@ -106,9 +106,7 @@ class Background(models.Model):
         ('contacto', _(u'Contacto')),
         ('videos', _(u'Videos')),
         ('politicas', _(u'Politicas')),
-        ('videos', _(u'Videos')),
-        ('sitemap.xml', _(u'sitemap.xml')),
-        ('robots.txt', _(u'robots.txt'))
+        ('videos', _(u'Videos'))
     )
 
     codigo = models.CharField(_(u'Codigo'), max_length=45, choices=TIPOS_NAME, default='None',  unique=True)
