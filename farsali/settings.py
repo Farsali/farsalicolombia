@@ -2,10 +2,13 @@
 import os
 
 import django_heroku
+import environ
 from django import http
 from django.contrib.messages import constants as messages
 from django.utils.translation import ugettext_lazy as _
 
+# Only for local development and CI, env variables take precedence
+env = environ.Env()
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -50,6 +53,8 @@ INSTALLED_APPS = [
     "farsali.apps.inventario",
     "farsali.apps.ventas",
     "farsali.apps.navegacion",
+    "django_celery_results",
+    "django_celery_beat",
 ]
 
 # Config. de correo
@@ -271,3 +276,33 @@ MATERIAL_ADMIN_SITE = {
 }
 
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 10240
+
+# Redis
+REDIS_PASSWORD = env.str("REDIS_PASSWORD", "ABCDE")
+REDIS_HOST = env.str("REDIS_HOST", "redis")
+REDIS_PORT = env.str("REDIS_PORT", "6379")
+
+
+REDIS_URL_PRE = f"redis://:{REDIS_PASSWORD}@{REDIS_HOST}:{REDIS_PORT}"
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": f"{REDIS_URL_PRE}/0",
+        "OPTIONS": {"CLIENT_CLASS": "django_redis.client.DefaultClient"},
+        "KEY_PREFIX": None,
+    }
+}
+
+# Sessions con redis
+SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+SESSION_CACHE_ALIAS = "default"
+
+BROKER_URL = "amqp://guest:guest@localhost:5672//"
+
+CELERY_BROKER_URL = "redis://redis:6379"
+CELERY_RESULT_BACKEND = "redis://redis:6379"
+CELERY_ACCEPT_CONTENT = ["application/json"]
+CELERY_RESULT_SERIALIZER = "json"
+CELERY_TASK_SERIALIZER = "json"
+CELERY_TIMEZONE = "America/Bogota"

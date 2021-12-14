@@ -1,0 +1,62 @@
+version: '3'
+
+services:
+
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+    networks:
+      - webappnetwork
+
+  backend: 
+    restart: always
+    build: .
+    command: bash -c "sleep 7; python3 manage.py migrate --noinput && gunicorn --workers=2 --bind=0.0.0.0:8000 farsali.wsgi:application --reload"
+    volumes:
+      - .:/backend
+    ports:
+      - "8000:8000"
+    networks:
+      - webappnetwork
+
+  celery:
+    build: .
+    command: celery -A farsali.celery worker -l info
+    restart: always
+    volumes:
+      - .:/backend
+    depends_on:
+      - redis
+    networks:
+      - webappnetwork
+  celery-beat:
+    build: .
+    command: celery -A farsali.celery beat -l info
+    volumes:
+      - .:/backend
+    restart: always
+    depends_on:
+      - redis
+    networks:
+      - webappnetwork
+
+  nginx:
+    restart: always
+    image: nginx:1.17
+    container_name: ngx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx:/etc/nginx/conf.d
+    depends_on:
+      - backend
+    networks:
+      - webappnetwork
+
+networks:
+  webappnetwork:
+    driver: bridge
+    ipam:
+      config: 
+        - subnet: 172.177.0.0/16
