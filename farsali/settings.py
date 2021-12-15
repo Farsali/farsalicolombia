@@ -23,7 +23,7 @@ SECRET_KEY = "lr+ke#n6om%_evagj1-=-piroo%b^x4_ktr+*b8!(57#49%8oe"
 MEDIA_URL = "/"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = [
     "farsalicol.herokuapp.com",
@@ -279,9 +279,11 @@ MATERIAL_ADMIN_SITE = {
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 10240
 
 # Redis
-REDIS_PASSWORD = env.str("REDIS_PASSWORD", "ABCDE")
-REDIS_HOST = env.str("REDIS_HOST", "redis")
-REDIS_PORT = env.str("REDIS_PORT", "6379")
+REDIS_PASSWORD = env.str(
+    "REDIS_PASSWORD", "p62810ddbc7b624ce10f7e79261ea77ad20668ada8c8171a4b50a1a4c68358495"
+)
+REDIS_HOST = env.str("REDIS_HOST", "ec2-54-87-81-33.compute-1.amazonaws.com")
+REDIS_PORT = env.str("REDIS_PORT", "12520")
 
 
 REDIS_URL_PRE = f"redis://:{REDIS_PASSWORD}@{REDIS_HOST}:{REDIS_PORT}"
