@@ -284,14 +284,17 @@ REDIS_PASSWORD = env.str(
 )
 REDIS_HOST = env.str("REDIS_HOST", "ec2-54-87-81-33.compute-1.amazonaws.com")
 REDIS_PORT = env.str("REDIS_PORT", "12520")
+REDIS_TLS_URL = env.str(
+    "REDIS_TLS_URL",
+    "redis://:p62810ddbc7b624ce10f7e79261ea77ad20668ada8c8171a4b50a1a4c68358495@ec2-54-87-81-33.compute-1.amazonaws.com:12520",
+)
 
-
-REDIS_URL_PRE = "redis://:p62810ddbc7b624ce10f7e79261ea77ad20668ada8c8171a4b50a1a4c68358495@ec2-54-87-81-33.compute-1.amazonaws.com:12520"  # noqa
+REDIS_URL_PRE = REDIS_TLS_URL
 
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": f"{REDIS_URL_PRE}",
+        "LOCATION": REDIS_TLS_URL,
         "OPTIONS": {"CLIENT_CLASS": "django_redis.client.DefaultClient"},
         "KEY_PREFIX": None,
     }
