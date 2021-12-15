@@ -6,8 +6,10 @@ build:
 run:
   web: gunicorn --workers=2 --bind=0.0.0.0:$PORT farsali.wsgi:application --reload
   worker1: 
-    command: celery -A farsali.celery worker -l info
-    image: worker
+    command: 
+      - celery -A farsali.celery worker -l info
+    image: worker1
   worker2: 
-    command: celery -A farsali.celery beat -l info
-    image: worker
+    command: 
+      - celery -A farsali.celery beat -l info
+    image: worker2
