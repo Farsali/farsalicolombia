@@ -286,7 +286,7 @@ REDIS_HOST = env.str("REDIS_HOST", "ec2-54-87-81-33.compute-1.amazonaws.com")
 REDIS_PORT = env.str("REDIS_PORT", "12520")
 
 
-REDIS_URL_PRE = f"redis://:{REDIS_PASSWORD}@{REDIS_HOST}:{REDIS_PORT}"
+REDIS_URL_PRE = "redis://:p62810ddbc7b624ce10f7e79261ea77ad20668ada8c8171a4b50a1a4c68358495@ec2-54-87-81-33.compute-1.amazonaws.com:12520"  # noqa
 
 CACHES = {
     "default": {
