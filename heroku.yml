@@ -1,7 +1,16 @@
 build:
   docker:
     web: Dockerfile
+    worker1: Dockerfile
+    worker2: Dockerfile
 run:
-  web:  gunicorn --workers=2 --bind=0.0.0.0:$PORT farsali.wsgi:application --reload
-  worker1: celery -A farsali.celery worker -l info
-  worker2: celery -A farsali.celery beat -l info
+  web:  
+    command: >
+       sh -c "
+       python manage.py migrate &&
+       gunicorn --workers=2 --bind=0.0.0.0:$PORT farsali.wsgi:application --reload
+       "
+  worker1: 
+    command: celery -A farsali.celery worker -l info
+  worker2: 
+    command: celery -A farsali.celery beat -l info
