@@ -291,7 +291,7 @@ REDIS_URL_PRE = f"redis://:{REDIS_PASSWORD}@{REDIS_HOST}:{REDIS_PORT}"
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": f"{REDIS_URL_PRE}/0",
+        "LOCATION": f"{REDIS_URL_PRE}",
         "OPTIONS": {"CLIENT_CLASS": "django_redis.client.DefaultClient"},
         "KEY_PREFIX": None,
     }
