@@ -28,3 +28,5 @@ RUN addgroup --gid 1000 docker \
     && chown -R docker:docker /var/secrets /backend
 
 USER docker
+
+EXPOSE 29428
