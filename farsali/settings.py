@@ -68,7 +68,6 @@ EMAIL_HOST_PASSWORD = "qhhuekkmbdpzlnbq"
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 # Config. keys CAPTCHA
-
 GOOGLE_KEY_CAPTCHA_V3 = "6LeF1OQZAAAAANEM_w4Boie-wolB4a3rxnu5D1-u"
 GOOGLE_SECRET_KEY_CAPTCHA_V3 = "6LeF1OQZAAAAAD26pvXzsOWkilGTkUNlMtT3ZaOg"
 
@@ -84,7 +83,9 @@ MIDDLEWARE = [
     "whitenoise.middleware.WhiteNoiseMiddleware",
 ]
 
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+STATICFILES_STORAGE = (
+    "whitenoise.storage.CompressedManifestStaticFilesStorage"
+)
 
 ROOT_URLCONF = "farsali.urls"
 
@@ -278,8 +279,13 @@ MATERIAL_ADMIN_SITE = {
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 10240
 
 # Redis
-REDIS_PASSWORD = env.str("REDIS_PASSWORD", "p62810ddbc7b624ce10f7e79261ea77ad20668ada8c8171a4b50a1a4c68358495")
-REDIS_HOST = env.str("REDIS_HOST", "ec2-54-87-81-33.compute-1.amazonaws.com")
+REDIS_PASSWORD = env.str(
+    "REDIS_PASSWORD",
+    "p62810ddbc7b624ce10f7e79261ea77ad20668ada8c8171a4b50a1a4c68358495",
+)
+REDIS_HOST = env.str(
+    "REDIS_HOST", "ec2-54-87-81-33.compute-1.amazonaws.com"
+)
 REDIS_PORT = env.str("REDIS_PORT", "12520")
 REDIS_TLS_URL = env.str(
     "REDIS_TLS_URL",
