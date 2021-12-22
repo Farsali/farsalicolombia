@@ -64,7 +64,7 @@ EMAIL_USE_TLS = True
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
 EMAIL_HOST_USER = "farsalicolombia@gmail.com"
-EMAIL_HOST_PASSWORD = "gbmjmcjnaupknyec"
+EMAIL_HOST_PASSWORD = "qhhuekkmbdpzlnbq"
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 # Config. keys CAPTCHA
