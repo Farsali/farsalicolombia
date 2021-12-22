@@ -28,6 +28,8 @@ Una vez realizado los cambios con exito sehace push como normalmente se hace
 Con la diferencia que una vez la branch este actualizada se ejecutaran los siguientes comandos.
 
 ```sh
+heroku login
+heroku container:login
 heroku container:push web -a farsalicol -> para guardar la imagen nueva en heroku
 heroku container:release web -a farsalicol -> para hacer el release a prod
 ```
