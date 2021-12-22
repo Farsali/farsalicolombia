@@ -234,9 +234,7 @@ django_heroku.settings(locals())
 # Api keys of mercadopagos
 MERCADOPAGO_URL = "https://api.mercadopago.com/v1/payments/"
 MERCADOPAGO_PUBLIC_KEY = "APP_USR-3631e183-eff4-474e-8f32-704eccc16578"
-MERCADOPAGO_ACCESS_TOKEN = (
-    "APP_USR-1611010299166741-092904-c7a74b63ba851707b3925261263f3ed4-652583311"
-)
+MERCADOPAGO_ACCESS_TOKEN = "APP_USR-1611010299166741-092904-c7a74b63ba851707b3925261263f3ed4-652583311"
 MERCADOPAGO_CLIENT_ID = "1611010299166741"
 MERCADOPAGO_CLIENT_SECRET = "CCrznaGLOIf33iM6arHjHFP5hlhv7FAv"
 """ 
@@ -279,9 +277,7 @@ MATERIAL_ADMIN_SITE = {
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 10240
 
 # Redis
-REDIS_PASSWORD = env.str(
-    "REDIS_PASSWORD", "p62810ddbc7b624ce10f7e79261ea77ad20668ada8c8171a4b50a1a4c68358495"
-)
+REDIS_PASSWORD = env.str("REDIS_PASSWORD", "p62810ddbc7b624ce10f7e79261ea77ad20668ada8c8171a4b50a1a4c68358495")
 REDIS_HOST = env.str("REDIS_HOST", "ec2-54-87-81-33.compute-1.amazonaws.com")
 REDIS_PORT = env.str("REDIS_PORT", "12520")
 REDIS_TLS_URL = env.str(
@@ -297,7 +293,7 @@ CACHES = {
         "LOCATION": REDIS_TLS_URL,
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
-            "CONNECTION_POOL_KWARGS": {"ssl_cert_reqs": None},
+            "CONNECTION_POOL_KWARGS": {"ssl_cert_reqs": False},
         },
         "KEY_PREFIX": None,
     }
