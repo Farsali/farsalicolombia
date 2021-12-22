@@ -1,5 +1,6 @@
 # coding: utf-8
 import os
+import ssl
 
 import django_heroku
 import environ
@@ -285,6 +286,7 @@ REDIS_TLS_URL = env.str(
     "redis://:p62810ddbc7b624ce10f7e79261ea77ad20668ada8c8171a4b50a1a4c68358495@ec2-54-87-81-33.compute-1.amazonaws.com:12520",
 )
 
+
 REDIS_URL_PRE = REDIS_TLS_URL
 
 CACHES = {
@@ -293,7 +295,7 @@ CACHES = {
         "LOCATION": REDIS_TLS_URL,
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
-            "CONNECTION_POOL_KWARGS": {"ssl_cert_reqs": False},
+            "CONNECTION_POOL_KWARGS": {"ssl_cert_reqs": None},
         },
         "KEY_PREFIX": None,
     }
@@ -304,6 +306,9 @@ SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 SESSION_CACHE_ALIAS = "default"
 
 BROKER_URL = "amqp://guest:guest@localhost:5672//"
+
+BROKER_USE_SSL = {"ssl_cert_reqs": ssl.CERT_NONE}
+CELERY_REDIS_BACKEND_USE_SSL = {"ssl_cert_reqs": ssl.CERT_NONE}
 
 CELERY_BROKER_URL = REDIS_URL_PRE
 CELERY_RESULT_BACKEND = REDIS_URL_PRE
