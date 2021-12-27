@@ -28,7 +28,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     "farsalicol.herokuapp.com",
-    "localhost:29428",
+    "localhost:8000",
     "www.farsalicolombia.com",
     "farsalicolombia.com",
     "polar-tor-89642.herokuapp.com",

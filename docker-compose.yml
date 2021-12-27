@@ -18,12 +18,12 @@ services:
     command: >
        sh -c "
        python manage.py migrate &&
-       gunicorn --workers=2 --bind=0.0.0.0:29428 farsali.wsgi:application --reload
+       gunicorn --workers=2 --bind=0.0.0.0:8000 farsali.wsgi:application --reload
        "
     volumes:
       - .:/backend
     ports:
-      - "29428:29428"
+      - "8000:8000"
     networks:
       - webappnetwork
 
