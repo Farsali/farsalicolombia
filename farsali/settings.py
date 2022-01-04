@@ -24,7 +24,7 @@ SECRET_KEY = "lr+ke#n6om%_evagj1-=-piroo%b^x4_ktr+*b8!(57#49%8oe"
 MEDIA_URL = "/"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [
     "farsalicol.herokuapp.com",
@@ -83,9 +83,7 @@ MIDDLEWARE = [
     "whitenoise.middleware.WhiteNoiseMiddleware",
 ]
 
-STATICFILES_STORAGE = (
-    "whitenoise.storage.CompressedManifestStaticFilesStorage"
-)
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 ROOT_URLCONF = "farsali.urls"
 
@@ -276,49 +274,7 @@ MATERIAL_ADMIN_SITE = {
     "APP_ICONS": {},
 }
 
-DATA_UPLOAD_MAX_NUMBER_FIELDS = 10240
-
-# Redis
-REDIS_PASSWORD = env.str(
-    "REDIS_PASSWORD",
-    "p62810ddbc7b624ce10f7e79261ea77ad20668ada8c8171a4b50a1a4c68358495",
-)
-REDIS_HOST = env.str(
-    "REDIS_HOST", "ec2-54-87-81-33.compute-1.amazonaws.com"
-)
-REDIS_PORT = env.str("REDIS_PORT", "12520")
-REDIS_TLS_URL = env.str(
-    "REDIS_TLS_URL",
-    "redis://:p62810ddbc7b624ce10f7e79261ea77ad20668ada8c8171a4b50a1a4c68358495@ec2-54-87-81-33.compute-1.amazonaws.com:12520",
-)
-
-
-REDIS_URL_PRE = REDIS_TLS_URL
-
-CACHES = {
-    "default": {
-        "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": REDIS_TLS_URL,
-        "OPTIONS": {
-            "CLIENT_CLASS": "django_redis.client.DefaultClient",
-            "CONNECTION_POOL_KWARGS": {"ssl_cert_reqs": None},
-        },
-        "KEY_PREFIX": None,
-    }
-}
 
 # Sessions con redis
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 SESSION_CACHE_ALIAS = "default"
-
-BROKER_URL = "amqp://guest:guest@localhost:5672//"
-
-BROKER_USE_SSL = {"ssl_cert_reqs": ssl.CERT_NONE}
-CELERY_REDIS_BACKEND_USE_SSL = {"ssl_cert_reqs": ssl.CERT_NONE}
-
-CELERY_BROKER_URL = REDIS_URL_PRE
-CELERY_RESULT_BACKEND = REDIS_URL_PRE
-CELERY_ACCEPT_CONTENT = ["application/json"]
-CELERY_RESULT_SERIALIZER = "json"
-CELERY_TASK_SERIALIZER = "json"
-CELERY_TIMEZONE = "America/Bogota"
