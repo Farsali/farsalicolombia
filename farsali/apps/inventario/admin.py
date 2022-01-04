@@ -1,14 +1,16 @@
 # coding: utf-8
+import random
 import sys
+from io import BytesIO
 
-from django.contrib import admin, messages
+from django.contrib import admin
 from django.core.files.base import ContentFile
 from django.http import HttpResponse
 from django.template.loader import get_template
 from django.utils.translation import ugettext_lazy as _
-from farsali.apps.task.tasks import send_email_pdf_products
 from farsali.forms import ImagenAdminForm
 from sorl.thumbnail.admin import AdminImageMixin
+from weasyprint import HTML
 
 from .models import CategoriaProducto, Comentario, Descuento, GaleriaProducto, Marca, Producto
 
@@ -215,15 +217,19 @@ class ImagenesProductoAdmin(admin.ModelAdmin):
     readonly_fields = ("preview_img",)
 
     actions = ("generate_pdf",)
-    list_per_page = sys.maxsize
+    list_per_page = 30
 
     def generate_pdf(self, request, queryset):
-        products_ids = list(queryset.values_list("pk", flat=True))
-        send_email_pdf_products.delay(products_ids)
-        self.message_user(
-            request, "Se enviara un correo con el pdf de las imagenes del productos", level=messages.SUCCESS
-        )
-        return
+        template = get_template("reports/imagenes_products.html")
+        html_template = template.render({"data_imagenes": list(queryset)})
+        response = BytesIO()
+        html = HTML(string=html_template.encode("UTF-8"), base_url=request.build_absolute_uri())
+        html.write_pdf(response)
+        number = random.randrange(100000)
+        filename = f"fotos_{number}.pdf"
+        response = HttpResponse(ContentFile(response.getvalue()), content_type="application/pdf")
+        response["Content-Disposition"] = f"attachment; filename={filename}"
+        return response
 
     generate_pdf.short_description = "Generar PDF de fotos"
 
