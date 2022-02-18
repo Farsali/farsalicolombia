@@ -136,7 +136,7 @@
         </div>
 
          <div class="modal fade" id="typePrice" tabindex="-1" aria-labelledby="typePriceLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-sm">
+                        <div class="modal-sm" style="text-align: center;color: white">
                             <div class="modal-content bg-dark">
                                 <div class="modal-header">
                                     <h5 class="modal-title" id="typePriceLabel">Tipo de Precio</h5>
@@ -144,7 +144,7 @@
                                         <span aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
-                                <div class="modal-body">
+                                <div class="modal-body" style="color: white;">
 
                                     <form id="form-products" method="POST" action="{% url 'checkout' %}">
                                     {% csrf_token %}
