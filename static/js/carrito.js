@@ -29,9 +29,9 @@ $(window).on('load', function () {
 });
 
 function SelectedPrice() {
-  console.log(document.getElementById('price1'))
-  console.log(document.getElementById('price2'))
-  console.log(document.getElementById('price3'))
+  console.log(document.getElementById('price1').value)
+  console.log(document.getElementById('price2').value)
+  console.log(document.getElementById('price3').value)
   localStorage.setItem('selected_price', 1);
 }
 
