@@ -172,7 +172,7 @@
 
 
 
-         <div class="modal fade" id="typePrice" tabindex="-1" aria-labelledby="typePriceLabel" aria-hidden="true">
+         <div class="modal fade" style="display: flex;align-items: center;justify-content: center;" id="typePrice" tabindex="-1" aria-labelledby="typePriceLabel" aria-hidden="true">
             <div class="modal-sm" style="text-align: center;color: white">
                 <div class="modal-content bg-dark">
                     <div class="modal-header">
@@ -181,7 +181,7 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <div class="modal-body" style="color: white;">
+                    <div class="modal-body" style="color: white;text-align: left;">
 
                         <form id="form-products" method="POST" action="{% url 'checkout' %}">
                         {% csrf_token %}
