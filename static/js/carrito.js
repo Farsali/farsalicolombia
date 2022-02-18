@@ -28,6 +28,13 @@ $(window).on('load', function () {
   $('#typePrice').modal('show');
 });
 
+function SelectedPrice() {
+  console.log(document.getElementById('price1'))
+  console.log(document.getElementById('price2'))
+  console.log(document.getElementById('price3'))
+  localStorage.setItem('selected_price', 1);
+}
+
 function cargarEventListeners() {
   displayTotal(valorTotalSuma)
   displayTotalProductos(getValueCantidadProducts())

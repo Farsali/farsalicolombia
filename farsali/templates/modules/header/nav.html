@@ -183,7 +183,6 @@
                     </div>
                     <div class="modal-body" style="color: white;text-align: left;">
 
-                        <form id="form-products" method="POST" action="{% url 'checkout' %}">
                         {% csrf_token %}
 
                         <div class="modal__body--content">
@@ -210,10 +209,8 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                        <button type="submit" class="btn btn-primary">Aceptar</button>
+                        <button type="button" class="btn btn-primary"  onclick="SelectedPrice()">Aceptar</button>
                     </div>
-
-                    </form>
                 </div>
             </div>
         </div>
