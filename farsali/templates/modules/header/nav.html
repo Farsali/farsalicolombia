@@ -13,9 +13,9 @@
 
                         <!-- Cliente Prefer -->
                         {% if not logged_usser %}
-                            <li class="nav__item">
-                                <a data-toggle="modal" data-target="#modal-prefer" class="icon-diamond"></a>
-                            </li>
+                        <li class="nav__item">
+                            <a data-toggle="modal" data-target="#modal-prefer" class="icon-diamond"></a>
+                        </li>
                         {% endif %}
                         <!-- Cliente Prefer -->
 
@@ -44,7 +44,8 @@
                                         </div>
                                         <div class="modal-body">
                                             <div class="carrito__table" id="lista-carrito">
-                                                <table class="table table-responsive" style="color: white; font-size: 12px;">
+                                                <table class="table table-responsive"
+                                                    style="color: white; font-size: 12px;">
                                                     <thead>
                                                         <tr>
                                                             <th scope="col">Producto(s)</th>
@@ -108,7 +109,8 @@
                                         <form id="form-products" method="POST" action="{% url 'checkout' %}">
                                             {% csrf_token %}
                                             <input type="hidden" id="productos-checkout" name="productos-checkout" />
-                                            <input type="hidden" id="valor_min" name="valor_min" value="{{ monto_min.valor }}"/>
+                                            <input type="hidden" id="valor_min" name="valor_min"
+                                                value="{{ monto_min.valor }}" />
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary"
                                                     data-dismiss="modal">Cerrar</button>
@@ -132,6 +134,53 @@
                 </div>
             </div>
         </div>
+
+        <!-- Menu type price -->
+        <div class="modal fade" id="typePrice" data-backdrop="static" data-keyboard="false" tabindex="-1"
+            aria-labelledby="typePriceLabel" aria-hidden="true">
+            <div class="modal-dialog" style="text-align: center;">
+                <div class="modal-content bg-dark">
+
+                    <form id="form-products" method="POST" action="{% url 'checkout' %}">
+                        {% csrf_token %}
+
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="typePriceLabel">Tipo de Precio</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-check">
+                          <input class="form-check-input" type="radio" name="flexRadioDefault" id="price1" checked>
+                          <label class="form-check-label" for="price1">
+                            Precio Normal
+                          </label>
+                        </div>
+                        <div class="form-check">
+                          <input class="form-check-input" type="radio" name="flexRadioDefault" id="price2">
+                          <label class="form-check-label" for="price2">
+                            Precio por Caja
+                          </label>
+                        </div>
+                        <div class="form-check">
+                          <input class="form-check-input" type="radio" name="flexRadioDefault" id="price3">
+                          <label class="form-check-label" for="price3">
+                            Precio por Mayor
+                          </label>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                        <button type="submit" class="btn btn-primary">Aceptar</button>
+                    </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- End type price -->
+
         <!-- MENU BURGUER -->
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
             aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
@@ -153,13 +202,13 @@
                     <a class="nav-link" href="{% url 'contacto' %}">Contacto</a>
                 </li>
                 {% if logged_usser %}
-                    <li class="nav-item nav-item__user-log">
-                        <a class="nav-item__user-log-btn icon-user"></a>
-                        <div class="nav-item__user-log-content">
-                            <span class="nav-link">Hola! {{ logged_usser }}, bienvenido</span>
-                            <a class="nav-link" href="{% url 'logout_farsali' %}">Salir</a>
-                        </div>
-                    </li>
+                <li class="nav-item nav-item__user-log">
+                    <a class="nav-item__user-log-btn icon-user"></a>
+                    <div class="nav-item__user-log-content">
+                        <span class="nav-link">Hola! {{ logged_usser }}, bienvenido</span>
+                        <a class="nav-link" href="{% url 'logout_farsali' %}">Salir</a>
+                    </div>
+                </li>
                 {% endif %}
             </ul>
         </div>

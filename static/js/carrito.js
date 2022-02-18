@@ -24,6 +24,10 @@ var cantidad_total = 0
 // Event Listeners
 cargarEventListeners();
 
+$(window).on('load', function () {
+  $('#typePrice').modal('show');
+});
+
 function cargarEventListeners() {
   displayTotal(valorTotalSuma)
   displayTotalProductos(getValueCantidadProducts())
