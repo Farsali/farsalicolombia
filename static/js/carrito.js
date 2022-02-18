@@ -29,9 +29,14 @@ $(window).on('load', function () {
 });
 
 function SelectedPrice() {
-  console.log(document.getElementById('price1').checked)
-  console.log(document.getElementById('price2').checked)
-  console.log(document.getElementById('price3').checked)
+  price = 1;
+  if (document.getElementById('price1').checked == true) {
+    price = 1;
+  } else if (document.getElementById('price2').checked == true) {
+    price = 2;
+  } else if (document.getElementById('price3').checked == true) {
+    price = 3;
+  }
   localStorage.setItem('selected_price', 1);
 }
 
