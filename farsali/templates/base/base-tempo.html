@@ -1,0 +1,43 @@
+<div class="modal fade modal-sm" tabindex="-1" id="typePrice" aria-labelledby="typePriceLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content bg-dark">
+            <div class="modal-header">
+                <h5 class="modal-title" id="typePriceLabel">Tipo de Precio</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" style="color: white;text-align: left;">
+
+                {% csrf_token %}
+
+                <div class="modal__body--content">
+                    <div class="modal-body">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="price1" checked>
+                            <label class="form-check-label" for="price1">
+                                Precio Normal
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="price2">
+                            <label class="form-check-label" for="price2">
+                                Precio por Caja
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="price3">
+                            <label class="form-check-label" for="price3">
+                                Precio por Mayor
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-primary" onclick="SelectedPrice()">Aceptar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
