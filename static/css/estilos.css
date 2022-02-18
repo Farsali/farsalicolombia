@@ -697,6 +697,15 @@ p {
   background: #f8bd3e;
 }
 
+.modalProductos {
+  margin-left: 24%;
+}
+@media (min-width: 320px) and (max-width: 1024px) {
+  .modalProductos {
+    margin-left: 0%;
+  }
+}
+
 .owl-carousel {
   display: none;
   position: relative;
