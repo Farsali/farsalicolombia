@@ -37,7 +37,7 @@ function SelectedPrice() {
   } else if (document.getElementById('price3').checked == true) {
     price = 3;
   }
-  localStorage.setItem('selected_price', 1);
+  localStorage.setItem('selected_price', price);
 }
 
 function cargarEventListeners() {
