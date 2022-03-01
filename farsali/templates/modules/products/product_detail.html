@@ -29,7 +29,7 @@
                     <div class="info__prices">
                         <div class="info__prices--basic">
                             <!-- Precio normal -->
-                            <div class="div-box-price">
+                            <div class="div-box-price class_producto_costo">
                                 {% if producto.descuento_principal > 0 and producto.descuento_unidad > 0 %}
                                     <p class="products__info--price-discount">$ {{ producto.costo|floatformat:"0"|intcomma }} COP</p>
                                     <p class="product__detail--price">$ {{ producto.descuento_unidad|floatformat:"0"|intcomma }} COP</p>
@@ -47,7 +47,7 @@
                             </div>
 
                             {% if not producto.by_inactive_price_aditional %}
-                                <div class="div-box-price">
+                                <div class="div-box-price class_producto_costo_adicional">
                                     {% if producto.descuento_principal > 0 and producto.descuento_caja > 0 %}
                                         <p class="products__info--price-discount">$ {{ producto.costo_adicional|floatformat:"0"|intcomma }} COP</p>
                                         <p class="product__detail--price">$ {{ producto.descuento_caja|floatformat:"0"|intcomma }} COP</p>
@@ -66,7 +66,7 @@
                             {% endif %}
 
                             {% if not producto.by_inactive_price_farsali %}
-                            <div class="div-box-price">
+                            <div class="div-box-price class_producto_costo_farsali">
                                 {% if producto.descuento_principal > 0 and producto.descuento_mayor > 0 %}
                                     <p class="products__info--price-discount">$ {{ producto.costo_farsali|floatformat:"0"|intcomma }} COP</p>
                                     <p class="product__detail--price">$ {{ producto.descuento_mayor|floatformat:"0"|intcomma }} COP</p>

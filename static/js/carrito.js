@@ -25,18 +25,45 @@ var cantidad_total = 0
 cargarEventListeners();
 
 $(window).on('load', function () {
-  $('#typePrice').modal('show');
+  price = localStorage.getItem('selected_price')
+  if (price) {
+    if (price == 1) {
+      document.querySelectorAll(".class_producto_costo").forEach(a => a.style.display = "block");
+      document.querySelectorAll(".class_producto_costo_adicional").forEach(a => a.style.display = "none");
+      document.querySelectorAll(".class_producto_costo_farsali").forEach(a => a.style.display = "none");
+    } else if (price == 2) {
+      document.querySelectorAll(".class_producto_costo").forEach(a => a.style.display = "none");
+      document.querySelectorAll(".class_producto_costo_adicional").forEach(a => a.style.display = "block");
+      document.querySelectorAll(".class_producto_costo_farsali").forEach(a => a.style.display = "none");
+    } else if (price == 3) {
+      document.querySelectorAll(".class_producto_costo").forEach(a => a.style.display = "none");
+      document.querySelectorAll(".class_producto_costo_adicional").forEach(a => a.style.display = "none");
+      document.querySelectorAll(".class_producto_costo_farsali").forEach(a => a.style.display = "block");
+    }
+  } else {
+    $('#typePrice').modal('show');
+  }
 });
 
 function SelectedPrice() {
   price = 1;
   if (document.getElementById('price1').checked == true) {
     price = 1;
+    document.querySelectorAll(".class_producto_costo").forEach(a => a.style.display = "block");
+    document.querySelectorAll(".class_producto_costo_adicional").forEach(a => a.style.display = "none");
+    document.querySelectorAll(".class_producto_costo_farsali").forEach(a => a.style.display = "none");
   } else if (document.getElementById('price2').checked == true) {
     price = 2;
+    document.querySelectorAll(".class_producto_costo").forEach(a => a.style.display = "none");
+    document.querySelectorAll(".class_producto_costo_adicional").forEach(a => a.style.display = "block");
+    document.querySelectorAll(".class_producto_costo_farsali").forEach(a => a.style.display = "none");
   } else if (document.getElementById('price3').checked == true) {
     price = 3;
+    document.querySelectorAll(".class_producto_costo").forEach(a => a.style.display = "none");
+    document.querySelectorAll(".class_producto_costo_adicional").forEach(a => a.style.display = "none");
+    document.querySelectorAll(".class_producto_costo_farsali").forEach(a => a.style.display = "block");
   }
+  $('#typePrice').modal('hide');
   localStorage.setItem('selected_price', price);
 }
 

@@ -64,7 +64,10 @@
                         {% if logged_usser %}
                         <p class="products__info--price">$ [[ producto.costo_prefer ]] COP</p>
                         {% else %}
-                        <p class="products__info--price">$ [[ producto.costo ]] COP</p>
+                        <p class="products__info--price class_producto_costo">$ [[ producto.costo ]] COP</p>
+                        <p style="display: none" class="products__info--price class_producto_costo_adicional">$ [[ producto.costo_adicional ]] COP</p>
+                        <p style="display: none" class="products__info--price class_producto_costo_farsali">$ [[ producto.costo_farsali ]] COP
+                        </p>
                         {% endif %}
                     </template>
                     <div class="products__info--rating">
@@ -260,6 +263,7 @@
                         self.productos = [...self.productos, ...data_response.data]
                         self.page += 1
                     }
+                    
                 }
                 loading.style.display = "none"
             },
@@ -270,6 +274,24 @@
                         const { scrollHeight, scrollTop, clientHeight } = document.documentElement;
                         if (scrollTop + clientHeight >= offsetHeight && this.page != this.last_page) {
                             this.getProducts();
+                            price = localStorage.getItem('selected_price')
+                            if(price){
+                                console.log(price)
+                                if (price == 1) {
+                                    document.querySelectorAll(".class_producto_costo").forEach(a=>a.style.display = "block");
+                                    document.querySelectorAll(".class_producto_costo_adicional").forEach(a=>a.style.display = "none");
+                                    document.querySelectorAll(".class_producto_costo_farsali").forEach(a=>a.style.display = "none");
+                                  } else if (price == 2) {
+                                    document.querySelectorAll(".class_producto_costo").forEach(a=>a.style.display = "none");
+                                    document.querySelectorAll(".class_producto_costo_adicional").forEach(a=>a.style.display = "block");
+                                    document.querySelectorAll(".class_producto_costo_farsali").forEach(a=>a.style.display = "none");
+                                  } else if (price == 3) {
+                                    document.querySelectorAll(".class_producto_costo").forEach(a=>a.style.display = "none");
+                                    document.querySelectorAll(".class_producto_costo_adicional").forEach(a=>a.style.display = "none");
+                                    document.querySelectorAll(".class_producto_costo_farsali").forEach(a=>a.style.display = "block");
+                                  }
+
+                            }
                         }
                     }
                 }, 500));

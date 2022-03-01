@@ -14485,3 +14485,15 @@ h3 {
 }
 
 /*# sourceMappingURL=estilos.css.map */
+
+.class_producto_costo{
+  display: block;
+}
+
+.class_producto_costo_adicional{
+  display: none;
+}
+
+.class_producto_costo_farsali{
+  display: none;
+}
